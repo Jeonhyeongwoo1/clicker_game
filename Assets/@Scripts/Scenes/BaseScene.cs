@@ -1,28 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using Clicker.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static Define;
+using static Clicker.Utils.Define;
 
-public abstract class BaseScene : InitBase
+namespace Clicker.Scene
 {
-	public EScene SceneType { get; protected set; } = EScene.Unknown;
-
-	public override bool Init()
+	public abstract class BaseScene : InitBase
 	{
-		if (base.Init() == false)
-			return false;
+		public EScene SceneType { get; protected set; } = EScene.Unknown;
 
-		Object obj = GameObject.FindObjectOfType(typeof(EventSystem));
-		if (obj == null)
+		public override bool Init()
 		{
-			GameObject go = new GameObject() { name = "@EventSystem" };
-			go.AddComponent<EventSystem>();
-			go.AddComponent<StandaloneInputModule>();
+			if (base.Init() == false)
+				return false;
+
+			Object obj = GameObject.FindObjectOfType(typeof(EventSystem));
+			if (obj == null)
+			{
+				GameObject go = new GameObject() { name = "@EventSystem" };
+				go.AddComponent<EventSystem>();
+				go.AddComponent<StandaloneInputModule>();
+			}
+
+			return true;
 		}
 
-		return true;
+		public abstract void Clear();
 	}
-
-	public abstract void Clear();
 }

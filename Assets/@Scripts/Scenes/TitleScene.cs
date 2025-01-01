@@ -1,36 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Clicker.Utils;
 
-public class TitleScene : BaseScene
+namespace Clicker.Scene
 {
-	public override bool Init()
+	public class TitleScene : BaseScene
 	{
-		if (base.Init() == false)
-			return false;
+		public override bool Init()
+		{
+			if (base.Init() == false)
+				return false;
 
-		SceneType = Define.EScene.TitleScene;
+			SceneType = Define.EScene.TitleScene;
 
-		//StartLoadAssets();
+			return true;
+		}
+		
+		public override void Clear()
+		{
 
-		return true;
-	}
-
-	void StartLoadAssets()
-    {
-        Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
-        {
-			Debug.Log($"{key} {count}/{totalCount}");
-
-			if (count == totalCount)
-			{
-				//Managers.Data.Init();
-			}
-		});
-    }
-
-	public override void Clear()
-	{
-
+		}
 	}
 }

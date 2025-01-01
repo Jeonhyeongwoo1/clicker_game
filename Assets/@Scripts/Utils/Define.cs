@@ -2,27 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Define
+namespace Clicker.Utils
 {
-	public enum EScene
+	public static class Define
 	{
-		Unknown,
-		TitleScene,
-		GameScene,
-	}
+		public enum EScene
+		{
+			Unknown,
+			TitleScene,
+			GameScene,
+		}
 
-	public enum EUIEvent
-	{
-		Click,
-		PointerDown,
-		PointerUp,
-		Drag,
-	}
+		public enum EUIEvent
+		{
+			Click,
+			PointerDown,
+			PointerUp,
+			Drag,
+		}
 
-	public enum ESound
-	{
-		Bgm,
-		Effect,
-		Max,
+		public enum ESound
+		{
+			Bgm,
+			Effect,
+			Max,
+		}
+		
+		public enum CreatureType
+		{
+			None,
+			Hero,
+			Monster
+		}
+
+		public enum MonsterState
+		{
+			None,
+			Idle,
+			Move,
+			Attack,
+			Dead
+		}
 	}
 }

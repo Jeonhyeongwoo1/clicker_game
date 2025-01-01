@@ -4,11 +4,11 @@ using System.IO;
 using UnityEngine;
 using System.Linq;
 using Unity.Plastic.Newtonsoft.Json;
-using Data;
 using System;
 using System.Reflection;
 using System.Collections;
 using System.ComponentModel;
+using Clicker.ContentData.Data;
 
 public class DataTransformer : EditorWindow
 {

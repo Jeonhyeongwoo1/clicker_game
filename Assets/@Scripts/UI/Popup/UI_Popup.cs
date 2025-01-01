@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using Clicker.Manager;
 using UnityEngine;
 
-public class UI_Popup : UI_Base
+namespace Clicker.UI.Popup
 {
-	public override bool Init()
+	public class UI_Popup : UI_Base
 	{
-		if (base.Init() == false)
-			return false;
+		public override bool Init()
+		{
+			if (base.Init() == false)
+				return false;
 
-		Managers.UI.SetCanvas(gameObject, true);
-		return true;
-	}
+			Managers.UI.SetCanvas(gameObject, true);
+			return true;
+		}
 
-	public virtual void ClosePopupUI()
-	{
-		Managers.UI.ClosePopupUI(this);
+		public virtual void ClosePopupUI()
+		{
+			Managers.UI.ClosePopupUI(this);
+		}
 	}
 }

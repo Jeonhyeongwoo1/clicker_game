@@ -2,21 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InitBase : MonoBehaviour
+namespace Clicker.Utils
 {
-	protected bool _init = false;
-
-	public virtual bool Init()
+	public class InitBase : MonoBehaviour
 	{
-		if (_init)
-			return false;
+		protected bool _init = false;
 
-		_init = true;
-		return true;
-	}
+		public virtual bool Init()
+		{
+			if (_init)
+				return false;
 
-	private void Awake()
-	{
-		Init();
+			_init = true;
+			return true;
+		}
+
+		private void Awake()
+		{
+			Init();
+		}
 	}
 }

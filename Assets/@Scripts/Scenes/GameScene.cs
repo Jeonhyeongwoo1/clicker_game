@@ -1,24 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
+using Clicker.Controllers;
+using Clicker.Manager;
+using Clicker.Utils;
 using UnityEngine;
-using static Define;
 
-public class GameScene : BaseScene
+namespace Clicker.Scene
 {
-	public override bool Init()
+	public class GameScene : BaseScene
 	{
-		if (base.Init() == false)
-			return false;
+		public override bool Init()
+		{
+			if (base.Init() == false)
+				return false;
 
-		SceneType = EScene.GameScene;
+			SceneType = Define.EScene.GameScene;
 
-		// TODO
+			// TODO
+			Initialize();
+			
+			return true;
+		}
 
-		return true;
-	}
+		private void Initialize()
+		{
+			GameObject map = Managers.Resource.Instantiate("BaseMap");
+			Creature hero = Managers.Object.CreateCreature("Hero", Define.CreatureType.Hero);
+			hero.Spawn(Vector3.zero);
+			
+			Creature monster = Managers.Object.CreateCreature("Monster", Define.CreatureType.Monster);
+			monster.Spawn(new Vector3(10, 10));
+		}
 
-	public override void Clear()
-	{
+		public override void Clear()
+		{
 
+		}
 	}
 }

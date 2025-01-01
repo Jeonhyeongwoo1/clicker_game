@@ -1,35 +1,38 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Clicker.Manger;
 using UnityEngine;
 
-
-namespace Data
+namespace Clicker.ContentData
 {
-	#region TestData
-	[Serializable]
-	public class TestData
+	namespace Data
 	{
-		public int Level;
-		public int Exp;
-		public List<int> Skills;
-		public float Speed;
-		public string Name;
-	}
-
-	[Serializable]
-	public class TestDataLoader : ILoader<int, TestData>
-	{
-		public List<TestData> tests = new List<TestData>();
-
-		public Dictionary<int, TestData> MakeDict()
+		#region TestData
+		[Serializable]
+		public class TestData
 		{
-			Dictionary<int, TestData> dict = new Dictionary<int, TestData>();
-			foreach (TestData testData in tests)
-				dict.Add(testData.Level, testData);
-
-			return dict;
+			public int Level;
+			public int Exp;
+			public List<int> Skills;
+			public float Speed;
+			public string Name;
 		}
+
+		[Serializable]
+		public class TestDataLoader : ILoader<int, TestData>
+		{
+			public List<TestData> tests = new List<TestData>();
+
+			public Dictionary<int, TestData> MakeDict()
+			{
+				Dictionary<int, TestData> dict = new Dictionary<int, TestData>();
+				foreach (TestData testData in tests)
+					dict.Add(testData.Level, testData);
+
+				return dict;
+			}
+		}
+		#endregion
 	}
-	#endregion
 }

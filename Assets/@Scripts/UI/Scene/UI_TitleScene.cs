@@ -1,58 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
+using Clicker.Manager;
+using Clicker.Scene;
+using Clicker.Utils;
 using UnityEngine;
-using UnityEngine.UI;
-using static Define;
+using UnityEngine.SceneManagement;
 
-public class UI_TitleScene : UI_Scene
+namespace Clicker.Scene
 {
-    enum GameObjects
-    {
-        StartImage
-    }
-
-    enum Texts
-    {
-        DisplayText
-    }
-
-    public override bool Init()
-    {
-        if (base.Init() == false)
-            return false;
-
-        BindObjects(typeof(GameObjects));
-        BindTexts(typeof(Texts));
-
-		GetObject((int)GameObjects.StartImage).BindEvent((evt) =>
-		{
-			Debug.Log("ChangeScene");
-			Managers.Scene.LoadScene(EScene.GameScene);
-		});
-
-		GetObject((int)GameObjects.StartImage).gameObject.SetActive(false);
-		GetText((int)Texts.DisplayText).text = $"";
-
-		StartLoadAssets();
-
-		return true;
-    }
-
-	void StartLoadAssets()
+	public class UI_TitleScene : UI_Scene
 	{
-		Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
+		public override bool Init()
 		{
-			Debug.Log($"{key} {count}/{totalCount}");
+			if (base.Init() == false)
+				return false;
+			
+			StartLoadAssets();
 
-			if (count == totalCount)
+			return true;
+		}
+
+		void StartLoadAssets()
+		{
+			Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
 			{
-				Managers.Data.Init();
+				Debug.Log($"{key} {count}/{totalCount}");
 
-				GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
-				GetText((int)Texts.DisplayText).text = "Touch To Start";
-
-
-			}
-		});
+				if (count == totalCount)
+				{
+					Managers.Scene.LoadScene(Define.EScene.GameScene);
+					Managers.Data.Init();
+				}
+			});
+		}
 	}
 }

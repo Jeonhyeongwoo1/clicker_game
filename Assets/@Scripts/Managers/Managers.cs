@@ -1,45 +1,57 @@
-using System.Collections;
-using System.Collections.Generic;
+using Clicker.Manger;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
-public class Managers : MonoBehaviour
+namespace Clicker.Manager
 {
-	private static Managers s_instance;
-	private static Managers Instance { get { Init(); return s_instance; } }
-
-	#region Core
-	private DataManager _data = new DataManager();
-	private PoolManager _pool = new PoolManager();
-	private ResourceManager _resource = new ResourceManager();
-	private SceneManagerEx _scene = new SceneManagerEx();
-	private SoundManager _sound = new SoundManager();
-	private UIManager _ui = new UIManager();
-
-	public static DataManager Data { get { return Instance?._data; } }
-	public static PoolManager Pool { get { return Instance?._pool; } }
-	public static ResourceManager Resource { get { return Instance?._resource; } }
-	public static SceneManagerEx Scene { get { return Instance?._scene; } }
-	public static SoundManager Sound { get { return Instance?._sound; } }
-	public static UIManager UI { get { return Instance?._ui; } }
-	#endregion
-
-
-	public static void Init()
+	public class Managers : MonoBehaviour
 	{
-		if (s_instance == null)
+		private static Managers s_instance;
+		private static Managers Instance { get { Init(); return s_instance; } }
+
+		#region Content
+
+		private ObjectManager _object = new ObjectManager();
+		private CameraManager _camera = new CameraManager();
+
+		public static ObjectManager Object => Instance?._object;
+		public static CameraManager Camera => Instance?._camera;
+		
+		#endregion
+		
+		#region Core
+		private DataManager _data = new DataManager();
+		private PoolManager _pool = new PoolManager();
+		private ResourceManager _resource = new ResourceManager();
+		private SceneManagerEx _scene = new SceneManagerEx();
+		private SoundManager _sound = new SoundManager();
+		private UIManager _ui = new UIManager();
+
+		public static DataManager Data { get { return Instance?._data; } }
+		public static PoolManager Pool { get { return Instance?._pool; } }
+		public static ResourceManager Resource { get { return Instance?._resource; } }
+		public static SceneManagerEx Scene { get { return Instance?._scene; } }
+		public static SoundManager Sound { get { return Instance?._sound; } }
+		public static UIManager UI { get { return Instance?._ui; } }
+		#endregion
+		
+		public static void Init()
 		{
-			GameObject go = GameObject.Find("@Managers");
-			if (go == null)
+			if (s_instance == null)
 			{
-				go = new GameObject { name = "@Managers" };
-				go.AddComponent<Managers>();
+				GameObject go = GameObject.Find("@Managers");
+				if (go == null)
+				{
+					go = new GameObject { name = "@Managers" };
+					go.AddComponent<Managers>();
+				}
+
+				DontDestroyOnLoad(go);
+
+				// 초기화
+				s_instance = go.GetComponent<Managers>();
 			}
-
-			DontDestroyOnLoad(go);
-
-			// 초기화
-			s_instance = go.GetComponent<Managers>();
 		}
-	}
 
+	}
 }
