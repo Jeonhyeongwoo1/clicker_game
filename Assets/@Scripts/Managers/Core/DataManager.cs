@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Clicker.Manager;
 using UnityEngine;
 using Clicker.ContentData;
+using Clicker.ContentData.Data;
 
 namespace Clicker.Manger
 {
@@ -15,11 +16,14 @@ namespace Clicker.Manger
 
 	public class DataManager
 	{
-		public Dictionary<int, ContentData.Data.TestData> TestDic { get; private set; } = new();
-
+		public Dictionary<int, EnvData> EnvDataDict { get; set; }	
+		public Dictionary<int, CreatureData> CreatureDataDict { get; set; }
+		
 		public void Init()
 		{
-			TestDic = LoadJson<ContentData.Data.TestDataLoader, int, ContentData.Data.TestData>("TestData").MakeDict();
+			CreatureDataDict = LoadJson<CreatureDataLoader, int, CreatureData>("CreatureData").MakeDict();
+			EnvDataDict = LoadJson<EnvDataLoader, int, EnvData>("EnvData").MakeDict();
+
 		}
 
 		private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>

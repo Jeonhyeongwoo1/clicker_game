@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 6328173336420940412}
   - component: {fileID: 8158778119479161798}
   - component: {fileID: 4241395275963686837}
-  - component: {fileID: 7159290258030825465}
-  - component: {fileID: 6818794875209344461}
+  - component: {fileID: 8753145415764451155}
+  - component: {fileID: 2673084403195372407}
+  - component: {fileID: 5072572515672210517}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -64,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 221e67daa798cfc4fa9709028c7c81b1, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -126,7 +127,34 @@ MonoBehaviour:
   _animationName: 
   loop: 1
   timeScale: 1
---- !u!58 &7159290258030825465
+--- !u!50 &8753145415764451155
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4373596034486630441}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!58 &2673084403195372407
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,10 +186,10 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.13727915, y: 0.51762617}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5699913
---- !u!114 &6818794875209344461
+  m_Radius: 0.5
+--- !u!114 &5072572515672210517
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -175,6 +203,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 5
   _rigidbody2D: {fileID: 0}
-  _collider2D: {fileID: 7159290258030825465}
-  _animation: {fileID: 4241395275963686837}
+  _collider2D: {fileID: 0}
+  _animation: {fileID: 0}
   _monsterState: 0

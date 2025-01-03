@@ -12,11 +12,10 @@ namespace Clicker.Manager
 		#region Content
 
 		private ObjectManager _object = new ObjectManager();
-		private CameraManager _camera = new CameraManager();
+		private GameManager _game = new GameManager();
 
 		public static ObjectManager Object => Instance?._object;
-		public static CameraManager Camera => Instance?._camera;
-		
+		public static GameManager Game => Instance?._game;
 		#endregion
 		
 		#region Core

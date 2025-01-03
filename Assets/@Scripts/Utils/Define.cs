@@ -28,14 +28,15 @@ namespace Clicker.Utils
 			Max,
 		}
 		
-		public enum CreatureType
+		public enum ObjectType
 		{
 			None,
 			Hero,
-			Monster
+			Monster,
+			Env
 		}
 
-		public enum MonsterState
+		public enum CreatureState
 		{
 			None,
 			Idle,

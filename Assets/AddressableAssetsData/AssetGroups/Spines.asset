@@ -17,14 +17,20 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 104219c8489c7c34bb509ca4cd5aa287
   m_SerializeEntries:
+  - m_GUID: 1e308705ac9a774499fb319ab993deb4
+    m_Address: knight_SkeletonData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 47fa580edd880c749a479a92662f21a4
     m_Address: wizard_SkeletonData
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1e308705ac9a774499fb319ab993deb4
-    m_Address: knight_SkeletonData
+  - m_GUID: bf9ec093fe189a04d92278eaa0f28574
+    m_Address: goblin_SkeletonData
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

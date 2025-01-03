@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3409054631930527976}
   - component: {fileID: 5182487736261316860}
   - component: {fileID: 621101116729802775}
-  - component: {fileID: 21852314242096847}
+  - component: {fileID: 9072866028421220421}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Untagged
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7f0e6e0812053bc4d8ca00e5e88948f2, type: 2}
+  - {fileID: 2100000, guid: 9aa2023c2c91b254f9cb0a4fba19af00, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,7 +85,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1725826435
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3409054631930527976
 MonoBehaviour:
@@ -189,7 +189,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &21852314242096847
+--- !u!114 &9072866028421220421
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

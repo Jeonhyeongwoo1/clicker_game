@@ -17,8 +17,20 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 4ef6f93e6dc9c1540812bda65fca63fe
   m_SerializeEntries:
+  - m_GUID: 1b9fa31b25b73ba41af10a6e7eef7663
+    m_Address: CreatureData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5d418efd81401c249a291b8bc2c6c6d4
     m_Address: TestData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: db7c0b011b606ab47ae392ae588559f4
+    m_Address: EnvData
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

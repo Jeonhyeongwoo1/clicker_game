@@ -162,7 +162,8 @@ GameObject:
   - component: {fileID: 7585355888172306911}
   - component: {fileID: 7585355888172306896}
   - component: {fileID: 7585355888172306897}
-  - component: {fileID: 5928288725023036974}
+  - component: {fileID: 5502824162943197309}
+  - component: {fileID: 4816192891488087484}
   m_Layer: 5
   m_Name: UI_Joystick
   m_TagString: Untagged
@@ -255,7 +256,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5928288725023036974
+--- !u!114 &5502824162943197309
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -269,6 +270,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _joystickBg: {fileID: 6540157126154278043}
   _joystick: {fileID: 6595746026210987593}
+  _canvasGroup: {fileID: 4816192891488087484}
+--- !u!225 &4816192891488087484
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7585355888172306898}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8047145526816992281
 GameObject:
   m_ObjectHideFlags: 0

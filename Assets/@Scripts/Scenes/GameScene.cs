@@ -1,6 +1,7 @@
 using Clicker.Controllers;
 using Clicker.Manager;
 using Clicker.Utils;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Clicker.Scene
@@ -23,10 +24,23 @@ namespace Clicker.Scene
 		private void Initialize()
 		{
 			GameObject map = Managers.Resource.Instantiate("BaseMap");
-			Creature hero = Managers.Object.CreateCreature("Hero", Define.CreatureType.Hero);
-			hero.Spawn(Vector3.zero);
-			
-			Creature monster = Managers.Object.CreateCreature("Monster", Define.CreatureType.Monster);
+
+			Managers.Game.CreateHeroTracker();
+
+			float radius = 1.5f;
+			int count = 1;
+			for (int i = 0; i < count; i++)
+			{
+				float angle = i * Mathf.PI * 2 / count;
+				float x = Mathf.Cos(angle) * radius;
+				float y = Mathf.Sin(angle) * radius;
+
+				Vector3 spawnPos = i == 0 ? Vector3.zero : new Vector3(x, y);
+				var hero = Managers.Object.CreateCreature<Hero>(Define.ObjectType.Hero, 201001);
+				hero.Spawn(spawnPos);
+			}
+
+			var monster = Managers.Object.CreateCreature<Monster>(Define.ObjectType.Monster, 202005);
 			monster.Spawn(new Vector3(10, 10));
 		}
 
