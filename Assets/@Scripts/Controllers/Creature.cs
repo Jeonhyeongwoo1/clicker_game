@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Clicker.ContentData.Data;
 using Clicker.Entity;
 using Clicker.Manager;
@@ -9,48 +10,46 @@ namespace Clicker.Controllers
 {
     public class Creature : BaseObject
     {
-        public float Speed = 5;
-
-        public Define.CreatureState CreatureState => creatureState;
-        [SerializeField] private Define.CreatureState creatureState;
+        public bool IsDead => CreatureState == Define.CreatureState.Dead;
+        public Define.CreatureState CreatureState => _creatureState;
+        [SerializeField] protected Define.CreatureState _creatureState;
         
         #region Data
+     
+        public float MoveSpeed => 5;
         public float AttackCoolTime => _attackCoolTime;
+        public float Atk => _atk;
         protected CreatureData _creatureData;
         protected float _attackCoolTime = 1f;
-        protected float _maxHp;
-        protected float _attack;
-        protected float _attackRange;
-        protected float _moveSpeed;
+        protected float _atk;
         
         #endregion
         
-        protected int _currentHp;
+        protected float _searchDistance = 8f;
+        protected float _aiProcessDelay = 0.3f;
         
         protected static class AnimationName
         {
             public static string Idle = "idle";
             public static string Move = "move";
             public static string Attack_a = "attack_a";
+            public static string Attack = "attack";
             public static string Attack_b = "attack_b";
             public static string Dead = "dead";
         }
 
-        public virtual void SetInfo(CreatureData creatureData)
+        public override void SetInfo(int id)
         {
-            _creatureData = creatureData;
-            
+            _creatureData = Managers.Data.CreatureDataDict[id];
             _collider2D.offset = new Vector2(_creatureData.ColliderOffsetX, _creatureData.ColliderOffstY);
             _collider2D.radius = _creatureData.ColliderRadius;
             _rigidbody2D.mass = _creatureData.Mass;
 
-            _maxHp = creatureData.MaxHp;
-            _attack = creatureData.Atk;
-            _attackRange = creatureData.AtkRange;
-            _moveSpeed = creatureData.MoveSpeed;
+            _maxHp = _currentHp = _creatureData.MaxHp;
+            _atk = _creatureData.Atk;
             _attackCoolTime = 0.5f;
 
-            string skeletonDataID = creatureData.SkeletonDataID;
+            string skeletonDataID = _creatureData.SkeletonDataID;
             var dataAsset = Managers.Resource.Load<SkeletonDataAsset>(skeletonDataID);
             _animation.skeletonDataAsset = dataAsset;
             _animation.Initialize(true);
@@ -58,25 +57,25 @@ namespace Clicker.Controllers
         
         public void ChangeState(Define.CreatureState state)
         {
-            if (state == creatureState)
+            if (state == _creatureState)
             {
                 return;
             }
 
-            creatureState = state;
+            _creatureState = state;
             switch (state)
             {
                 case Define.CreatureState.Idle:
-                    ChangeAnimation(AnimationName.Idle);
+                    PlayAnimation(0, AnimationName.Idle, true);
                     break;
                 case Define.CreatureState.Move:
-                    ChangeAnimation(AnimationName.Move);
+                    PlayAnimation(0, AnimationName.Move, true);
                     break;
                 case Define.CreatureState.Attack:
-                    ChangeAnimation(AnimationName.Attack_a);
+                    PlayAnimation(0, AnimationName.Attack, false);
                     break;
                 case Define.CreatureState.Dead:
-                    ChangeAnimation(AnimationName.Dead);
+                    PlayAnimation(0, AnimationName.Dead, false);
                     break;
             }
         }
@@ -89,6 +88,13 @@ namespace Clicker.Controllers
         {
         }
 
+        public override void Dead()
+        {
+            base.Dead();
+            
+            ChangeState(Define.CreatureState.Dead);
+        }
+
         public virtual void UseSKill()
         {
             float damage = _creatureData.Atk * _creatureData.AtkRange;
@@ -99,12 +105,7 @@ namespace Clicker.Controllers
         {
             _currentHp -= (int)damage;
         }
-
-        public virtual void Spawn(Vector3 spawnPosition)
-        {
-            transform.position = spawnPosition;
-        }
-
+        
         public void SetFlip(bool leftLook)
         {
             _animation.skeleton.ScaleX = leftLook ? -1 : 1;
@@ -114,6 +115,31 @@ namespace Clicker.Controllers
         {
             _animation.AnimationName = animationName;
         }
+
+        protected BaseObject FindNearestCreatureInRange(float distance, IEnumerable<BaseObject> objectList)
+        {
+            float distA = distance * distance;
+            BaseObject nearestObj = null;
+            float nearestDistance = float.MaxValue;
+            foreach (BaseObject obj in objectList)
+            {
+                float distB = (transform.position - obj.transform.position).sqrMagnitude;
+                if (distB < distA && distB < nearestDistance)
+                {
+                    nearestObj = obj;
+                    nearestDistance = distB;
+                }
+            }
+
+            return nearestObj;
+        }
+
+        protected virtual void ChaseAndAttack()
+        {}
+        protected virtual void IdleState(){ }
+        protected virtual void MoveState(){}
+        protected virtual void AttackState(){}
+        protected virtual void DeadState(){}
 
     }
 }

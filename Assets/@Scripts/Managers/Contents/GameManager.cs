@@ -11,7 +11,7 @@ namespace Clicker.Manager
         
         private CameraController _cameraController;
         
-        public HeroCamp CreateHeroTracker()
+        public HeroCamp CreateHeroCamp()
         {
             GameObject prefab = Managers.Resource.Instantiate("HeroCamp");
             _heroCamp = prefab.GetComponent<HeroCamp>();

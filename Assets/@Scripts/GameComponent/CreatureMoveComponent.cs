@@ -14,7 +14,7 @@ namespace Clicker.GameComponent
         public void Initialize(Creature owner, Transform followTarget)
         {
             _owner = owner;
-            _speed = owner.Speed;
+            _speed = owner.MoveSpeed;
             _followTransform = followTarget;
         }
 
@@ -36,7 +36,7 @@ namespace Clicker.GameComponent
             Vector2 movePosition = Vector2.Lerp(myPos, myPos + direction, Time.fixedDeltaTime * _speed);
             rigidbody2D.MovePosition(movePosition);
             _owner.SetFlip(Mathf.Sign(direction.x) == 1);
-           _prevPosition = rigidbody2D.position; 
+            _prevPosition = rigidbody2D.position; 
         }
     }
 }

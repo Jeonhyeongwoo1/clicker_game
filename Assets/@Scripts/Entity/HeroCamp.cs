@@ -1,14 +1,27 @@
 using System;
 using Clicker.Controllers;
+using Clicker.Utils;
 using Scripts;
 using UnityEngine;
 
 namespace Clicker.Entity
 {
-    public class HeroCamp : MonoBehaviour
+    public class HeroCamp : BaseObject
     {
         private Vector2 _direction;
         private float _speed = 5f;
+
+        public override bool Init(Define.ObjectType objectType)
+        {
+            if(base.Init(objectType) == false)
+                return false;
+
+            _collider2D.excludeLayers = (1 << (int)Define.ELayer.Monster) | (1 << (int)Define.ELayer.Hero);
+            _collider2D.includeLayers = (1 << (int)Define.ELayer.Obstacle);
+            
+            return true;
+        }
+
 
         private void OnEnable()
         {

@@ -25,23 +25,26 @@ namespace Clicker.Scene
 		{
 			GameObject map = Managers.Resource.Instantiate("BaseMap");
 
-			Managers.Game.CreateHeroTracker();
+			Managers.Game.CreateHeroCamp();
 
 			float radius = 1.5f;
-			int count = 1;
+			int count = 4;
 			for (int i = 0; i < count; i++)
 			{
 				float angle = i * Mathf.PI * 2 / count;
 				float x = Mathf.Cos(angle) * radius;
 				float y = Mathf.Sin(angle) * radius;
 
-				Vector3 spawnPos = i == 0 ? Vector3.zero : new Vector3(x, y);
-				var hero = Managers.Object.CreateCreature<Hero>(Define.ObjectType.Hero, 201001);
+				Vector3 spawnPos = i == 0 ? Vector3.zero : new Vector3(x + Random.Range(-5, 5), y + Random.Range(5, -5));
+				var hero = Managers.Object.CreateObject<Hero>(Define.ObjectType.Hero, 201001);
 				hero.Spawn(spawnPos);
 			}
 
-			var monster = Managers.Object.CreateCreature<Monster>(Define.ObjectType.Monster, 202005);
+			var monster = Managers.Object.CreateObject<Monster>(Define.ObjectType.Monster, 202005);
 			monster.Spawn(new Vector3(10, 10));
+			
+			var env = Managers.Object.CreateObject<Env>(Define.ObjectType.Env, 300001);
+			env.Spawn(new Vector3(10, 10));
 		}
 
 		public override void Clear()

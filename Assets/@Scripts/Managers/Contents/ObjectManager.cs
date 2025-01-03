@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Clicker.ConfigData;
 using Clicker.ContentData.Data;
 using Clicker.Controllers;
+using Clicker.Entity;
 using Clicker.Utils;
 using UnityEngine;
 
@@ -11,38 +10,61 @@ namespace Clicker.Manager
 {
     public class ObjectManager
     {
+        public HashSet<Creature> HeroSet => _heroSet;
+        public HashSet<Creature> MonsterSet => _monsterSet;
+        public HashSet<Env> EnvSet => _envSet;
+        
         private readonly HashSet<Creature> _heroSet = new();
         private readonly HashSet<Creature> _monsterSet = new();
+        private readonly HashSet<Env> _envSet = new();
         
-        public T CreateCreature<T>(Define.ObjectType objectType, int id) where T : Creature
+        public T CreateObject<T>(Define.ObjectType objectType, int id) where T : BaseObject
         {
             string key = typeof(T).Name;
             GameObject prefab = Managers.Resource.Instantiate(key);
-            if (!prefab.TryGetComponent(out Creature creature))
+            if (!prefab.TryGetComponent(out BaseObject baseObject))
             {
                 LogUtils.LogError("Failed get creature object : " + key);
                 return null;
             }
 
-            CreatureData creatureData = Managers.Data.CreatureDataDict[id];
             switch (objectType)
             {
                 case Define.ObjectType.Hero:
+                    Creature creature = baseObject as Creature;
                     _heroSet.Add(creature);
                     break;
                 case Define.ObjectType.Monster:
+                    creature = baseObject as Creature;
                     _monsterSet.Add(creature);
+                    break;
+                case Define.ObjectType.Env:
+                    Env env = baseObject as Env;
+                    _envSet.Add(env);
                     break;
             }
             
-            creature.Init(objectType);
-            creature.SetInfo(creatureData);
-            return creature as T;
+            baseObject.Init(objectType);
+            baseObject.SetInfo(id);
+            return baseObject as T;
         }
 
-        public HashSet<Creature> GetHeroList()
+        public void Despawn(BaseObject obj)
         {
-            return _heroSet;
+            switch (obj.ObjectType)
+            {
+                case Define.ObjectType.Hero:
+                    _heroSet.Remove(obj as Creature);
+                    break;
+                case Define.ObjectType.Monster:
+                    _monsterSet.Remove(obj as Creature);
+                    break;
+                case Define.ObjectType.Env:
+                    _envSet.Remove(obj as Env);
+                    break;
+            }
+            
+            Managers.Resource.Destroy(obj.gameObject);
         }
 
         public HashSet<Creature> GetCreatureList(Define.ObjectType objectType)

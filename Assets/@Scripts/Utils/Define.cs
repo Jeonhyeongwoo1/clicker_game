@@ -44,5 +44,38 @@ namespace Clicker.Utils
 			Attack,
 			Dead
 		}
+
+		public enum HeroMoveState
+		{
+			None,
+			Idle,
+			MoveToCreature,
+			MoveToEnv,
+			ReturnToHeroCamp,
+			ForceMove
+		}
+
+		public enum ELayer
+		{
+			Default = 0,
+			TransparentFX = 1,
+			IgnoreRaycast = 2,
+			Dummy1 = 3,
+			Water = 4,
+			UI = 5,
+			Hero = 6,
+			Monster = 7,
+			GatheringResource = 8,
+			Obstacle = 9,
+			Projectile = 10,
+		}
+		
+		public enum EnvState
+		{
+			None,
+			Idle,
+			Hit,
+			Dead
+		}
 	}
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Clicker.Entity;
 using Clicker.Manager;
 using UnityEngine;
 
@@ -14,6 +15,11 @@ namespace Clicker.Utils
 		public static bool IsValid(this GameObject go)
 		{
 			return go != null && go.activeSelf;
+		}
+
+		public static bool IsValid(this BaseObject go)
+		{
+			return go != null && go.isActiveAndEnabled;
 		}
 
 		public static void DestroyChilds(this GameObject go)
