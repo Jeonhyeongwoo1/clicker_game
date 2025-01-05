@@ -42,10 +42,8 @@ namespace Clicker.GameComponent
             if (_aiCts != null)
             {
                 _aiCts.Cancel();
-                _aiCts.Dispose();
                 _aiCts = null;
             }
-            
         }
         
         private async UniTaskVoid StartAiProcessAsync()
@@ -93,7 +91,7 @@ namespace Clicker.GameComponent
                 }
                 
                 _owner.UseSKill();
-                await UniTask.WaitForSeconds(_owner.AttackCoolTime, cancellationToken: _aiCts.Token);
+                await UniTask.WaitForSeconds(_owner.GetTick(Define.CreatureState.Attack), cancellationToken: _aiCts.Token);
             }
         }
         

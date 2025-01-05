@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 7585355888172306896}
   - component: {fileID: 7585355888172306897}
   - component: {fileID: 5502824162943197309}
-  - component: {fileID: 4816192891488087484}
+  - component: {fileID: 7227051080566877964}
   m_Layer: 5
   m_Name: UI_Joystick
   m_TagString: Untagged
@@ -270,8 +270,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _joystickBg: {fileID: 6540157126154278043}
   _joystick: {fileID: 6595746026210987593}
-  _canvasGroup: {fileID: 4816192891488087484}
---- !u!225 &4816192891488087484
+  _canvasGroup: {fileID: 7227051080566877964}
+--- !u!225 &7227051080566877964
 CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

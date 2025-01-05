@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8872386004885140659}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: forest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,7 +48,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4823554154714027429}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: --------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ GameObject:
   - component: {fileID: 8519969870835041664}
   - component: {fileID: 1481464480189733792}
   - component: {fileID: 7496511245034539319}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Terrain_tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16697,7 +16697,7 @@ GameObject:
   - component: {fileID: 1322573285864740666}
   - component: {fileID: 6006702406170651332}
   - component: {fileID: 7982616682686884111}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Front_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16882,7 +16882,7 @@ GameObject:
   - component: {fileID: 6124301054546232274}
   - component: {fileID: 8518286559325824242}
   - component: {fileID: 979342862115889692}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Gr_mine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17155,7 +17155,7 @@ GameObject:
   - component: {fileID: 6930635878020352441}
   - component: {fileID: 7821010272158355123}
   - component: {fileID: 49561184016053319}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Gr_tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17426,7 +17426,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8081719028740402147}
   - component: {fileID: 2058918996782095461}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: BaseMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17474,7 +17474,7 @@ GameObject:
   - component: {fileID: 694766335277176795}
   - component: {fileID: 1440013238996685700}
   - component: {fileID: 4533467438820091286}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Terrain_deco
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18945,7 +18945,7 @@ GameObject:
   - component: {fileID: 6816272820974116329}
   - component: {fileID: 4676350214998853274}
   - component: {fileID: 8961775855153822602}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Terrain_wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22252,7 +22252,7 @@ GameObject:
   - component: {fileID: 2429383838251070055}
   - component: {fileID: 5388123927344442874}
   - component: {fileID: 8595506550024541939}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Terrain_road
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30129,7 +30129,7 @@ GameObject:
   - component: {fileID: 3528830452059893286}
   - component: {fileID: 5362414176276843984}
   - component: {fileID: 8068278629000132971}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Object_prop
   m_TagString: Untagged
   m_Icon: {fileID: 0}

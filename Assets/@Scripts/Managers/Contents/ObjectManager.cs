@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
-using Clicker.ContentData.Data;
 using Clicker.Controllers;
 using Clicker.Entity;
+using Clicker.Skill;
 using Clicker.Utils;
 using UnityEngine;
 
@@ -13,10 +12,13 @@ namespace Clicker.Manager
         public HashSet<Creature> HeroSet => _heroSet;
         public HashSet<Creature> MonsterSet => _monsterSet;
         public HashSet<Env> EnvSet => _envSet;
+        public HeroCamp HeroCamp => _heroCamp;
         
         private readonly HashSet<Creature> _heroSet = new();
         private readonly HashSet<Creature> _monsterSet = new();
         private readonly HashSet<Env> _envSet = new();
+        private readonly HashSet<Projectile> _projectileSet = new();
+        private HeroCamp _heroCamp;
         
         public T CreateObject<T>(Define.ObjectType objectType, int id) where T : BaseObject
         {
@@ -42,6 +44,14 @@ namespace Clicker.Manager
                     Env env = baseObject as Env;
                     _envSet.Add(env);
                     break;
+                case Define.ObjectType.HeroCamp:
+                    HeroCamp heroCamp = baseObject as HeroCamp;
+                    _heroCamp = heroCamp;
+                    break;
+                case Define.ObjectType.Projectile:
+                    Projectile projectile = baseObject as Projectile;
+                    _projectileSet.Add(projectile);
+                    break;
             }
             
             baseObject.Init(objectType);
@@ -61,6 +71,9 @@ namespace Clicker.Manager
                     break;
                 case Define.ObjectType.Env:
                     _envSet.Remove(obj as Env);
+                    break;
+                case Define.ObjectType.Projectile:
+                    _projectileSet.Remove(obj as Projectile);
                     break;
             }
             

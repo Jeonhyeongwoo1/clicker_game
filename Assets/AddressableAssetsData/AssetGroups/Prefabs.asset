@@ -23,14 +23,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 45823a6326f3b8c4ead9fbe0893db3be
-    m_Address: Monster
+  - m_GUID: 5a40e413d750cdb44b0fe888fbf55284
+    m_Address: BaseMap
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5a40e413d750cdb44b0fe888fbf55284
-    m_Address: BaseMap
+  - m_GUID: 45823a6326f3b8c4ead9fbe0893db3be
+    m_Address: Monster
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -43,6 +43,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f47c398c87ed2e841acfd50260b3a10a
     m_Address: HeroCamp
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b1e0ccdd80d98a49a0fd17692f2e50e
+    m_Address: Projectile
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

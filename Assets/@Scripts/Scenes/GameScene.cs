@@ -1,4 +1,5 @@
 using Clicker.Controllers;
+using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
 using JetBrains.Annotations;
@@ -25,10 +26,10 @@ namespace Clicker.Scene
 		{
 			GameObject map = Managers.Resource.Instantiate("BaseMap");
 
-			Managers.Game.CreateHeroCamp();
+			Managers.Object.CreateObject<HeroCamp>(Define.ObjectType.HeroCamp, -1);
 
 			float radius = 1.5f;
-			int count = 4;
+			int count = 1;
 			for (int i = 0; i < count; i++)
 			{
 				float angle = i * Mathf.PI * 2 / count;
@@ -36,7 +37,7 @@ namespace Clicker.Scene
 				float y = Mathf.Sin(angle) * radius;
 
 				Vector3 spawnPos = i == 0 ? Vector3.zero : new Vector3(x + Random.Range(-5, 5), y + Random.Range(5, -5));
-				var hero = Managers.Object.CreateObject<Hero>(Define.ObjectType.Hero, 201001);
+				var hero = Managers.Object.CreateObject<Hero>(Define.ObjectType.Hero, 201002);
 				hero.Spawn(spawnPos);
 			}
 

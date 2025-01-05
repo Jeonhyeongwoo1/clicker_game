@@ -33,7 +33,10 @@ namespace Clicker.Utils
 			None,
 			Hero,
 			Monster,
-			Env
+			Env,
+			HeroCamp,
+			Skill,
+			Projectile
 		}
 
 		public enum CreatureState
@@ -77,5 +80,21 @@ namespace Clicker.Utils
 			Hit,
 			Dead
 		}
+		
+		public enum SortingOrder
+		{
+			Projectile = 30
+		}	
+		
+		public class AnimationName
+		{
+			public static string Idle = "idle";
+			public static string Move = "move";
+			public static string Attack_a = "attack_a";
+			public static string Attack = "attack";
+			public static string Attack_b = "attack_b";
+			public static string Dead = "dead";
+		}
+
 	}
 }

@@ -1,13 +1,10 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Clicker.Entity;
-using Clicker.GameComponent;
 using Clicker.Manager;
 using Clicker.Utils;
 using Cysharp.Threading.Tasks;
 using Scripts;
-using Spine;
 using UnityEngine;
 
 namespace Clicker.Controllers
@@ -23,9 +20,8 @@ namespace Clicker.Controllers
             }
         }
         
-        private CreatureMoveComponent _moveComponent;
+        // private CreatureMoveComponent _moveComponent;
         [SerializeField] private Define.HeroMoveState _heroMoveState;
-        private BaseObject _targetObject;
         private float _distanceThreshold = 5f;
         
         public override bool Init(Define.ObjectType objectType)
@@ -35,44 +31,11 @@ namespace Clicker.Controllers
             //_moveComponent.Initialize(this, Managers.Game.HeroCamp.transform);
             // _aiComponent = Util.GetOrAddComponent<AIComponent>(gameObject);
             // _aiComponent.Initialize(this);
-            
+
+            transform.name = transform.GetInstanceID().ToString();
             return true;
         }
-
-        private CancellationTokenSource _aiCts;
-        private async UniTaskVoid AIProcess()
-        {
-            _aiCts = new CancellationTokenSource();
-            while (_aiCts.IsCancellationRequested == false)
-            {
-                switch (_creatureState)
-                {
-                    case Define.CreatureState.Idle:
-                        IdleState();
-                        break;
-                    case Define.CreatureState.Move:
-                        MoveState();
-                        break;
-                    case Define.CreatureState.Attack:
-                        AttackState();
-                        break;
-                    case Define.CreatureState.Dead:
-                        DeadState();
-                        break;
-                }
-
-                try
-                {
-                    await UniTask.WaitForSeconds(_aiProcessDelay, cancellationToken: _aiCts.Token);
-                }
-                catch (Exception e) when (e is not OperationCanceledException)
-                {
-                    LogUtils.LogError($"{nameof(AIProcess)} / Message : {e.Message}");
-                    return;
-                }
-            }
-        }
-
+        
         protected override void IdleState()
         {
             base.IdleState();
@@ -86,7 +49,7 @@ namespace Clicker.Controllers
 
             //1. 근처에 적이 있는지 확인한다.
             BaseObject creature =
-                FindNearestCreatureInRange(5, Managers.Object.MonsterSet) as Creature;
+                FindNearestCreatureInRange(_searchDistance, Managers.Object.MonsterSet) as Creature;
             if (creature.IsValid())
             {
                 ChangeState(Define.CreatureState.Move);
@@ -97,11 +60,11 @@ namespace Clicker.Controllers
             
             //2. 근처에 env가 있는지 확인한다.
             BaseObject env =
-                FindNearestCreatureInRange(5, Managers.Object.EnvSet) as Env;
+                FindNearestCreatureInRange(_searchDistance, Managers.Object.EnvSet) as Env;
             if (env.IsValid())
             {
                 creature =
-                    FindNearestCreatureInRange(5, Managers.Object.MonsterSet) as Creature;
+                    FindNearestCreatureInRange(_searchDistance, Managers.Object.MonsterSet) as Creature;
                 if (creature.IsValid())
                 {
                     ChangeState(Define.CreatureState.Move);
@@ -145,7 +108,6 @@ namespace Clicker.Controllers
 
             if (HeroMoveState == Define.HeroMoveState.MoveToEnv)
             {
-                
                 ChaseAndAttack();
                 return;
             }
@@ -153,7 +115,7 @@ namespace Clicker.Controllers
             //3. 복귀
             if (HeroMoveState == Define.HeroMoveState.ReturnToHeroCamp)
             {
-                Vector3 heroCampPos = Managers.Game.HeroCamp.transform.position;
+                Vector3 heroCampPos = Managers.Object.HeroCamp.transform.position;
                 float distToHeroSqrt = (heroCampPos - transform.position).sqrMagnitude;
                 float distToThresholdSqrt = (_distanceThreshold * _distanceThreshold);
                 float speed = distToHeroSqrt > distToThresholdSqrt ? MoveSpeed * 1.5f : MoveSpeed;
@@ -166,8 +128,8 @@ namespace Clicker.Controllers
                 
                 SetVelocity(direction, speed);
             }
-            
         }
+        
 
         protected override void ChaseAndAttack()
         {
@@ -190,8 +152,9 @@ namespace Clicker.Controllers
                 
             Vector3 direction = (_targetObject.transform.position - transform.position).normalized;
             float distA = (transform.position - _targetObject.transform.position).sqrMagnitude;
-            float radius = (_targetObject.Radius + Radius + 1.0f);
-            float distB = radius * radius;
+            float attackDistanceSqrt = AttackDistance;
+            float distB = attackDistanceSqrt * attackDistanceSqrt;
+            //공격 범위안에 들어왔는가
             if (distA <= distB)
             {
                 direction = Vector2.zero;
@@ -200,7 +163,8 @@ namespace Clicker.Controllers
             }
             else
             {
-                float chaseDistance = _searchDistance * _searchDistance;
+                //추적할 수 있는 거리를 벗어났을 때
+                float chaseDistance = _chaseDistance * _chaseDistance;
                 if (chaseDistance < distA)
                 {
                     HeroMoveState = Define.HeroMoveState.None;
@@ -214,17 +178,26 @@ namespace Clicker.Controllers
 
         protected override void AttackState()
         {
-            base.AttackState();
-
             if (!_targetObject.IsValid())
             {
                 _targetObject = null;
                 ChangeState(Define.CreatureState.Idle);
                 HeroMoveState = Define.HeroMoveState.Idle;
+                if (_isUseSKill)
+                {
+                    _isUseSKill = false;
+                    _skillBook.StopSkill();
+                }
                 return;
             }
-            
-            _targetObject.TakeDamage(this);
+
+            if (_isUseSKill)
+            {
+                return;
+            }
+
+            _isUseSKill = true;
+            _skillBook.UseSKill(this);
         }
 
         private void FixedUpdate()
@@ -238,12 +211,13 @@ namespace Clicker.Controllers
             float speed = MoveSpeed;
             switch (HeroMoveState)
             {
+                case Define.HeroMoveState.None:
                 case Define.HeroMoveState.Idle:
                     direction = Vector2.zero;
                     SetVelocity(direction, speed);
                     break;
                 case Define.HeroMoveState.ForceMove:
-                    Vector3 heroCampPos = Managers.Game.HeroCamp.transform.position;
+                    Vector3 heroCampPos = Managers.Object.HeroCamp.transform.position;
                     Vector2 dir = (heroCampPos - transform.position).normalized;
                     float distToHeroSqrt = (heroCampPos - transform.position).sqrMagnitude;
                     float distToThresholdSqrt = (_distanceThreshold * _distanceThreshold);
@@ -266,46 +240,20 @@ namespace Clicker.Controllers
             }
         }
 
-        private void SetVelocity(Vector2 velocity, float speed)
-        {
-            _rigidbody2D.velocity = velocity * speed;
-            SetFlip(Mathf.Sign(velocity.x) == 1);
-        }
-
         protected override void OnEnable()
         {
             base.OnEnable();
             InputHandler.onChangedUIEvent += OnChangedUIEvent;
-            _animation.AnimationState.Event += OnAnimationComplete;
         }
-
+        
         protected override void OnDisable()
         {
             base.OnDisable();
             InputHandler.onChangedUIEvent -= OnChangedUIEvent;
             if (_animation != null)
             {
-                _animation.AnimationState.Event -= OnAnimationComplete;
-            }
-        }
-        
-        private void OnAnimationComplete(TrackEntry trackEntry, Spine.Event e)
-        {
-            Debug.Log($"animation {trackEntry.Animation.Name}");
-        
-            // 여기서 원하는 로직 추가
-            if (trackEntry.Animation.Name == AnimationName.Attack)
-            {
-                PlayAnimation(0, AnimationName.Attack, false);
-            }
-        }
-
-        private void StopAIProcess()
-        {
-            if (_aiCts != null)
-            {
-                _aiCts.Cancel();
-                _aiCts = null;
+                _animation.AnimationState.Event -= OnAnimationEvent;
+                _animation.AnimationState.Complete -= OnAnimationComplete;
             }
         }
 
@@ -323,7 +271,7 @@ namespace Clicker.Controllers
                 case Define.EUIEvent.PointerUp:
                     ChangeState(Define.CreatureState.Idle);
                     HeroMoveState = Define.HeroMoveState.None;
-                    AIProcess().Forget();
+                    AIProcessAsync().Forget();
                     break;
                 case Define.EUIEvent.Drag:
                     break;

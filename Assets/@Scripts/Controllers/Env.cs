@@ -1,6 +1,6 @@
 
 using System;
-using Clicker.ContentData.Data;
+using Clicker.ContentData;
 using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;

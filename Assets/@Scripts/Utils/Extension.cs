@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Clicker.Controllers;
 using Clicker.Entity;
 using Clicker.Manager;
 using UnityEngine;
@@ -17,9 +18,16 @@ namespace Clicker.Utils
 			return go != null && go.activeSelf;
 		}
 
-		public static bool IsValid(this BaseObject go)
+		public static bool IsValid(this BaseObject bo)
 		{
-			return go != null && go.isActiveAndEnabled;
+			if (bo == null || bo.isActiveAndEnabled == false)
+				return false;
+
+			Creature creature = bo as Creature;
+			if (creature != null)
+				return creature.CreatureState != Define.CreatureState.Dead;
+
+			return true;
 		}
 
 		public static void DestroyChilds(this GameObject go)

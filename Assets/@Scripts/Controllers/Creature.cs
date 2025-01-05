@@ -1,10 +1,16 @@
+using System;
 using System.Collections.Generic;
-using Clicker.ContentData.Data;
+using System.Threading;
+using Clicker.ContentData;
 using Clicker.Entity;
 using Clicker.Manager;
+using Clicker.Skill;
 using Clicker.Utils;
+using Cysharp.Threading.Tasks;
+using Spine;
 using UnityEngine;
 using Spine.Unity;
+using Event = Spine.Event;
 
 namespace Clicker.Controllers
 {
@@ -12,49 +18,73 @@ namespace Clicker.Controllers
     {
         public bool IsDead => CreatureState == Define.CreatureState.Dead;
         public Define.CreatureState CreatureState => _creatureState;
+        public BaseObject TargetObject => _targetObject;
+        
         [SerializeField] protected Define.CreatureState _creatureState;
         
         #region Data
      
-        public float MoveSpeed => 5;
-        public float AttackCoolTime => _attackCoolTime;
+        public float MoveSpeed => _moveSpeed;
         public float Atk => _atk;
+        public float AttackRange => _attackRange;
         protected CreatureData _creatureData;
-        protected float _attackCoolTime = 1f;
         protected float _atk;
+        protected float _attackRange;
+        protected float _moveSpeed;
         
         #endregion
-        
-        protected float _searchDistance = 8f;
-        protected float _aiProcessDelay = 0.3f;
-        
-        protected static class AnimationName
-        {
-            public static string Idle = "idle";
-            public static string Move = "move";
-            public static string Attack_a = "attack_a";
-            public static string Attack = "attack";
-            public static string Attack_b = "attack_b";
-            public static string Dead = "dead";
-        }
 
+        protected float AttackDistance
+        {
+            get
+            {
+                //최소범위
+                float radius = (_targetObject.Radius + Radius + 1.0f);
+                return radius + _attackRange;
+            }
+        }
+        
+        protected SkillBook _skillBook;
+        protected float _chaseDistance = 8f;
+        protected float _searchDistance = 8f;
+        protected CancellationTokenSource _aiCts;
+        protected BaseObject _targetObject;
+        protected bool _isUseSKill = false;
+        
         public override void SetInfo(int id)
         {
-            _creatureData = Managers.Data.CreatureDataDict[id];
+            base.SetInfo(id);
+            switch(_objectType)
+            {
+                case Define.ObjectType.Hero:
+                    _creatureData = Managers.Data.HeroDataDict[id];
+                    break;
+                case Define.ObjectType.Monster:
+                    _creatureData = Managers.Data.MonsterDataDict[id];
+                    break;
+            }
+            
             _collider2D.offset = new Vector2(_creatureData.ColliderOffsetX, _creatureData.ColliderOffstY);
             _collider2D.radius = _creatureData.ColliderRadius;
             _rigidbody2D.mass = _creatureData.Mass;
 
             _maxHp = _currentHp = _creatureData.MaxHp;
             _atk = _creatureData.Atk;
-            _attackCoolTime = 0.5f;
+            _attackRange = _creatureData.AtkRange;
+            _moveSpeed = _creatureData.MoveSpeed;
 
             string skeletonDataID = _creatureData.SkeletonDataID;
             var dataAsset = Managers.Resource.Load<SkeletonDataAsset>(skeletonDataID);
             _animation.skeletonDataAsset = dataAsset;
             _animation.Initialize(true);
+
+            _skillBook = Util.GetOrAddComponent<SkillBook>(gameObject);
+            _skillBook.AddSkill(_creatureData.SkillIdList);
+
+            _animation.AnimationState.Event += OnAnimationEvent;
+            _animation.AnimationState.Complete += OnAnimationComplete;
         }
-        
+
         public void ChangeState(Define.CreatureState state)
         {
             if (state == _creatureState)
@@ -66,33 +96,31 @@ namespace Clicker.Controllers
             switch (state)
             {
                 case Define.CreatureState.Idle:
-                    PlayAnimation(0, AnimationName.Idle, true);
+                    PlayAnimation(0, Define.AnimationName.Idle, true);
                     break;
                 case Define.CreatureState.Move:
-                    PlayAnimation(0, AnimationName.Move, true);
+                    PlayAnimation(0, Define.AnimationName.Move, true);
                     break;
                 case Define.CreatureState.Attack:
-                    PlayAnimation(0, AnimationName.Attack, false);
+                    if (_objectType == Define.ObjectType.Hero)
+                    {
+                        PlayAnimation(0, Define.AnimationName.Attack, false);
+                    }
+                    else
+                    {
+                        PlayAnimation(0, Define.AnimationName.Attack_a, false);
+                    }
                     break;
                 case Define.CreatureState.Dead:
-                    PlayAnimation(0, AnimationName.Dead, false);
+                    PlayAnimation(0, Define.AnimationName.Dead, false);
                     break;
             }
         }
 
-        protected virtual void OnEnable()
-        {
-        }
- 
-        protected virtual void OnDisable()
-        {
-        }
-
         public override void Dead()
         {
-            base.Dead();
-            
             ChangeState(Define.CreatureState.Dead);
+            _skillBook.StopSkill();
         }
 
         public virtual void UseSKill()
@@ -109,11 +137,6 @@ namespace Clicker.Controllers
         public void SetFlip(bool leftLook)
         {
             _animation.skeleton.ScaleX = leftLook ? -1 : 1;
-        }
-
-        protected void ChangeAnimation(string animationName)
-        {
-            _animation.AnimationName = animationName;
         }
 
         protected BaseObject FindNearestCreatureInRange(float distance, IEnumerable<BaseObject> objectList)
@@ -134,12 +157,89 @@ namespace Clicker.Controllers
             return nearestObj;
         }
 
-        protected virtual void ChaseAndAttack()
-        {}
-        protected virtual void IdleState(){ }
+        protected override void OnAnimationComplete(TrackEntry trackEntry)
+        {
+            base.OnAnimationComplete(trackEntry);
+
+            if (trackEntry.Animation.Name == Define.AnimationName.Attack &&
+                _creatureState == Define.CreatureState.Attack)
+            {
+                PlayAnimation(0, Define.AnimationName.Attack, false);
+            }
+            else if (trackEntry.Animation.Name == Define.AnimationName.Attack_a &&
+                     _creatureState == Define.CreatureState.Attack)
+            {
+                PlayAnimation(0, Define.AnimationName.Attack_a, false);
+            }
+            else if (trackEntry.Animation.Name == Define.AnimationName.Attack_b &&
+                     _creatureState == Define.CreatureState.Attack)
+            {
+                PlayAnimation(0, Define.AnimationName.Attack_b, false);
+            }
+            else if (trackEntry.Animation.Name == Define.AnimationName.Dead &&
+                     _creatureState == Define.CreatureState.Dead)
+            {
+                Dead();
+            }
+        }
+
+        protected async UniTaskVoid AIProcessAsync()
+        {
+            _aiCts = new CancellationTokenSource();
+            while (_aiCts.IsCancellationRequested == false)
+            {
+                switch (_creatureState)
+                {
+                    case Define.CreatureState.Idle:
+                        IdleState();
+                        break;
+                    case Define.CreatureState.Move:
+                        MoveState();
+                        break;
+                    case Define.CreatureState.Attack:
+                        AttackState();
+                        break;
+                    case Define.CreatureState.Dead:
+                        DeadState();
+                        break;
+                }
+
+                try
+                {
+                    await UniTask.WaitForSeconds(GetTick(_creatureState), cancellationToken: _aiCts.Token);
+                }
+                catch (Exception e) when (e is not OperationCanceledException)
+                {
+                    LogUtils.LogError($"{nameof(AIProcessAsync)} / Message : {e.Message}");
+                    return;
+                }
+            }
+        }
+
+        protected void StopAIProcess()
+        {
+            if (_aiCts != null)
+            {
+                _aiCts.Cancel();
+                _aiCts = null;
+            }
+        }
+
+        protected void SetVelocity(Vector2 velocity, float speed)
+        {
+            _rigidbody2D.velocity = velocity * speed;
+            SetFlip(Mathf.Sign(velocity.x) == 1);
+        }
+
+        protected virtual void ChaseAndAttack() {}
+        protected virtual void IdleState() {}
         protected virtual void MoveState(){}
         protected virtual void AttackState(){}
-        protected virtual void DeadState(){}
+
+        protected virtual void DeadState()
+        {
+            ChangeState(Define.CreatureState.Dead);
+        }
 
     }
 }

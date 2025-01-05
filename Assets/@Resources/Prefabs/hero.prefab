@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 5182487736261316860}
   - component: {fileID: 621101116729802775}
   - component: {fileID: 9072866028421220421}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Hero
-  m_TagString: Untagged
+  m_TagString: Hero
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 912eb0f835f83244081d7b774062d72f, type: 2}
+  - {fileID: 2100000, guid: 7f0e6e0812053bc4d8ca00e5e88948f2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -174,8 +174,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 10
+  m_Mass: 75
+  m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -204,5 +204,6 @@ MonoBehaviour:
   _rigidbody2D: {fileID: 621101116729802775}
   _collider2D: {fileID: 5182487736261316860}
   _animation: {fileID: 3409054631930527976}
+  _currentHp: 0
   _creatureState: 0
   _heroMoveState: 0

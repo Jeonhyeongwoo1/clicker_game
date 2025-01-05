@@ -8,6 +8,9 @@ namespace Clicker.Entity
 {
     public class HeroCamp : BaseObject
     {
+        private CameraController _cameraController;
+
+        
         private Vector2 _direction;
         private float _speed = 5f;
 
@@ -19,6 +22,12 @@ namespace Clicker.Entity
             _collider2D.excludeLayers = (1 << (int)Define.ELayer.Monster) | (1 << (int)Define.ELayer.Hero);
             _collider2D.includeLayers = (1 << (int)Define.ELayer.Obstacle);
             
+            if (_cameraController == null)
+            {
+                _cameraController = FindObjectOfType<CameraController>();
+            }
+
+            _cameraController.SetTarget(transform);
             return true;
         }
 
