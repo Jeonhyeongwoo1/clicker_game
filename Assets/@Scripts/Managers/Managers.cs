@@ -13,9 +13,11 @@ namespace Clicker.Manager
 
 		private ObjectManager _object = new ObjectManager();
 		private GameManager _game = new GameManager();
+		private MapManager _map = new MapManager();
 
 		public static ObjectManager Object => Instance?._object;
 		public static GameManager Game => Instance?._game;
+		public static MapManager Map => Instance?._map;
 		#endregion
 		
 		#region Core

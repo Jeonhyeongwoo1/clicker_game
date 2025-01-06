@@ -16593,13 +16593,13 @@ Tilemap:
   - m_RefCount: 1623
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 0
-    m_Data: {r: 6.907e-41, g: 6.907e-41, b: 6.907e-41, a: 6.907e-41}
+    m_Data: {r: 5.3196e-41, g: 5.3196e-41, b: 5.3196e-41, a: 5.3196e-41}
   - m_RefCount: 0
-    m_Data: {r: 6.907e-41, g: 6.907e-41, b: 6.907e-41, a: 6.907e-41}
+    m_Data: {r: 5.3196e-41, g: 5.3196e-41, b: 5.3196e-41, a: 5.3196e-41}
   - m_RefCount: 4
-    m_Data: {r: 0.74772674, g: 0.46475607, b: 0.5420139, a: 1}
+    m_Data: {r: 0.9440995, g: 0.398822, b: 0.46470037, a: 1}
   - m_RefCount: 14
-    m_Data: {r: 0.9810121, g: 0.63027686, b: 0.69436747, a: 1}
+    m_Data: {r: 0.85581386, g: 0.3817277, b: 0.48739538, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -17426,6 +17426,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8081719028740402147}
   - component: {fileID: 2058918996782095461}
+  - component: {fileID: 8922217225330647135}
   m_Layer: 0
   m_Name: BaseMap
   m_TagString: Untagged
@@ -17462,6 +17463,19 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 2
   m_CellSwizzle: 0
+--- !u!114 &8922217225330647135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5563641845993889020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c633851da3cd4585b39164cdf98ce6d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wallTileMap: {fileID: 6816272820974116329}
 --- !u!1 &6108373538326142407
 GameObject:
   m_ObjectHideFlags: 0
@@ -22154,7 +22168,7 @@ Tilemap:
   - m_RefCount: 307
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 1
-    m_Data: {r: 0.70045924, g: 0.47084594, b: 0.5415468, a: 1}
+    m_Data: {r: 0.97897834, g: 0.6471233, b: 0.7349664, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -22236,7 +22250,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6223244115828525455}
   m_Enabled: 1
-  m_CellSize: {x: 8, y: 4, z: 1}
+  m_CellSize: {x: 3, y: 2, z: 1}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 2
   m_CellSwizzle: 0

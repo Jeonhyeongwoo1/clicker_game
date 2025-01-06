@@ -2,7 +2,6 @@ using Clicker.Controllers;
 using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
-using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Clicker.Scene
@@ -24,8 +23,10 @@ namespace Clicker.Scene
 
 		private void Initialize()
 		{
-			GameObject map = Managers.Resource.Instantiate("BaseMap");
-
+			GameObject mapPrefab = Managers.Resource.Instantiate("BaseMap");
+			var map = mapPrefab.GetComponent<Map>();
+			Managers.Map.SetMap(map);
+			
 			Managers.Object.CreateObject<HeroCamp>(Define.ObjectType.HeroCamp, -1);
 
 			float radius = 1.5f;

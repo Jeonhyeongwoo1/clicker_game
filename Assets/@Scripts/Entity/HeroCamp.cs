@@ -1,5 +1,6 @@
 using System;
 using Clicker.Controllers;
+using Clicker.Manager;
 using Clicker.Utils;
 using Scripts;
 using UnityEngine;
@@ -31,14 +32,13 @@ namespace Clicker.Entity
             return true;
         }
 
-
-        private void OnEnable()
+        protected override void OnEnable()
         {
             InputHandler.onDragAction += SetDirection;
             InputHandler.onPointerUpAction += SetDirection;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
             InputHandler.onDragAction -= SetDirection;
             InputHandler.onPointerUpAction -= SetDirection;
@@ -53,7 +53,10 @@ namespace Clicker.Entity
         {
             Vector2 myPos = transform.position;
             Vector2 movePosition = Vector2.Lerp(myPos, myPos + _direction, Time.deltaTime * _speed);
-            transform.position = movePosition;
+            if (Managers.Map.CurrentMap.IsPossibleMoveTo(movePosition))
+            {
+                transform.position = movePosition;
+            }
             
             float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg - 90;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
