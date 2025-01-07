@@ -25,9 +25,9 @@ namespace Clicker.Controllers
         [SerializeField] private Define.HeroMoveState _heroMoveState;
         private float _distanceThreshold = 5f;
         
-        public override bool Init(Define.ObjectType objectType)
+        public override bool Init(Define.EObjectType eObjectType)
         {
-            base.Init(objectType);
+            base.Init(eObjectType);
             //_moveComponent = Util.GetOrAddComponent<CreatureMoveComponent>(gameObject);
             //_moveComponent.Initialize(this, Managers.Game.HeroCamp.transform);
             // _aiComponent = Util.GetOrAddComponent<AIComponent>(gameObject);

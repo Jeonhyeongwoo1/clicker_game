@@ -26,7 +26,7 @@ namespace Clicker.Skill
                     continue;
                 }
                 
-                skill.Init(Define.ObjectType.Skill);
+                skill.Init(Define.EObjectType.Skill);
                 skill.SetInfo(id);
                 _skillList.Add(skill);
             }

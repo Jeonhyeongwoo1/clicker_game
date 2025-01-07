@@ -16,9 +16,9 @@ namespace Clicker.Entity
         private Vector3 _movePosition;
         private float _speed = 5f;
 
-        public override bool Init(Define.ObjectType objectType)
+        public override bool Init(Define.EObjectType eObjectType)
         {
-            if(base.Init(objectType) == false)
+            if(base.Init(eObjectType) == false)
                 return false;
 
             _collider2D.excludeLayers = (1 << (int)Define.ELayer.Monster) | (1 << (int)Define.ELayer.Hero);

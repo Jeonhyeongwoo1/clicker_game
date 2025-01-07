@@ -16,14 +16,14 @@ namespace Clicker.Skill
         
         // private CancellationTokenSource _skillCts;
         
-        public override bool Init(Define.ObjectType objectType)
+        public override bool Init(Define.EObjectType eObjectType)
         {
-            if (base.Init(objectType) == false)
+            if (base.Init(eObjectType) == false)
             {
                 return false;
             }
 
-            _objectType = objectType;
+            objectType = eObjectType;
             return true;
         }
 
@@ -82,7 +82,7 @@ namespace Clicker.Skill
                 else
                 {
                     var projectile =
-                        Managers.Object.CreateObject<Projectile>(Define.ObjectType.Projectile, _skillData.ProjectileId);
+                        Managers.Object.CreateObject<Projectile>(Define.EObjectType.Projectile, _skillData.ProjectileId);
             
                     if (projectile == null)
                     {

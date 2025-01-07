@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Clicker.Controllers;
-using Clicker.Entity;
 using Clicker.Utils;
-using Sirenix.OdinInspector;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -21,8 +19,6 @@ namespace Clicker.Manager
         private int _maxY;
         private GameObject _mapObject;
         
-        private List<Vector3Int> _objectPositionList = new();
-
         public bool IsPossibleHeroCampMove(Vector3 position)
         {
             Vector3Int targetPos = Vector3Int.CeilToInt(position);
@@ -75,7 +71,7 @@ namespace Clicker.Manager
             }   
         }
         
-        public List<Vector3Int> GetObjectPosition()
+        public void CreateBaseObjects()
         {
             Tilemap tm = Util.FindChild<Tilemap>(_mapObject, "Tilemap_Object", true);
 
@@ -91,16 +87,26 @@ namespace Clicker.Manager
                     if (tile == null)
                         continue;
 
-                    Debug.Log("tile : " + tile);
-                    if (tile.ObjectType == Define.ObjectType.Env)
+                    Debug.Log($"{tile} / {tile.ObjectType} / {tile.DataTemplateID}");
+                    if (tile.ObjectType == Define.EObjectType.Env)
                     {
-                     //   env.SetCellPos(cellPos, true);
+                        if (tile.DataTemplateID == 202001)
+                        {
+                            continue;
+                        }
+                        var env = Managers.Object.CreateObject<Env>(tile.ObjectType, tile.DataTemplateID);
+                        Vector3 worldPosition = CellToWorld(cellPos);
+                        env.Spawn(worldPosition);
+                    }
+                    else if(tile.ObjectType == Define.EObjectType.Monster)
+                    {
+                        var monster = Managers.Object.CreateObject<Monster>(tile.ObjectType, tile.DataTemplateID);
+                        Vector3 worldPosition = CellToWorld(cellPos);
+                        monster.Spawn(worldPosition);
                     }
                     
-                    _objectPositionList.Add(cellPos);
                 }
             }
-            return _objectPositionList;
         }
         
         public List<Vector3Int> PathFinding(Vector3Int currentPosition, Vector3Int destPosition)

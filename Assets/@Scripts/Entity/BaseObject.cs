@@ -12,7 +12,7 @@ namespace Clicker.Entity
     public class BaseObject : MonoBehaviour
     {
         public float Radius => _collider2D.radius;
-        public Define.ObjectType ObjectType => _objectType;
+        public Define.EObjectType ObjectType => objectType;
         public Rigidbody2D Rigidbody2D => _rigidbody2D;
         public CircleCollider2D Collider2D => _collider2D;
         public SkeletonAnimation SkeletonAnimation => _animation;
@@ -21,17 +21,17 @@ namespace Clicker.Entity
         [SerializeField] protected CircleCollider2D _collider2D;
         [SerializeField] protected SkeletonAnimation _animation;
 
-        protected Define.ObjectType _objectType;
+        protected Define.EObjectType objectType;
         protected float _maxHp;
         [SerializeField] protected float _currentHp;
         protected int _id;
         
-        public virtual bool Init(Define.ObjectType objectType)
+        public virtual bool Init(Define.EObjectType eObjectType)
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _collider2D = GetComponent<CircleCollider2D>();
             _animation = GetComponent<SkeletonAnimation>();
-            _objectType = objectType;
+            objectType = eObjectType;
             return true;
         }
         

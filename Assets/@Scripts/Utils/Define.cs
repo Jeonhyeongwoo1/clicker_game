@@ -28,7 +28,7 @@ namespace Clicker.Utils
 			Max,
 		}
 		
-		public enum ObjectType
+		public enum EObjectType
 		{
 			None,
 			Hero,
@@ -38,7 +38,13 @@ namespace Clicker.Utils
 			Skill,
 			Projectile
 		}
-
+		public enum ECreatureType
+		{
+			None,
+			Hero,
+			Monster,
+			Npc,
+		}
 		public enum CreatureState
 		{
 			None,

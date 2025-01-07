@@ -16,16 +16,10 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 784a07d8e1c6aa6498317919c6109520
-  m_SerializeEntries:
-  - m_GUID: 894df532750051b43a5df0b583b6c101
-    m_Address: BaseMapCollision
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3b34cd1d0f58d714b8b4fcf9c86bdbb4, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: fc326a7fcc84972419b62c393bd108ad, type: 2}
     - {fileID: 11400000, guid: d99eee2464ad6fa4ea454663390703a3, type: 2}
+    - {fileID: 11400000, guid: fc326a7fcc84972419b62c393bd108ad, type: 2}

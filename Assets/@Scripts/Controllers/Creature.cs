@@ -54,12 +54,12 @@ namespace Clicker.Controllers
         public override void SetInfo(int id)
         {
             base.SetInfo(id);
-            switch(_objectType)
+            switch(ObjectType)
             {
-                case Define.ObjectType.Hero:
+                case Define.EObjectType.Hero:
                     _creatureData = Managers.Data.HeroDataDict[id];
                     break;
-                case Define.ObjectType.Monster:
+                case Define.EObjectType.Monster:
                     _creatureData = Managers.Data.MonsterDataDict[id];
                     break;
             }
@@ -102,7 +102,7 @@ namespace Clicker.Controllers
                     PlayAnimation(0, Define.AnimationName.Move, true);
                     break;
                 case Define.CreatureState.Attack:
-                    if (_objectType == Define.ObjectType.Hero)
+                    if (ObjectType == Define.EObjectType.Hero)
                     {
                         PlayAnimation(0, Define.AnimationName.Attack, false);
                     }

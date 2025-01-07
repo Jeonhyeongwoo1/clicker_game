@@ -25,7 +25,7 @@ namespace Clicker.Scene
 		private void Initialize()
 		{
 			Managers.Map.CreateMap("BaseMap");
-			Managers.Object.CreateObject<HeroCamp>(Define.ObjectType.HeroCamp, -1);
+			Managers.Object.CreateObject<HeroCamp>(Define.EObjectType.HeroCamp, -1);
 
 			float radius = 1.5f;
 			int count = 4;
@@ -36,18 +36,11 @@ namespace Clicker.Scene
 				float y = Mathf.Sin(angle) * radius;
 
 				Vector3 spawnPos = i == 0 ? Vector3.zero : new Vector3(x + Random.Range(-5, 5), y + Random.Range(5, -5));
-				var hero = Managers.Object.CreateObject<Hero>(Define.ObjectType.Hero, 201002);
+				var hero = Managers.Object.CreateObject<Hero>(Define.EObjectType.Hero, 201002);
 				hero.Spawn(spawnPos);
 			}
 
-			List<Vector3Int> objectList = Managers.Map.GetObjectPosition();
-			Debug.Log(objectList.Count);
-			foreach (Vector3Int position in objectList)
-			{	
-				var monster = Managers.Object.CreateObject<Monster>(Define.ObjectType.Monster, 202005);
-				monster.Spawn(position);
-			}
-
+			Managers.Map.CreateBaseObjects();
 			// var monster = Managers.Object.CreateObject<Monster>(Define.ObjectType.Monster, 202005);
 			// monster.Spawn(new Vector3(10, 10));
 			

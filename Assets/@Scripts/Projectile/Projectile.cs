@@ -19,12 +19,12 @@ namespace Clicker.Skill
         private float _elapsed = 0f;
         private Creature _owner;
 
-        public override bool Init(Define.ObjectType objectType)
+        public override bool Init(Define.EObjectType eObjectType)
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _collider2D = GetComponent<CircleCollider2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _objectType = objectType;
+            objectType = eObjectType;
             return true;
         }
 

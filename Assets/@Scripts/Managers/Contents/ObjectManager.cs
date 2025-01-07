@@ -20,7 +20,7 @@ namespace Clicker.Manager
         private readonly HashSet<Projectile> _projectileSet = new();
         private HeroCamp _heroCamp;
         
-        public T CreateObject<T>(Define.ObjectType objectType, int id) where T : BaseObject
+        public T CreateObject<T>(Define.EObjectType eObjectType, int id) where T : BaseObject
         {
             string key = typeof(T).Name;
             GameObject prefab = Managers.Resource.Instantiate(key);
@@ -30,31 +30,32 @@ namespace Clicker.Manager
                 return null;
             }
 
-            switch (objectType)
+            switch (eObjectType)
             {
-                case Define.ObjectType.Hero:
+                case Define.EObjectType.Hero:
                     Creature creature = baseObject as Creature;
                     _heroSet.Add(creature);
                     break;
-                case Define.ObjectType.Monster:
+                case Define.EObjectType.Monster:
                     creature = baseObject as Creature;
                     _monsterSet.Add(creature);
                     break;
-                case Define.ObjectType.Env:
+                case Define.EObjectType.Env:
                     Env env = baseObject as Env;
                     _envSet.Add(env);
                     break;
-                case Define.ObjectType.HeroCamp:
+                case Define.EObjectType.HeroCamp:
                     HeroCamp heroCamp = baseObject as HeroCamp;
                     _heroCamp = heroCamp;
                     break;
-                case Define.ObjectType.Projectile:
+                case Define.EObjectType.Projectile:
                     Projectile projectile = baseObject as Projectile;
                     _projectileSet.Add(projectile);
                     break;
             }
-            
-            baseObject.Init(objectType);
+
+            baseObject.name = prefab.name; 
+            baseObject.Init(eObjectType);
             baseObject.SetInfo(id);
             return baseObject as T;
         }
@@ -63,16 +64,16 @@ namespace Clicker.Manager
         {
             switch (obj.ObjectType)
             {
-                case Define.ObjectType.Hero:
+                case Define.EObjectType.Hero:
                     _heroSet.Remove(obj as Creature);
                     break;
-                case Define.ObjectType.Monster:
+                case Define.EObjectType.Monster:
                     _monsterSet.Remove(obj as Creature);
                     break;
-                case Define.ObjectType.Env:
+                case Define.EObjectType.Env:
                     _envSet.Remove(obj as Env);
                     break;
-                case Define.ObjectType.Projectile:
+                case Define.EObjectType.Projectile:
                     _projectileSet.Remove(obj as Projectile);
                     break;
             }
@@ -80,17 +81,17 @@ namespace Clicker.Manager
             Managers.Resource.Destroy(obj.gameObject);
         }
 
-        public HashSet<Creature> GetCreatureList(Define.ObjectType objectType)
+        public HashSet<Creature> GetCreatureList(Define.EObjectType eObjectType)
         {
-            switch (objectType)
+            switch (eObjectType)
             {
-                case Define.ObjectType.Hero:
+                case Define.EObjectType.Hero:
                     return _monsterSet;
-                case Define.ObjectType.Monster:
+                case Define.EObjectType.Monster:
                     return _heroSet;
             }
 
-            LogUtils.LogError("Failed get creature list" + objectType);
+            LogUtils.LogError("Failed get creature list" + eObjectType);
             return null;
         }
 

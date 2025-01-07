@@ -10,9 +10,9 @@ namespace Clicker.Controllers
     {
         private Vector3 _spawnPosition;
         
-        public override bool Init(Define.ObjectType objectType)
+        public override bool Init(Define.EObjectType eObjectType)
         {
-            base.Init(objectType);
+            base.Init(eObjectType);
             
             ChangeState(Define.CreatureState.Idle);
             return true;
