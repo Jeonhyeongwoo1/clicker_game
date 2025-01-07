@@ -90,16 +90,16 @@ namespace Clicker.Manager
                     Debug.Log($"{tile} / {tile.ObjectType} / {tile.DataTemplateID}");
                     if (tile.ObjectType == Define.EObjectType.Env)
                     {
-                        if (tile.DataTemplateID == 202001)
-                        {
-                            continue;
-                        }
                         var env = Managers.Object.CreateObject<Env>(tile.ObjectType, tile.DataTemplateID);
                         Vector3 worldPosition = CellToWorld(cellPos);
                         env.Spawn(worldPosition);
                     }
                     else if(tile.ObjectType == Define.EObjectType.Monster)
                     {
+                        if (tile.DataTemplateID == 202001)
+                        {
+                            continue;
+                        }
                         var monster = Managers.Object.CreateObject<Monster>(tile.ObjectType, tile.DataTemplateID);
                         Vector3 worldPosition = CellToWorld(cellPos);
                         monster.Spawn(worldPosition);

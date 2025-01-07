@@ -47,7 +47,7 @@ TagManager:
   - name: Map
     uniqueID: 2770296385
     locked: 0
-  - name: Hero
+  - name: Creature
     uniqueID: 2569140861
     locked: 0
   - name: Env

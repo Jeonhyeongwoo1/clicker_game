@@ -84,8 +84,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1725826435
+  m_SortingLayer: 2
   m_SortingOrder: 20
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4241395275963686837
@@ -154,7 +154,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &2673084403195372407
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -205,6 +205,7 @@ MonoBehaviour:
   _rigidbody2D: {fileID: 0}
   _collider2D: {fileID: 0}
   _animation: {fileID: 0}
+  _currentHp: 0
   _creatureState: 0
 --- !u!58 &1546784922251601561
 CircleCollider2D:

@@ -75,6 +75,7 @@ namespace Clicker.Controllers
 
             string skeletonDataID = _creatureData.SkeletonDataID;
             var dataAsset = Managers.Resource.Load<SkeletonDataAsset>(skeletonDataID);
+            Debug.Log($"data assset {dataAsset}");
             _animation.skeletonDataAsset = dataAsset;
             _animation.Initialize(true);
 
@@ -83,6 +84,7 @@ namespace Clicker.Controllers
 
             _animation.AnimationState.Event += OnAnimationEvent;
             _animation.AnimationState.Complete += OnAnimationComplete;
+            ChangeState(Define.CreatureState.Idle);
         }
 
         public void ChangeState(Define.CreatureState state)
@@ -102,14 +104,14 @@ namespace Clicker.Controllers
                     PlayAnimation(0, Define.AnimationName.Move, true);
                     break;
                 case Define.CreatureState.Attack:
-                    if (ObjectType == Define.EObjectType.Hero)
-                    {
-                        PlayAnimation(0, Define.AnimationName.Attack, false);
-                    }
-                    else
-                    {
-                        PlayAnimation(0, Define.AnimationName.Attack_a, false);
-                    }
+                    // if (ObjectType == Define.EObjectType.Hero)
+                    // {
+                    //     PlayAnimation(0, Define.AnimationName.Attack, false);
+                    // }
+                    // else
+                    // {
+                    //     PlayAnimation(0, Define.AnimationName.Attack_a, false);
+                    // }
                     break;
                 case Define.CreatureState.Dead:
                     PlayAnimation(0, Define.AnimationName.Dead, false);
