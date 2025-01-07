@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Clicker.Entity;
 using Clicker.Manager;
@@ -200,6 +201,40 @@ namespace Clicker.Controllers
             _skillBook.UseSKill(this);
         }
 
+        private Vector3 _heroCampPos;
+        private Queue<Vector3Int> _queue;
+        private Vector3 _targetPosition;
+        private MapManager Map => Managers.Map;
+
+        private void Move()
+        {
+            Vector2 dir = (_targetPosition - transform.position).normalized;
+            float distToHeroSqrt = (_targetPosition - transform.position).sqrMagnitude;
+            float distToThresholdSqrt = (_distanceThreshold * _distanceThreshold);
+            float speed = MoveSpeed;
+            if (distToHeroSqrt > distToThresholdSqrt)
+            {
+                speed *= 2f;
+            }
+
+            Vector3 direction = Vector3.zero;
+            if (distToHeroSqrt < 1)
+            {
+                if (_queue != null && _queue.Count > 0)
+                {
+                    Vector3Int pos = _queue.Dequeue();
+                    _targetPosition = Map.CellToWorld(pos);
+                    direction = (_targetPosition - transform.position).normalized;
+                }
+            }
+            else
+            {
+                direction = Vector2.Lerp(_rigidbody2D.velocity.normalized, dir, Time.fixedDeltaTime * 10);
+            }
+                    
+            SetVelocity(direction, speed);
+        }
+        
         private void FixedUpdate()
         {
             if (_rigidbody2D == null)
@@ -214,28 +249,33 @@ namespace Clicker.Controllers
                 case Define.HeroMoveState.None:
                 case Define.HeroMoveState.Idle:
                     direction = Vector2.zero;
-                    SetVelocity(direction, speed);
-                    break;
-                case Define.HeroMoveState.ForceMove:
-                    Vector3 heroCampPos = Managers.Object.HeroCamp.transform.position;
-                    Vector2 dir = (heroCampPos - transform.position).normalized;
-                    float distToHeroSqrt = (heroCampPos - transform.position).sqrMagnitude;
-                    float distToThresholdSqrt = (_distanceThreshold * _distanceThreshold);
-                    if (distToHeroSqrt > distToThresholdSqrt)
+                    if (_queue != null && _queue.Count > 0)
                     {
-                        speed *= 2f;
-                    }
-                    
-                    if (distToHeroSqrt < 1)
-                    {
-                        direction = Vector2.zero;
+                        Move();
                     }
                     else
                     {
-                        direction = Vector2.Lerp(_rigidbody2D.velocity.normalized, dir, Time.fixedDeltaTime * 10);
+                        SetVelocity(direction, speed);
                     }
-                    
-                    SetVelocity(direction, speed);
+                    break;
+                case Define.HeroMoveState.ForceMove:
+                    Vector3 heroCampPos = Managers.Object.HeroCamp.transform.position;
+                    if ((heroCampPos - _heroCampPos).sqrMagnitude > 10)
+                    {
+                        MapManager map = Managers.Map;
+                        List<Vector3Int> list = Managers.Map.PathFinding(map.WorldToCell(transform.position),
+                            map.WorldToCell(heroCampPos));
+
+                        if (list.Count > 0)
+                        {
+                            _heroCampPos = heroCampPos;
+                            _queue = new Queue<Vector3Int>(list);
+                            Vector3Int pos = _queue.Dequeue();
+                            _targetPosition = map.CellToWorld(pos);
+                        }
+                    }
+
+                    Move();
                     break;
             }
         }
@@ -275,6 +315,20 @@ namespace Clicker.Controllers
                     break;
                 case Define.EUIEvent.Drag:
                     break;
+            }
+        }
+        
+        private void OnDrawGizmos()
+        {
+            if (_queue == null)
+            {
+                return;
+            }
+
+            Gizmos.color = Color.yellow;
+            foreach (Vector3Int vector3Int in _queue)
+            {
+                Gizmos.DrawSphere(Managers.Map.CellToWorld(vector3Int), 0.3f);
             }
         }
     }

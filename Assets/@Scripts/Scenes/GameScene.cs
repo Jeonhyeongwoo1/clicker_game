@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Clicker.Controllers;
 using Clicker.Entity;
 using Clicker.Manager;
@@ -23,14 +24,11 @@ namespace Clicker.Scene
 
 		private void Initialize()
 		{
-			GameObject mapPrefab = Managers.Resource.Instantiate("BaseMap");
-			var map = mapPrefab.GetComponent<Map>();
-			Managers.Map.SetMap(map);
-			
+			Managers.Map.CreateMap("BaseMap");
 			Managers.Object.CreateObject<HeroCamp>(Define.ObjectType.HeroCamp, -1);
 
 			float radius = 1.5f;
-			int count = 1;
+			int count = 4;
 			for (int i = 0; i < count; i++)
 			{
 				float angle = i * Mathf.PI * 2 / count;
@@ -42,11 +40,19 @@ namespace Clicker.Scene
 				hero.Spawn(spawnPos);
 			}
 
-			var monster = Managers.Object.CreateObject<Monster>(Define.ObjectType.Monster, 202005);
-			monster.Spawn(new Vector3(10, 10));
+			List<Vector3Int> objectList = Managers.Map.GetObjectPosition();
+			Debug.Log(objectList.Count);
+			foreach (Vector3Int position in objectList)
+			{	
+				var monster = Managers.Object.CreateObject<Monster>(Define.ObjectType.Monster, 202005);
+				monster.Spawn(position);
+			}
+
+			// var monster = Managers.Object.CreateObject<Monster>(Define.ObjectType.Monster, 202005);
+			// monster.Spawn(new Vector3(10, 10));
 			
-			var env = Managers.Object.CreateObject<Env>(Define.ObjectType.Env, 300001);
-			env.Spawn(new Vector3(10, 10));
+			// var env = Managers.Object.CreateObject<Env>(Define.ObjectType.Env, 300001);
+			// env.Spawn(new Vector3(10, 10));
 		}
 
 		public override void Clear()

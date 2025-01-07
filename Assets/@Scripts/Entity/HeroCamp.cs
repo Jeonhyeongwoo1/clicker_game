@@ -9,10 +9,11 @@ namespace Clicker.Entity
 {
     public class HeroCamp : BaseObject
     {
-        private CameraController _cameraController;
-
+        public Vector3 MovePosition => _movePosition; 
         
+        private CameraController _cameraController;
         private Vector2 _direction;
+        private Vector3 _movePosition;
         private float _speed = 5f;
 
         public override bool Init(Define.ObjectType objectType)
@@ -53,9 +54,10 @@ namespace Clicker.Entity
         {
             Vector2 myPos = transform.position;
             Vector2 movePosition = Vector2.Lerp(myPos, myPos + _direction, Time.deltaTime * _speed);
-            if (Managers.Map.CurrentMap.IsPossibleMoveTo(movePosition))
+            if (Managers.Map.IsPossibleHeroCampMove(movePosition))
             {
                 transform.position = movePosition;
+                _movePosition = movePosition;
             }
             
             float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg - 90;

@@ -86,6 +86,13 @@ namespace Clicker.Utils
 			Projectile = 30
 		}	
 		
+		public enum CollisionType
+		{
+			None,
+			Wall,
+			SemiWall //영웅들을 지나갈 수 없고 herocamp만 가능
+		}
+		
 		public class AnimationName
 		{
 			public static string Idle = "idle";
@@ -96,5 +103,8 @@ namespace Clicker.Utils
 			public static string Dead = "dead";
 		}
 
+		public const char MAP_TOOL_WALL = '0';
+		public const char MAP_TOOL_NONE = '1';
+		public const char MAP_TOOL_SEMI_WALL = '2';
 	}
 }
