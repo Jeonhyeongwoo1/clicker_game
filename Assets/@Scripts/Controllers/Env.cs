@@ -4,6 +4,7 @@ using Clicker.ContentData;
 using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
+using Spine;
 using Spine.Unity;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -83,6 +84,22 @@ namespace Clicker.Controllers
                     animationName = AnimationName.Dead;
                     PlayAnimation(0, animationName, false);
                     break;
+            }
+        }
+
+        protected override void OnAnimationComplete(TrackEntry trackEntry)
+        {
+            base.OnAnimationComplete(trackEntry);
+            
+            if (trackEntry.Animation.Name == Define.AnimationName.Hit &&
+                _envState == Define.EnvState.Hit)
+            {
+                PlayAnimation(0, Define.AnimationName.Hit, false);
+            }
+            else if (trackEntry.Animation.Name == Define.AnimationName.Dead &&
+                     _envState == Define.EnvState.Dead)
+            {
+                Managers.Object.Despawn(this);
             }
         }
     }

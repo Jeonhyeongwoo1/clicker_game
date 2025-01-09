@@ -104,10 +104,10 @@ namespace Clicker.Controllers
                     PlayAnimation(0, Define.AnimationName.Move, true);
                     break;
                 case Define.CreatureState.Attack:
-                    // if (ObjectType == Define.EObjectType.Hero)
-                    // {
-                    //     PlayAnimation(0, Define.AnimationName.Attack, false);
-                    // }
+                    if (ObjectType == Define.EObjectType.Hero)
+                    {
+                        PlayAnimation(0, Define.AnimationName.Attack, false);
+                    }
                     // else
                     // {
                     //     PlayAnimation(0, Define.AnimationName.Attack_a, false);
@@ -121,6 +121,7 @@ namespace Clicker.Controllers
 
         public override void Dead()
         {
+            base.Dead();
             ChangeState(Define.CreatureState.Dead);
             _skillBook.StopSkill();
         }
@@ -143,13 +144,14 @@ namespace Clicker.Controllers
 
         protected BaseObject FindNearestCreatureInRange(float distance, IEnumerable<BaseObject> objectList)
         {
+            float chaseDistance = _chaseDistance * _chaseDistance;
             float distA = distance * distance;
             BaseObject nearestObj = null;
             float nearestDistance = float.MaxValue;
             foreach (BaseObject obj in objectList)
             {
                 float distB = (transform.position - obj.transform.position).sqrMagnitude;
-                if (distB < distA && distB < nearestDistance)
+                if (distB < distA && distB < nearestDistance && distB < chaseDistance)
                 {
                     nearestObj = obj;
                     nearestDistance = distB;
@@ -181,7 +183,7 @@ namespace Clicker.Controllers
             else if (trackEntry.Animation.Name == Define.AnimationName.Dead &&
                      _creatureState == Define.CreatureState.Dead)
             {
-                Dead();
+                Managers.Object.Despawn(this);
             }
         }
 
@@ -229,7 +231,7 @@ namespace Clicker.Controllers
 
         protected void SetVelocity(Vector2 velocity, float speed)
         {
-            _rigidbody2D.velocity = velocity * speed;
+            //_rigidbody2D.velocity = velocity * speed;
             SetFlip(Mathf.Sign(velocity.x) == 1);
         }
 

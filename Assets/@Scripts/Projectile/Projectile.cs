@@ -71,11 +71,16 @@ namespace Clicker.Skill
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (!other.gameObject.IsValid())
+            {
+                return;
+            }
+            
             if (other.CompareTag(nameof(Monster)) || 
                 other.CompareTag(nameof(Env)) || 
                 other.CompareTag(nameof(Hero)))
             {
-                if (other.gameObject != _owner.TargetObject.gameObject)
+                if (!_owner.TargetObject.IsValid() || other.gameObject != _owner.TargetObject.gameObject)
                 {
                     return;
                 }

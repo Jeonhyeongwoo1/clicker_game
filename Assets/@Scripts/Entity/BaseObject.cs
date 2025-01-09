@@ -52,7 +52,7 @@ namespace Clicker.Entity
             _currentHp -= (int) Mathf.Clamp(attacker.Atk, 0, attacker.Atk);
             if (_currentHp <= 0)
             {
-                Dead();    
+                Dead();
             }
         }
         

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Clicker.Controllers;
+using Clicker.Entity;
 using Clicker.Utils;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -19,6 +20,18 @@ namespace Clicker.Manager
         private int _maxY;
         private GameObject _mapObject;
         
+        private readonly Vector3Int[] _dirArray =
+        {
+            new Vector3Int(1, 0),
+            new Vector3Int(0, 1),
+            new Vector3Int(-1, 0),
+            new Vector3Int(0, -1),
+            new Vector3Int(1, 1),
+            new Vector3Int(1, -1),
+            new Vector3Int(-1, 1),
+            new Vector3Int(-1, -1),
+        };
+
         public bool IsPossibleHeroCampMove(Vector3 position)
         {
             Vector3Int targetPos = Vector3Int.CeilToInt(position);
@@ -44,7 +57,6 @@ namespace Clicker.Manager
         {
             GameObject mapPrefab = Managers.Resource.Instantiate(mapName);
             _mapObject = mapPrefab;
-            Debug.Log(_mapObject.name);
             _grid = _mapObject.GetComponent<Grid>();
             ParseCollision(mapName);
             SetHeroCampMoveableTile();
@@ -68,11 +80,17 @@ namespace Clicker.Manager
                         _heroCampMoveableTileDict.Add(position, tile);
                     }
                 }
-            }   
+            }
+
+            if (tileObject.activeSelf)
+            {
+                tileObject.SetActive(false);
+            }
         }
         
         public void CreateBaseObjects()
         {
+            return;
             Tilemap tm = Util.FindChild<Tilemap>(_mapObject, "Tilemap_Object", true);
 
             if (tm != null)
@@ -87,7 +105,6 @@ namespace Clicker.Manager
                     if (tile == null)
                         continue;
 
-                    Debug.Log($"{tile} / {tile.ObjectType} / {tile.DataTemplateID}");
                     if (tile.ObjectType == Define.EObjectType.Env)
                     {
                         var env = Managers.Object.CreateObject<Env>(tile.ObjectType, tile.DataTemplateID);
@@ -108,14 +125,55 @@ namespace Clicker.Manager
                 }
             }
         }
+
+        private Dictionary<Vector3Int, BaseObject> _cellDict = new Dictionary<Vector3Int, BaseObject>();
+        private Dictionary<Vector3Int, BaseObject> _moveableTargetPositionDict = new();
+
+        public bool MoveToCell(Vector3Int cellPos, Vector3Int previousCellPos, BaseObject baseObject)
+        {
+            if (_cellDict.ContainsKey(previousCellPos))
+            {
+                _cellDict.Remove(previousCellPos);
+            }
+
+            //이미 선정된 상태일 수 있음
+            return _cellDict.TryAdd(cellPos, baseObject);
+        }
         
-        public List<Vector3Int> PathFinding(Vector3Int currentPosition, Vector3Int destPosition)
+        public Vector3Int GetMoveableTargetPosition(BaseObject baseObject, BaseObject targetObject)
+        {
+            foreach (var (key, value) in _moveableTargetPositionDict)
+            {
+                if (value != baseObject)
+                {
+                    continue;
+                }
+                
+                _moveableTargetPositionDict.Remove(key);
+                break;
+            }
+
+            float mutilplier = 1;
+            while (true)
+            {
+                for (int i = 0; i < _dirArray.Length; i++)
+                {
+                    Vector3 targetPos = targetObject.transform.position+ (Vector3) _dirArray[i] * mutilplier;
+                    Vector3Int worldToCellPos = WorldToCell(targetPos);
+                    if (!_moveableTargetPositionDict.ContainsKey(worldToCellPos))
+                    {
+                        _moveableTargetPositionDict[worldToCellPos] = baseObject;
+                        return worldToCellPos;
+                    }
+                }
+
+                mutilplier *= 3f;
+            }
+        }
+        
+        public List<Vector3Int> PathFinding(Vector3Int startPosition, Vector3Int destPosition)
         {
             // 상하좌우 + 대각선 (8 방향)
-            int[,] dir = {
-                { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 }, // 상하좌우
-                { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 } // 대각선
-            };
             int[] cost = { 10, 10, 10, 10, 14, 14, 14, 14 }; // 대각선 이동은 비용 14
 
             Dictionary<Vector3Int, int> bestDict = new Dictionary<Vector3Int, int>();
@@ -123,22 +181,25 @@ namespace Clicker.Manager
             PriorityQueue<Node> queue = new PriorityQueue<Node>();
             Dictionary<Vector3Int, Vector3Int> pathDict = new Dictionary<Vector3Int, Vector3Int>();
 
-            int closedF = int.MaxValue;
+            //목적지에 도착하지 못할 경우에 그나마 가장 가까운 위치로 보낸다.
+            int closedH = int.MaxValue;
             Vector3Int closePos = Vector3Int.zero;
+            int depth = 0;
 
             {
                 int g = 0;
-                int h = Mathf.Abs(destPosition.x - currentPosition.x) + Mathf.Abs(destPosition.y - currentPosition.y);
+                int h = Mathf.Abs(destPosition.x - startPosition.x) + Mathf.Abs(destPosition.y - startPosition.y);
                 int f = g + h;
-                Node startNode = new Node(h, g, f, currentPosition);
+                Node startNode = new Node(h, g, f, depth, startPosition);
                 queue.Push(startNode);
-                bestDict[currentPosition] = g;
-                pathDict[currentPosition] = currentPosition;
+                bestDict[startPosition] = g;
+                pathDict[startPosition] = startPosition;
 
-                closedF = f;
-                closePos = currentPosition;
+                closedH = h;
+                closePos = startPosition;
             }
 
+            int maxDepth = 30;
             while (!queue.IsEmpty())
             {
                 Node node = queue.Top();
@@ -147,7 +208,7 @@ namespace Clicker.Manager
                 Vector3Int nodePos = new Vector3Int(node.x, node.y, 0);
                 if (nodePos == destPosition)
                 {
-                    closePos = nodePos;
+                    // closePos = nodePos;
                     break;
                 }
 
@@ -155,18 +216,26 @@ namespace Clicker.Manager
                 {
                     continue;
                 }
-
+                
                 visited.Add(nodePos);
+                depth = node.depth;
 
-                for (int i = 0; i < 8; i++)
+                // Debug.Log($"{depth}");
+                if (depth == maxDepth)
                 {
-                    int nextY = node.y + dir[i, 0];
-                    int nextX = node.x + dir[i, 1];
+                    break;
+                }
+                
+                for (int i = 0; i < _dirArray.Length; i++)
+                {
+                    int nextY = node.y + _dirArray[i].y;
+                    int nextX = node.x + _dirArray[i].x;
                     if (!CanGo(nextX, nextY))
                     {
                         continue;
                     }
 
+                    // Debug.Log("Can");
                     Vector3Int nextPos = new Vector3Int(nextX, nextY, 0);
                     int g = cost[i] + node.g;
                     int h = Mathf.Abs(destPosition.x - nextPos.x) + Mathf.Abs(destPosition.y - nextPos.y);
@@ -178,19 +247,19 @@ namespace Clicker.Manager
                     }
 
                     bestDict[nextPos] = g;
-                    queue.Push(new Node(h, g, f, nextPos));
+                    queue.Push(new Node(h, g, f, depth + 1, nextPos));
                     pathDict[nextPos] = nodePos;
-
-                    if (closedF > f)
+                    
+                    if (closedH > h)
                     {
-                        closedF = f;
+                        closedH = h;
                         closePos = nextPos;
                     }
                 }
             }
             
             List<Vector3Int> list = new List<Vector3Int>();
-            Vector3Int now = pathDict.ContainsKey(destPosition) ? closePos : destPosition;
+            Vector3Int now = pathDict.ContainsKey(destPosition) ? destPosition : closePos;
             if (!pathDict.ContainsKey(now))
             {
                 return new List<Vector3Int>();
@@ -198,7 +267,8 @@ namespace Clicker.Manager
             
             while (pathDict[now] != now)
             {
-                list.Add(now);
+                if(!list.Contains(now))
+                        list.Add(now);
                 now = pathDict[now];
             }
 
@@ -214,10 +284,20 @@ namespace Clicker.Manager
                 return false;
             }
 
+            if (_cellDict.ContainsKey(new Vector3Int(x, y)))
+            {
+                return false;
+            }
+
             int targetX = x - _minX;
             int targetY = _maxY - y;
             Define.CollisionType type = _collisionArray[targetX, targetY];
-            return type == Define.CollisionType.None;
+            if (type == Define.CollisionType.None)
+            {
+                return true;
+            }
+
+            return false;
         }
         
         private void ParseCollision(string mapName)

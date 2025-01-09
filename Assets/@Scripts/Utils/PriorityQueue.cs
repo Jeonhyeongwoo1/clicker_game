@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Node : IComparable<Node>
+public struct Node : IComparable<Node>
 {
     public int y => position.y;
     public int x => position.x;
@@ -11,12 +11,14 @@ public class Node : IComparable<Node>
     public int g;
     public int f;
     public Vector3Int position;
+    public int depth;
 
-    public Node(int h, int g, int f, Vector3Int position)
+    public Node(int h, int g, int f, int depth, Vector3Int position)
     {
         this.h = h;
         this.g = g;
         this.f = f;
+        this.depth = depth;
         this.position = position;
     }
 
