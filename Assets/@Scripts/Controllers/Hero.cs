@@ -202,6 +202,9 @@ namespace Clicker.Controllers
                 return;
             }
 
+            Vector3 direction = (_targetObject.transform.position - transform.position).normalized;
+            SetFlip(Mathf.Sign(direction.x) == 1);
+            
             //기존에 있던 모든 이동 경로는 지운다.
             if (_pathQueue.Count > 0)
             {
@@ -258,27 +261,6 @@ namespace Clicker.Controllers
                     break;
                 case Define.EUIEvent.Drag:
                     break;
-            }
-        }
-
-        public bool useGizmos = false;
-        
-        private void OnDrawGizmos()
-        {
-            if (_pathQueue == null)
-            {
-                return;
-            }
-
-            if (!useGizmos)
-            {
-                return;
-            }
-
-            Gizmos.color = Color.yellow;
-            foreach (Vector3Int vector3Int in _pathQueue)
-            {
-                Gizmos.DrawSphere(Managers.Map.CellToWorld(vector3Int), 0.3f);
             }
         }
     }

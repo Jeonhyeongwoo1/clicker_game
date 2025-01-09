@@ -52,7 +52,7 @@ namespace Clicker.Controllers
         protected float _searchDistance = 8f;
         protected CancellationTokenSource _aiCts;
         protected BaseObject _targetObject;
-        protected bool _isUseSKill = false;
+        [SerializeField] protected bool _isUseSKill = false;
         protected Queue<Vector3Int> _pathQueue = new Queue<Vector3Int>();
         protected Coroutine _moveToCor;
         protected Vector3 _cellPosition;
@@ -133,6 +133,12 @@ namespace Clicker.Controllers
         {
             base.Dead();
             ChangeState(Define.CreatureState.Dead);
+            if (_moveToCor != null)
+            {
+                StopCoroutine(_moveToCor);
+                _moveToCor = null;
+            }
+            
             _skillBook.StopSkill();
         }
 
@@ -234,13 +240,7 @@ namespace Clicker.Controllers
                 _aiCts = null;
             }
         }
-
-        protected void SetVelocity(Vector2 velocity, float speed)
-        {
-            //_rigidbody2D.velocity = velocity * speed;
-            SetFlip(Mathf.Sign(velocity.x) == 1);
-        }
-
+        
         protected virtual void ChaseAndAttack() {}
         protected virtual void IdleState() {}
         protected virtual void MoveState(){}
@@ -345,5 +345,25 @@ namespace Clicker.Controllers
             }
         }
 
+        public bool useGizmos = false;
+        
+        private void OnDrawGizmos()
+        {
+            if (_pathQueue == null)
+            {
+                return;
+            }
+
+            if (!useGizmos)
+            {
+                return;
+            }
+
+            Gizmos.color = Color.yellow;
+            foreach (Vector3Int vector3Int in _pathQueue)
+            {
+                Gizmos.DrawSphere(Managers.Map.CellToWorld(vector3Int), 0.3f);
+            }
+        }
     }
 }

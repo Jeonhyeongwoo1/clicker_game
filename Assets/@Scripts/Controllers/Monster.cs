@@ -70,21 +70,24 @@ namespace Clicker.Controllers
             }
             else
             {
-                if (_isUseSKill)
-                {
-                    _isUseSKill = false;
-                    _skillBook.StopSkill();
-                }
                 
                 //추적할 수 있는 거리를 벗어났을 때
                 float chaseDistance = _chaseDistance * _chaseDistance;
                 if (chaseDistance < distA)
                 {
-                    ChangeState(Define.CreatureState.Move);
-                    return;
+                    ChangeState(Define.CreatureState.Idle);
                 }
-                
-                FindPath(_targetObject);
+                else
+                {
+                    if (_isUseSKill)
+                    {
+                        _isUseSKill = false;
+                        _skillBook.StopSkill();
+                    }
+                    
+                    ChangeState(Define.CreatureState.Move);
+                    FindPath(_targetObject);
+                }
             }
         }
 

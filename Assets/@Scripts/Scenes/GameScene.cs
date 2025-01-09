@@ -72,8 +72,8 @@ namespace Clicker.Scene
 			// var monster = Managers.Object.CreateObject<Monster>(Define.ObjectType.Monster, 202005);
 			// monster.Spawn(new Vector3(10, 10));
 			
-			// var env = Managers.Object.CreateObject<Env>(Define.ObjectType.Env, 300001);
-			// env.Spawn(new Vector3(10, 10));
+			var env = Managers.Object.CreateObject<Env>(Define.EObjectType.Env, 300001);
+			env.Spawn(new Vector3(10, 10));
 		}
 
 		public override void Clear()
