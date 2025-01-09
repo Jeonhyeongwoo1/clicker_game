@@ -7,6 +7,7 @@ using Clicker.Manger;
 using Clicker.Utils;
 
 #if UNITY_EDITOR
+using Clicker.ContentData;
 using Newtonsoft.Json;
 using UnityEditor;
 #endif
@@ -53,50 +54,50 @@ public class MapEditor : EditorWindow
 		Debug.Log("Map Collision Generation Complete");
 	}
 
-	//[MenuItem("Tools/Create Object Tile Asset %#o")]
-	// public static void CreateObjectTile()
-	// {
-	// 	// Monster
-	// 	Dictionary<int, Data.MonsterData> MonsterDic = LoadJson<Data.MonsterDataLoader, int, Data.MonsterData>("MonsterData").MakeDict();
-	// 	foreach (var data in MonsterDic.Values)
-	// 	{
-	// 		CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
-	// 		customTile.Name = data.DescriptionTextID;
-	// 		customTile.DataTemplateID = data.DataId;
-	// 		customTile.ObjectType = Define.EObjectType.Creature;
-	// 		customTile.CreatureType = Define.ECreatureType.Monster;
-	//
-	// 		string name = $"{data.DataId}_{data.DescriptionTextID}";
-	// 		string path = "Assets/@Resources/TileMaps/Tiles/Dev/Monster";
-	// 		path = Path.Combine(path, $"{name}.Asset");
-	//
-	// 		if (File.Exists(path))
-	// 			continue;
-	//
-	// 		AssetDatabase.CreateAsset(customTile, path);
-	// 	}
-	//
-	// 	// Env
-	// 	Dictionary<int, Data.EnvData> Env = LoadJson<Data.EnvDataLoader, int, Data.EnvData>("EnvData").MakeDict();
-	// 	foreach (var data in Env.Values)
-	// 	{
-	//
-	// 		CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
-	// 		customTile.Name = data.DescriptionTextID;
-	// 		customTile.DataTemplateID = data.DataId;
-	// 		customTile.ObjectType = Define.EObjectType.Env;
-	// 		customTile.CreatureType = Define.ECreatureType.None;
-	//
-	// 		string name = $"{data.DataId}_{data.DescriptionTextID}";
-	// 		string path = "Assets/@Resources/TileMaps/Tiles/Dev/Env";
-	// 		path = Path.Combine(path, $"{name}.Asset");
-	//
-	// 		if (File.Exists(path))
-	// 			continue;
-	//
-	// 		AssetDatabase.CreateAsset(customTile, path);
-	// 	}
-	// }
+	[MenuItem("Tools/Create Object Tile Asset %#o")]
+	 public static void CreateObjectTile()
+	 {
+	 	// Monster
+	 	Dictionary<int, MonsterData> MonsterDic = LoadJson<MonsterDataLoader, int, MonsterData>("MonsterData").MakeDict();
+	 	foreach (var data in MonsterDic.Values)
+	 	{
+	 		CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
+	 		customTile.Name = data.DescriptionTextID;
+	 		customTile.DataTemplateID = data.DataId;
+	 		customTile.ObjectType = Define.EObjectType.Monster;
+	 		customTile.CreatureType = Define.ECreatureType.Monster;
+	
+	 		string name = $"{data.DataId}_{data.DescriptionTextID}";
+	 		string path = "Assets/@Resources/TileMaps/Tiles/Dev/Monster";
+	 		path = Path.Combine(path, $"{name}.Asset");
+	
+	 		if (File.Exists(path))
+	 			continue;
+	
+	 		AssetDatabase.CreateAsset(customTile, path);
+	 	}
+	
+	 	// Env
+	 	Dictionary<int, EnvData> Env = LoadJson<EnvDataLoader, int, EnvData>("EnvData").MakeDict();
+	 	foreach (var data in Env.Values)
+	 	{
+	
+	 		CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
+	 		customTile.Name = data.DescriptionTextID;
+	 		customTile.DataTemplateID = data.DataId;
+	 		customTile.ObjectType = Define.EObjectType.Env;
+	 		customTile.CreatureType = Define.ECreatureType.None;
+	
+	 		string name = $"{data.DataId}_{data.DescriptionTextID}";
+	 		string path = "Assets/@Resources/TileMaps/Tiles/Dev/Env";
+	 		path = Path.Combine(path, $"{name}.Asset");
+	
+	 		if (File.Exists(path))
+	 			continue;
+	
+	 		AssetDatabase.CreateAsset(customTile, path);
+	 	}
+	 }
 
 	private static Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
 	{

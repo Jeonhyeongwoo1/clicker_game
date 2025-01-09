@@ -58,7 +58,7 @@ namespace Clicker.Controllers
         protected Vector3 _cellPosition;
 
         private Vector3 _endMovePosition;
-        private readonly int _distanceToTargetThreshold = 10;
+        private readonly int _distanceToTargetThreshold = 5;
         private Vector3 _targetPosition;
         
         public override void SetInfo(int id)
@@ -292,7 +292,7 @@ namespace Clicker.Controllers
             Vector3Int startPosition = Map.WorldToCell(transform.position);
             Vector3Int destPosition = Map.GetMoveableTargetPosition(this, targetObj);
             List<Vector3Int> list = Map.PathFinding(startPosition, destPosition);
-            if (list.Count <= 2)
+            if (list.Count < 2)
             {
                 return;
             }

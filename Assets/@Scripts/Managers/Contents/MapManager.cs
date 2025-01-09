@@ -174,7 +174,7 @@ namespace Clicker.Manager
         public List<Vector3Int> PathFinding(Vector3Int startPosition, Vector3Int destPosition)
         {
             // 상하좌우 + 대각선 (8 방향)
-            int[] cost = { 10, 10, 10, 10, 14, 14, 14, 14 }; // 대각선 이동은 비용 14
+            //int[] cost = { 10, 10, 10, 10, 14, 14, 14, 14 }; // 대각선 이동은 비용 14
 
             Dictionary<Vector3Int, int> bestDict = new Dictionary<Vector3Int, int>();
             HashSet<Vector3Int> visited = new HashSet<Vector3Int>();
@@ -187,12 +187,10 @@ namespace Clicker.Manager
             int depth = 0;
 
             {
-                int g = 0;
                 int h = Mathf.Abs(destPosition.x - startPosition.x) + Mathf.Abs(destPosition.y - startPosition.y);
-                int f = g + h;
-                Node startNode = new Node(h, g, f, depth, startPosition);
+                Node startNode = new Node(h, depth, startPosition);
                 queue.Push(startNode);
-                bestDict[startPosition] = g;
+                bestDict[startPosition] = h;
                 pathDict[startPosition] = startPosition;
 
                 closedH = h;
@@ -237,17 +235,15 @@ namespace Clicker.Manager
 
                     // Debug.Log("Can");
                     Vector3Int nextPos = new Vector3Int(nextX, nextY, 0);
-                    int g = cost[i] + node.g;
+                    //int g = cost[i] + node.g;
                     int h = Mathf.Abs(destPosition.x - nextPos.x) + Mathf.Abs(destPosition.y - nextPos.y);
-                    int f = g + h;
-
-                    if (bestDict.ContainsKey(nextPos) && bestDict[nextPos] <= g)
+                    if (bestDict.ContainsKey(nextPos) && bestDict[nextPos] <= h)
                     {
                         continue;
                     }
 
-                    bestDict[nextPos] = g;
-                    queue.Push(new Node(h, g, f, depth + 1, nextPos));
+                    bestDict[nextPos] = h;
+                    queue.Push(new Node(h, depth + 1, nextPos));
                     pathDict[nextPos] = nodePos;
                     
                     if (closedH > h)

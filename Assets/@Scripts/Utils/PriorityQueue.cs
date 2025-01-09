@@ -8,23 +8,19 @@ public struct Node : IComparable<Node>
     public int x => position.x;
 
     public int h;
-    public int g;
-    public int f;
     public Vector3Int position;
     public int depth;
 
-    public Node(int h, int g, int f, int depth, Vector3Int position)
+    public Node(int h, int depth, Vector3Int position)
     {
         this.h = h;
-        this.g = g;
-        this.f = f;
         this.depth = depth;
         this.position = position;
     }
 
     public int CompareTo(Node other)
     {
-        return f.CompareTo(other.f); // f 값 기준으로 비교
+        return h.CompareTo(other.h);
     }
 }
 
