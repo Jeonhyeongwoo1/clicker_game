@@ -21,8 +21,17 @@ namespace Clicker.Controllers
         public override void Spawn(Vector3 spawnPosition)
         {
             base.Spawn(spawnPosition);
-            _spawnPosition = spawnPosition;
             AIProcessAsync().Forget();
+            
+            if (_moveToCor != null)
+            {
+                StopCoroutine(_moveToCor);
+                _moveToCor = null;
+            }
+
+            _cellPosition = Map.WorldToCell(spawnPosition);
+            _spawnPosition = _cellPosition;
+            _moveToCor = StartCoroutine(MoveTo());
         }
 
         protected override void AttackState()
@@ -41,37 +50,41 @@ namespace Clicker.Controllers
                 }
                 return;
             }
-            
-            //타겟이 사정거리 안에 있는가?
+
             Vector3 direction = (_targetObject.transform.position - transform.position).normalized;
+            SetFlip(Mathf.Sign(direction.x) == 1);
+            
+            //공격중에 타겟이 사정거리 밖으로 이동한다면 추적
             float distA = (transform.position - _targetObject.transform.position).sqrMagnitude;
-            float attackDistanceSqrt = AttackDistance;
-            float distB = attackDistanceSqrt * attackDistanceSqrt;
+            float distB = AttackDistance * AttackDistance;
             //공격 범위안에 들어왔는가
             if (distA <= distB)
             {
-                ChangeState(Define.CreatureState.Attack);
-                SetVelocity(direction, 0);
-                
                 if (_isUseSKill)
                 {
                     return;
                 }
 
                 _isUseSKill = true;
-                Debug.LogWarning("UseSkill");
                 _skillBook.UseSKill(this);
             }
             else
             {
+                if (_isUseSKill)
+                {
+                    _isUseSKill = false;
+                    _skillBook.StopSkill();
+                }
+                
                 //추적할 수 있는 거리를 벗어났을 때
                 float chaseDistance = _chaseDistance * _chaseDistance;
                 if (chaseDistance < distA)
                 {
                     ChangeState(Define.CreatureState.Move);
+                    return;
                 }
                 
-                SetVelocity(direction, MoveSpeed);
+                FindPath(_targetObject);
             }
         }
 
@@ -117,8 +130,7 @@ namespace Clicker.Controllers
                 return;
             }
 
-            Vector3 direction = (_spawnPosition - transform.position).normalized;
-            SetVelocity(direction, MoveSpeed);
+            FindPath(_spawnPosition);
         }
 
         protected override void ChaseAndAttack()
@@ -127,18 +139,15 @@ namespace Clicker.Controllers
             {
                 _targetObject = null;
                 ChangeState(Define.CreatureState.Idle);
-                SetVelocity(Vector2.zero, MoveSpeed);
                 return;
             }
             
-            Vector3 direction = (_targetObject.transform.position - transform.position).normalized;
             float distA = (transform.position - _targetObject.transform.position).sqrMagnitude;
             float distB = AttackDistance * AttackDistance;
             
             //공격 범위안에 들어왔는가
             if (distA <= distB)
             {
-                direction = Vector2.zero;
                 ChangeState(Define.CreatureState.Attack);
             }
             else
@@ -152,9 +161,9 @@ namespace Clicker.Controllers
                     _targetObject = null;
                     return;
                 }
-            }
                 
-            SetVelocity(direction, MoveSpeed);
+                FindPath(_targetObject);
+            }
         }
     }
 }

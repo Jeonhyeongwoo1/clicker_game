@@ -25,9 +25,6 @@ namespace Clicker.Controllers
         
         [SerializeField] private Define.HeroMoveState _heroMoveState;
 
-        private Vector3 _endMovePosition;
-        private readonly int _distanceToTargetThreshold = 10;
-        
         public override void Spawn(Vector3 spawnPosition)
         {
             base.Spawn(spawnPosition);
@@ -88,92 +85,11 @@ namespace Clicker.Controllers
             
             //3. heroCamp보다 멀리 떨어져 있으면 이동한다.
             FindPath(Managers.Object.HeroCamp);
-        }
 
-        private IEnumerator MoveTo()
-        {
-            while (true)
+            if (_pathQueue.Count > 0)
             {
-                Vector3 myPos = transform.position;
-                while ((myPos - _cellPosition).sqrMagnitude >= 1f)
-                {
-                    float speed = MoveSpeed;
-                    //일정 거리 이상일 경우에는 스피드를 올려준다.
-                    if ((myPos - _endMovePosition).sqrMagnitude > _distanceToTargetThreshold * 2)
-                    {
-                        speed *= 2f;
-                    }
-                    
-                    myPos = transform.position;
-                    
-                    Vector3 dir = _cellPosition - transform.position;
-                    //일관성 있게 이동하기 위해서
-                    float moveDist = Mathf.Min(dir.magnitude, speed * Time.deltaTime);
-                    transform.position += dir.normalized * moveDist;
-                    
-                    // Vector3 pos = Vector3.Lerp(myPos, _cellPosition, Time.fixedDeltaTime * speed);
-                    // Rigidbody2D.MovePosition(pos);
-
-                    Vector3 direction = (_cellPosition - myPos).normalized;
-                    SetFlip(Mathf.Sign(direction.x) == 1);
-                    yield return null;
-                }
-
-                SetMoveToCellPosition();
-                yield return null;
-            }
-        }
-        
-        private void SetMoveToCellPosition()
-        {
-            if (_queue.Count == 0)
-            {
-                return;
-            }
-            
-            Vector3Int position = _queue.Dequeue();
-            bool isPossibleMove = Map.MoveToCell(position, Map.WorldToCell(_cellPosition), this);
-            if (isPossibleMove)
-            {
-                Vector3 cellToWorld = Map.CellToWorld(position);
-                _cellPosition = cellToWorld;
-            }
-            else
-            {
-                // if (_targetObject == null)
-                // {
-                //     FindPath(Managers.Object.HeroCamp, true);
-                // }
-                // else
-                // {
-                //     FindPath(_targetObject, true);
-                // }
-                // _queue.Dequeue();
-            }
-        }
-
-        private void FindPath(BaseObject targetObj, bool forceFindPath = false)
-        {
-            Vector3 targetPos = targetObj.transform.position;
-            if (!forceFindPath && (targetPos - transform.position).sqrMagnitude < _distanceToTargetThreshold)
-            {
-                return;
-            }
-            
-            Vector3Int startPosition = Map.WorldToCell(transform.position);
-            Vector3Int destPosition = Map.GetMoveableTargetPosition(this, targetObj);
-            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition);
-            if (list.Count <= 2)
-            {
-                return;
-            }
-            
-            _queue = new Queue<Vector3Int>(list);
-            _endMovePosition = Map.CellToWorld(list[^1]);
-            Debug.LogWarning("Last : " + _endMovePosition) ;
-            if (!forceFindPath)
-            {
-                SetMoveToCellPosition();
+                ChangeState(Define.CreatureState.Move);
+                HeroMoveState = Define.HeroMoveState.Idle; // 우선 idle 상태에서 moveState에서 State 판단하도록 함
             }
         }
         
@@ -205,7 +121,7 @@ namespace Clicker.Controllers
 
             if (HeroMoveState == Define.HeroMoveState.Idle)
             {
-                switch (_queue.Count)
+                switch (_pathQueue.Count)
                 {
                     case > 0:
                         HeroMoveState = Define.HeroMoveState.ReturnToHeroCamp;
@@ -219,7 +135,7 @@ namespace Clicker.Controllers
             if (HeroMoveState == Define.HeroMoveState.ReturnToHeroCamp)
             {
                 //이동할 경로가 더이상 없을 떄
-                if (_queue.Count == 0)
+                if (_pathQueue.Count == 0)
                 {
                     ChangeState(Define.CreatureState.Idle);
                     HeroMoveState = Define.HeroMoveState.Idle;
@@ -227,7 +143,6 @@ namespace Clicker.Controllers
             }
         }
         
-
         protected override void ChaseAndAttack()
         {
             base.ChaseAndAttack();
@@ -247,9 +162,10 @@ namespace Clicker.Controllers
                 return;
             }
             
-            float distA = (transform.position - _targetObject.transform.position).sqrMagnitude;
-            float attackDistanceSqrt = AttackDistance;
-            float distB = attackDistanceSqrt * attackDistanceSqrt;
+            float distA = (_targetObject.transform.position - transform.position).sqrMagnitude;
+            float distB = AttackDistance * AttackDistance;
+            // Debug.Log($"{distA} / {distB}");
+            
             //공격 범위안에 들어왔는가
             if (distA <= distB)
             {
@@ -287,14 +203,12 @@ namespace Clicker.Controllers
             }
 
             //기존에 있던 모든 이동 경로는 지운다.
-            if (_queue.Count > 0)
+            if (_pathQueue.Count > 0)
             {
-                _queue.Clear();
-                _cellPosition = transform.position;
+                _pathQueue.Clear();
+                //_cellPosition = transform.position;
             }
             
-            Vector3 direction = (_targetObject.transform.position - transform.position).normalized;
-            SetFlip(Mathf.Sign(direction.x) == 0);
             if (_isUseSKill)
             {
                 return;
@@ -303,13 +217,6 @@ namespace Clicker.Controllers
             _isUseSKill = true;
             _skillBook.UseSKill(this);
         }
-
-        private Vector3 _heroCampPos;
-        private Queue<Vector3Int> _queue = new Queue<Vector3Int>();
-        private Vector3 _targetPosition;
-        private MapManager Map => Managers.Map;
-        private Vector3 _cellPosition;
-        private Coroutine _moveToCor;
 
         protected override void OnEnable()
         {
@@ -336,6 +243,12 @@ namespace Clicker.Controllers
                     break;
                 case Define.EUIEvent.PointerDown:
                     // StopAIProcess();
+                    if (_isUseSKill)
+                    {
+                        _isUseSKill = false;
+                        _skillBook.StopSkill();
+                    }
+                    
                     ChangeState(Define.CreatureState.Move);
                     HeroMoveState = Define.HeroMoveState.ForceMove;
                     break;
@@ -352,7 +265,7 @@ namespace Clicker.Controllers
         
         private void OnDrawGizmos()
         {
-            if (_queue == null)
+            if (_pathQueue == null)
             {
                 return;
             }
@@ -363,7 +276,7 @@ namespace Clicker.Controllers
             }
 
             Gizmos.color = Color.yellow;
-            foreach (Vector3Int vector3Int in _queue)
+            foreach (Vector3Int vector3Int in _pathQueue)
             {
                 Gizmos.DrawSphere(Managers.Map.CellToWorld(vector3Int), 0.3f);
             }

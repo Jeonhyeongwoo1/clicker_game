@@ -7,14 +7,16 @@ namespace Clicker.Skill
 {
     public class ParabolaMotion : BaseProjectileMotionComponent
     {
-        private float _height = 15f;
+        private float _height = 10f;
         private Vector3 _startPosition;
         private Vector3 _endPosition;
         private float _time;
+        private Projectile _projectile;
 
         public override void Shoot(Creature owner, Projectile projectile, ProjectileData projectileData)
         {
             _time = 0f;
+            _projectile = projectile;
             _startPosition = owner.transform.position;
             _endPosition = owner.TargetObject.transform.position;
             transform.position = owner.transform.position;
@@ -32,6 +34,7 @@ namespace Clicker.Skill
         {
             if (_time > 1f)
             {
+                _projectile.Destroy();
                 return;
             }
 

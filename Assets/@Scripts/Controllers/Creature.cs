@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Clicker.ContentData;
@@ -10,6 +11,7 @@ using Cysharp.Threading.Tasks;
 using Spine;
 using UnityEngine;
 using Spine.Unity;
+using UnityEngine.Events;
 using Event = Spine.Event;
 
 namespace Clicker.Controllers
@@ -19,7 +21,8 @@ namespace Clicker.Controllers
         public bool IsDead => CreatureState == Define.CreatureState.Dead;
         public Define.CreatureState CreatureState => _creatureState;
         public BaseObject TargetObject => _targetObject;
-        
+        protected MapManager Map => Managers.Map;
+
         [SerializeField] protected Define.CreatureState _creatureState;
         
         #region Data
@@ -39,7 +42,7 @@ namespace Clicker.Controllers
             get
             {
                 //최소범위
-                float radius = (_targetObject.Radius + Radius + 1.0f);
+                float radius = (_targetObject.Radius + Radius + 0.1f);//+ 1.0f);
                 return radius + _attackRange;
             }
         }
@@ -50,6 +53,13 @@ namespace Clicker.Controllers
         protected CancellationTokenSource _aiCts;
         protected BaseObject _targetObject;
         protected bool _isUseSKill = false;
+        protected Queue<Vector3Int> _pathQueue = new Queue<Vector3Int>();
+        protected Coroutine _moveToCor;
+        protected Vector3 _cellPosition;
+
+        private Vector3 _endMovePosition;
+        private readonly int _distanceToTargetThreshold = 10;
+        private Vector3 _targetPosition;
         
         public override void SetInfo(int id)
         {
@@ -75,7 +85,6 @@ namespace Clicker.Controllers
 
             string skeletonDataID = _creatureData.SkeletonDataID;
             var dataAsset = Managers.Resource.Load<SkeletonDataAsset>(skeletonDataID);
-            Debug.Log($"data assset {dataAsset}");
             _animation.skeletonDataAsset = dataAsset;
             _animation.Initialize(true);
 
@@ -85,6 +94,7 @@ namespace Clicker.Controllers
             _animation.AnimationState.Event += OnAnimationEvent;
             _animation.AnimationState.Complete += OnAnimationComplete;
             ChangeState(Define.CreatureState.Idle);
+            PlayAnimation(0, Define.AnimationName.Idle, true);
         }
 
         public void ChangeState(Define.CreatureState state)
@@ -104,10 +114,10 @@ namespace Clicker.Controllers
                     PlayAnimation(0, Define.AnimationName.Move, true);
                     break;
                 case Define.CreatureState.Attack:
-                    if (ObjectType == Define.EObjectType.Hero)
-                    {
-                        PlayAnimation(0, Define.AnimationName.Attack, false);
-                    }
+                    // if (ObjectType == Define.EObjectType.Hero)
+                    // {
+                    //     PlayAnimation(0, Define.AnimationName.Attack, false);
+                    // }
                     // else
                     // {
                     //     PlayAnimation(0, Define.AnimationName.Attack_a, false);
@@ -126,17 +136,6 @@ namespace Clicker.Controllers
             _skillBook.StopSkill();
         }
 
-        public virtual void UseSKill()
-        {
-            float damage = _creatureData.Atk * _creatureData.AtkRange;
-            TakeDamage(damage);
-        }
-
-        public virtual void TakeDamage(float damage)
-        {
-            _currentHp -= (int)damage;
-        }
-        
         public void SetFlip(bool leftLook)
         {
             _animation.skeleton.ScaleX = leftLook ? -1 : 1;
@@ -183,10 +182,17 @@ namespace Clicker.Controllers
             else if (trackEntry.Animation.Name == Define.AnimationName.Dead &&
                      _creatureState == Define.CreatureState.Dead)
             {
-                Managers.Object.Despawn(this);
+                StartCoroutine(Delay(1, () => Managers.Object.Despawn(this)));
             }
         }
 
+        private IEnumerator Delay(float delay, UnityAction callback)
+        {
+            yield return new WaitForSeconds(delay);
+            callback?.Invoke();
+        }
+        
+        
         protected async UniTaskVoid AIProcessAsync()
         {
             _aiCts = new CancellationTokenSource();
@@ -243,6 +249,100 @@ namespace Clicker.Controllers
         protected virtual void DeadState()
         {
             ChangeState(Define.CreatureState.Dead);
+        }
+
+        protected void SetMoveToCellPosition()
+        {
+            if (_pathQueue.Count == 0)
+            {
+                return;
+            }
+            
+            Vector3Int position = _pathQueue.Dequeue();
+            bool isPossibleMove = Map.MoveToCell(position, Map.WorldToCell(_cellPosition), this);
+            if (isPossibleMove)
+            {
+                Vector3 cellToWorld = Map.CellToWorld(position);
+                _cellPosition = cellToWorld;
+            }
+        }
+
+        protected void FindPath(Vector3 destinationPosition)
+        {
+            Vector3Int startPosition = Map.WorldToCell(transform.position);
+            Vector3Int destPosition = Map.WorldToCell(destinationPosition);
+            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition);
+            if (list.Count <= 2)
+            {
+                return;
+            }
+            
+            _pathQueue = new Queue<Vector3Int>(list);
+            _endMovePosition = Map.CellToWorld(list[^1]);
+        }
+
+        protected void FindPath(BaseObject targetObj, bool forceFindPath = false)
+        {
+            Vector3 targetPos = targetObj.transform.position;
+            if (!forceFindPath && (targetPos - transform.position).sqrMagnitude < _distanceToTargetThreshold)
+            {
+                return;
+            }
+            
+            Vector3Int startPosition = Map.WorldToCell(transform.position);
+            Vector3Int destPosition = Map.GetMoveableTargetPosition(this, targetObj);
+            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition);
+            if (list.Count <= 2)
+            {
+                return;
+            }
+            
+            _pathQueue = new Queue<Vector3Int>(list);
+            _endMovePosition = Map.CellToWorld(list[^1]);
+            if (!forceFindPath)
+            {
+                SetMoveToCellPosition();
+            }
+        }
+
+
+        protected IEnumerator MoveTo()
+        {
+            while (true)
+            {
+                if (CreatureState == Define.CreatureState.Attack)
+                {
+                    yield return null;
+                    continue;
+                }
+                Vector3 myPos = transform.position;
+                while ((myPos - _cellPosition).sqrMagnitude >= 1f)
+                {
+                    float speed = MoveSpeed;
+                    //일정 거리 이상일 경우에는 스피드를 올려준다.
+                    if ((myPos - _endMovePosition).sqrMagnitude > _distanceToTargetThreshold * 2)
+                    {
+                        speed *= 2f;
+                    }
+                    
+                    myPos = transform.position;
+                    
+                    Vector3 dir = _cellPosition - transform.position;
+                    //일관성 있게 이동하기 위해서
+                    float moveDist = Mathf.Min(dir.magnitude, speed * Time.deltaTime);
+                    transform.position += dir.normalized * moveDist;
+                    
+                    // Vector3 pos = Vector3.Lerp(myPos, _cellPosition, Time.fixedDeltaTime * speed);
+                    // Rigidbody2D.MovePosition(pos);
+
+                    Vector3 direction = (_cellPosition - myPos).normalized;
+                    SetFlip(Mathf.Sign(direction.x) == 1);
+                    yield return null;
+                }
+
+                SetMoveToCellPosition();
+                yield return null;
+            }
         }
 
     }

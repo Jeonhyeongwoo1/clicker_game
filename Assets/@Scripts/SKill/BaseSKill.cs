@@ -37,6 +37,7 @@ namespace Clicker.Skill
         public void StartSkillProcess(Creature owner)
         {
             _onwer = owner;
+            _onwer.PlayAnimation(0, _skillData.AnimName, false);
             UseSKill();
         }
 

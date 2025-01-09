@@ -29,7 +29,7 @@ namespace Clicker.Scene
 
 			
 			Vector3 spawnPos =new Vector3(Random.Range(-5, 5), Random.Range(5, -5));
-			var hero = Managers.Object.CreateObject<Hero>(Define.EObjectType.Hero, 201002);
+			var hero = Managers.Object.CreateObject<Hero>(Define.EObjectType.Hero, 201001);
 			hero.Spawn(spawnPos);
 			
 			spawnPos =new Vector3(Random.Range(-5, 5), Random.Range(5, -5));

@@ -90,7 +90,7 @@ namespace Clicker.Manager
         
         public void CreateBaseObjects()
         {
-            return;
+            // return;
             Tilemap tm = Util.FindChild<Tilemap>(_mapObject, "Tilemap_Object", true);
 
             if (tm != null)
@@ -167,7 +167,7 @@ namespace Clicker.Manager
                     }
                 }
 
-                mutilplier *= 3f;
+                mutilplier++;
             }
         }
         
