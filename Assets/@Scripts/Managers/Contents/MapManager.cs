@@ -197,7 +197,7 @@ namespace Clicker.Manager
                 closePos = startPosition;
             }
 
-            int maxDepth = 30;
+            int maxDepth = 10;
             while (!queue.IsEmpty())
             {
                 Node node = queue.Top();
