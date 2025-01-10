@@ -108,6 +108,7 @@ namespace Clicker.Utils
 			public static string Attack_b = "attack_b";
 			public static string Dead = "dead";
 			public static string Hit = "hit";
+			public static string skill_a = "skill_a";
 		}
 
 		public const char MAP_TOOL_WALL = '0';

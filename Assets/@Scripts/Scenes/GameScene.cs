@@ -45,28 +45,13 @@ namespace Clicker.Scene
 			hero.Spawn(spawnPos);
 			
 			spawnPos =new Vector3(Random.Range(-5, 5), Random.Range(5, -5));
-			hero = Managers.Object.CreateObject<Hero>(Define.EObjectType.Hero, 201004);
+			hero = Managers.Object.CreateObject<Hero>(Define.EObjectType.Hero, 201002);
 			hero.Spawn(spawnPos);
 			
 			spawnPos =new Vector3(Random.Range(-5, 5), Random.Range(5, -5));
 			hero = Managers.Object.CreateObject<Hero>(Define.EObjectType.Hero, 201004);
 			hero.Spawn(spawnPos);
-			
-			spawnPos =new Vector3(Random.Range(-5, 5), Random.Range(5, -5));
-			hero = Managers.Object.CreateObject<Hero>(Define.EObjectType.Hero, 201004);
-			hero.Spawn(spawnPos);
-			
-			spawnPos =new Vector3(Random.Range(-5, 5), Random.Range(5, -5));
-			hero = Managers.Object.CreateObject<Hero>(Define.EObjectType.Hero, 201004);
-			hero.Spawn(spawnPos);
-			
-			spawnPos =new Vector3(Random.Range(-5, 5), Random.Range(5, -5));
-			hero = Managers.Object.CreateObject<Hero>(Define.EObjectType.Hero, 201004);
-			hero.Spawn(spawnPos);
-			
-			spawnPos =new Vector3(Random.Range(-5, 5), Random.Range(5, -5));
-			hero = Managers.Object.CreateObject<Hero>(Define.EObjectType.Hero, 201004);
-			hero.Spawn(spawnPos);
+
 
 			Managers.Map.CreateBaseObjects();
 			// var monster = Managers.Object.CreateObject<Monster>(Define.ObjectType.Monster, 202005);

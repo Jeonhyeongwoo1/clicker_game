@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 7330505322190745904}
   - component: {fileID: 9046325122266123006}
   - component: {fileID: 6315380913447359759}
-  - component: {fileID: 214678080834344755}
+  - component: {fileID: 5460538582220848066}
   m_Layer: 0
   m_Name: HeroCamp
   m_TagString: Untagged
@@ -266,7 +266,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &214678080834344755
+--- !u!114 &5460538582220848066
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -281,3 +281,4 @@ MonoBehaviour:
   _rigidbody2D: {fileID: 0}
   _collider2D: {fileID: 0}
   _animation: {fileID: 0}
+  _currentHp: 0

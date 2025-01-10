@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using Clicker.ContentData;
 using Clicker.Controllers;
 using Clicker.Manager;
 using Clicker.Utils;
@@ -23,14 +24,17 @@ namespace Clicker.Entity
 
         protected Define.EObjectType objectType;
         protected float _maxHp;
-        [SerializeField] protected float _currentHp;
+        protected float _currentHp;
         protected int _id;
+        
+        private HurtFlashEffect _hurtFlashEffect;
         
         public virtual bool Init(Define.EObjectType eObjectType)
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _collider2D = GetComponent<CircleCollider2D>();
             _animation = GetComponent<SkeletonAnimation>();
+            _hurtFlashEffect = Util.GetOrAddComponent<HurtFlashEffect>(gameObject);
             objectType = eObjectType;
             return true;
         }
@@ -47,13 +51,9 @@ namespace Clicker.Entity
             _id = id;
         }
 
-        public virtual void TakeDamage(Creature attacker)
+        public virtual void TakeDamage(Creature attacker, SkillData skillData)
         {
-            _currentHp -= (int) Mathf.Clamp(attacker.Atk, 0, attacker.Atk);
-            if (_currentHp <= 0)
-            {
-                Dead();
-            }
+            _hurtFlashEffect.Flash();
         }
         
         public virtual void Spawn(Vector3 spawnPosition)

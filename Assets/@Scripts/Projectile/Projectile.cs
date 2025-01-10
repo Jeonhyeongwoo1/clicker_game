@@ -15,6 +15,7 @@ namespace Clicker.Skill
         private ProjectileData _projectileData;
         private SpriteRenderer _spriteRenderer;
         private BaseProjectileMotionComponent _motionComponent;
+        private SkillData _skillData;
         private readonly float _autoDestroyTime = 3f;
         private float _elapsed = 0f;
         private Creature _owner;
@@ -41,7 +42,7 @@ namespace Clicker.Skill
                     BaseProjectileMotionComponent;
         }
 
-        public void Shoot(Creature owner)
+        public void Shoot(Creature owner, SkillData skillData)
         {
             if (_motionComponent == null)
             {
@@ -51,6 +52,7 @@ namespace Clicker.Skill
             }
             
             _owner = owner;
+            _skillData = skillData;
             _motionComponent.Shoot(owner, this, _projectileData);
         }
 
@@ -87,7 +89,7 @@ namespace Clicker.Skill
 
                 if (other.TryGetComponent(out BaseObject bo))
                 {
-                    bo.TakeDamage(_owner);
+                    bo.TakeDamage(_owner, _skillData);
                     Destroy();
                 }
             }

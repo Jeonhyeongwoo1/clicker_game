@@ -3,9 +3,6 @@ using Clicker.Controllers;
 using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
-using Spine;
-using UnityEngine;
-using Event = Spine.Event;
 
 namespace Clicker.Skill
 {
@@ -24,6 +21,7 @@ namespace Clicker.Skill
             }
 
             objectType = eObjectType;
+            
             return true;
         }
 
@@ -38,6 +36,8 @@ namespace Clicker.Skill
         {
             _onwer = owner;
             _onwer.PlayAnimation(0, _skillData.AnimName, false);
+            _onwer.SkeletonAnimation.AnimationState.Event += OnAnimationEvent;
+            _onwer.SkeletonAnimation.AnimationState.Complete += OnAnimationComplete;
             UseSKill();
         }
 
@@ -45,6 +45,12 @@ namespace Clicker.Skill
         
         public virtual void StopSkill()
         {
+            if (_onwer != null && _onwer.SkeletonAnimation.AnimationState != null)
+            {
+                _onwer.SkeletonAnimation.AnimationState.Event -= OnAnimationEvent;
+                _onwer.SkeletonAnimation.AnimationState.Complete -= OnAnimationComplete;
+            }
+            
             // if (_skillCts != null)
             // {
             //     _skillCts.Cancel();
@@ -56,44 +62,6 @@ namespace Clicker.Skill
             //     _onwer.SkeletonAnimation.AnimationState.Event -= OnAnimationEvent;
             //     _onwer.SkeletonAnimation.AnimationState.Complete -= OnAnimationComplete;
             // }
-        }
-
-        protected override void OnAnimationEvent(TrackEntry trackEntry, Event e)
-        {
-            base.OnAnimationEvent(trackEntry, e);
-
-            if (trackEntry.Animation.Name.Contains(Define.AnimationName.Attack) ||
-                trackEntry.Animation.Name.Contains(Define.AnimationName.Attack_a) ||
-                trackEntry.Animation.Name.Contains(Define.AnimationName.Attack_b))
-            {
-                if (trackEntry.Animation.Name == Define.AnimationName.Attack_a)
-                {
-                    int a = 0;
-                }
-                
-                if (_onwer == null || _onwer.TargetObject == null)
-                {
-                    return;
-                }
-
-                if (_skillData.ComponentName == null)
-                {
-                    _onwer.TargetObject.TakeDamage(_onwer);
-                }
-                else
-                {
-                    var projectile =
-                        Managers.Object.CreateObject<Projectile>(Define.EObjectType.Projectile, _skillData.ProjectileId);
-            
-                    if (projectile == null)
-                    {
-                        LogUtils.LogError($"Failed get proejctile : {_skillData.ProjectileId}");
-                        return;
-                    }
-                
-                    projectile.Shoot(_onwer);
-                }
-            }
         }
     }
 }

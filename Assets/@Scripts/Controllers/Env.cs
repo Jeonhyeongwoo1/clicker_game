@@ -51,9 +51,9 @@ namespace Clicker.Controllers
             UpdateAnimation();
         }
 
-        public override void TakeDamage(Creature attacker)
+        public override void TakeDamage(Creature attacker, SkillData skillData)
         {
-            base.TakeDamage(attacker);
+            base.TakeDamage(attacker, skillData);
             
             EnvState = Define.EnvState.Hit;
         }

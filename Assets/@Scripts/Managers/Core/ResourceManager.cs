@@ -23,7 +23,7 @@ namespace Clicker.Manager
 			return null;
 		}
 
-		public GameObject Instantiate(string key, Transform parent = null, bool pooling = false)
+		public GameObject Instantiate(string key, Transform parent = null, bool pooling = true)
 		{
 			GameObject prefab = Load<GameObject>(key);
 			if (prefab == null)

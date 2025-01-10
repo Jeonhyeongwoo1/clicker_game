@@ -44,7 +44,7 @@ namespace Clicker.Skill
 
             float time = Mathf.Clamp01(_time + 0.01f);
             Vector3 nextPosition = CalculatePosition(_startPosition, _endPosition, time, _height);
-            Vector3 direction = (nextPosition - currentPosition).normalized;
+            Vector3 direction = (currentPosition - nextPosition).normalized;
 
             //180 : atan2 X축 양의 방향으로 계산, 화살촉은 x마이너스 방향이기 때문에
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;

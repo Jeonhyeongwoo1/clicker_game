@@ -5,6 +5,7 @@ using System.Threading;
 using Clicker.ContentData;
 using Clicker.Entity;
 using Clicker.Manager;
+using Clicker.Manger;
 using Clicker.Skill;
 using Clicker.Utils;
 using Cysharp.Threading.Tasks;
@@ -74,9 +75,8 @@ namespace Clicker.Controllers
                     break;
             }
             
-            _collider2D.offset = new Vector2(_creatureData.ColliderOffsetX, _creatureData.ColliderOffstY);
+            _collider2D.offset = new Vector2(_creatureData.ColliderOffsetX, _creatureData.ColliderOffsetY);
             _collider2D.radius = _creatureData.ColliderRadius;
-            _rigidbody2D.mass = _creatureData.Mass;
 
             _maxHp = _currentHp = _creatureData.MaxHp;
             _atk = _creatureData.Atk;
@@ -89,7 +89,7 @@ namespace Clicker.Controllers
             _animation.Initialize(true);
 
             _skillBook = Util.GetOrAddComponent<SkillBook>(gameObject);
-            _skillBook.AddSkill(_creatureData.SkillIdList);
+            _skillBook.AddSkill(_creatureData.DefaultSkillId);
 
             _animation.AnimationState.Event += OnAnimationEvent;
             _animation.AnimationState.Complete += OnAnimationComplete;
@@ -141,7 +141,27 @@ namespace Clicker.Controllers
             
             _skillBook.StopSkill();
         }
-
+        
+        public override void TakeDamage(Creature attacker, SkillData skillData)
+        {
+            base.TakeDamage(attacker, skillData);
+            
+            float damage = attacker.Atk * skillData.DamageMultiplier;
+            _currentHp -= (int) Mathf.Clamp(damage , 0, damage);
+            if (_currentHp <= 0)
+            {
+                Dead();
+            }
+            
+            GameObject prefab = Managers.Resource.Instantiate("DamageFont");
+            if (!prefab.TryGetComponent(out DamageFont damageFont))
+            {
+                return;
+            }
+            
+            damageFont.SetInfo(transform.position + Vector3.up, damage);
+        }
+        
         public void SetFlip(bool leftLook)
         {
             _animation.skeleton.ScaleX = leftLook ? -1 : 1;

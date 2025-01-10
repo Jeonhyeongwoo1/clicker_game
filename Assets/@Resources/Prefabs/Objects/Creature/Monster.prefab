@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 6328173336420940412}
   - component: {fileID: 8158778119479161798}
   - component: {fileID: 4241395275963686837}
+  - component: {fileID: 2934238345323418152}
   - component: {fileID: 2055065751809685856}
-  - component: {fileID: 3882516047066253473}
   m_Layer: 7
   m_Name: Monster
   m_TagString: Untagged
@@ -126,6 +126,18 @@ MonoBehaviour:
   _animationName: 
   loop: 1
   timeScale: 1
+--- !u!114 &2934238345323418152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4373596034486630441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45fd0021159f43d46a726e979121a163, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &2055065751809685856
 Rigidbody2D:
   serializedVersion: 4
@@ -153,19 +165,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &3882516047066253473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4373596034486630441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0bff17ba0c6cd744a7965ce2209cd5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rigidbody2D: {fileID: 0}
-  _collider2D: {fileID: 0}
-  _animation: {fileID: 0}
-  _creatureState: 0

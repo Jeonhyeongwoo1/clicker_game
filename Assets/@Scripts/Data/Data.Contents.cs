@@ -14,26 +14,22 @@ namespace Clicker.ContentData
 		public string DescriptionTextID;
 		public string PrefabLabel;
 		public float ColliderOffsetX;
-		public float ColliderOffstY;
+		public float ColliderOffsetY;
 		public float ColliderRadius;
-		public float Mass;
 		public float MaxHp;
-		public float MaxHpBonus;
+		public float UpMaxHpBonus;
 		public float Atk;
 		public float AtkRange;
 		public float AtkBonus;
-		public float Def;
 		public float MoveSpeed;
-		public float TotalExp;
-		public float HpRate;
-		public float AtkRate;
-		public float DefRate;
-		public float MoveSpeedRate;
-		public string IconImage; // NEW
+		public float CriRate;
+		public float CriDamage;
+		public string IconImage;
 		public string SkeletonDataID;
-		public string AnimatorName;
-		public List<int> SkillIdList = new List<int>();
-		public int DropItemId;
+		public int DefaultSkillId;
+		public int EnvSkillId;
+		public int SkillAId;
+		public int SkillBId;
 	}
 	#endregion
 
@@ -41,6 +37,7 @@ namespace Clicker.ContentData
 	[Serializable]
 	public class MonsterData : CreatureData
 	{
+		public int DropItemId;
 	}
 
 	[Serializable]
@@ -61,6 +58,7 @@ namespace Clicker.ContentData
 	[Serializable]
 	public class HeroData : CreatureData
 	{
+		
 	}
 
 	[Serializable]
@@ -84,7 +82,6 @@ namespace Clicker.ContentData
 		public int DataId;
 		public string Name;
 		public string ClassName;
-		public string ComponentName;
 		public string Description;
 		public int ProjectileId;
 		public string PrefabLabel;
@@ -93,13 +90,15 @@ namespace Clicker.ContentData
 		public float CoolTime;
 		public float DamageMultiplier;
 		public float Duration;
-		public float NumProjectiles;
+		public float AnimImpactDuration;
 		public string CastingSound;
-		public float AngleBetweenProj;
 		public float SkillRange;
-		public float RotateSpeed;
 		public float ScaleMultiplier;
-		public float AngleRange;
+		public int TargetCount;
+		public List<int> EffectIds;
+		public int NextLevelId;
+		public int AoEId;
+		public int EffectSize;
 	}
 
 	[Serializable]

@@ -11,25 +11,22 @@ namespace Clicker.Skill
     {
         private List<BaseSKill> _skillList = new List<BaseSKill>();
         
-        public void AddSkill(List<int> skillIdList)
+        public void AddSkill(int id)
         {
             DataManager dataManager = Managers.Data;
-            foreach (var id in skillIdList)
+            string namespaceString = "Clicker.Skill";
+            string className = dataManager.SkillDataDict[id].ClassName;
+            string name = $"{namespaceString}.{className}";
+            var skill = gameObject.AddComponent(System.Type.GetType(name)) as BaseSKill;
+            if (skill == null)
             {
-                string namespaceString = "Clicker.Skill";
-                string className = dataManager.SkillDataDict[id].ClassName;
-                string name = $"{namespaceString}.{className}";
-                var skill = gameObject.AddComponent(System.Type.GetType(name)) as BaseSKill;
-                if (skill == null)
-                {
-                    LogUtils.LogError("Failed add skill " + id);
-                    continue;
-                }
-                
-                skill.Init(Define.EObjectType.Skill);
-                skill.SetInfo(id);
-                _skillList.Add(skill);
+                LogUtils.LogError("Failed add skill " + id);
+                return;
             }
+                
+            skill.Init(Define.EObjectType.Skill);
+            skill.SetInfo(id);
+            _skillList.Add(skill);
         }
 
         public void UseSKill(Creature owner)

@@ -36,6 +36,8 @@ namespace Clicker.Manager
 		{
 			if (go.activeSelf)
 				_pool.Release(go);
+			
+			go.SetActive(false);
 		}
 
 		public GameObject Pop()
