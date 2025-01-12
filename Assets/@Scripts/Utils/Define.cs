@@ -114,6 +114,28 @@ namespace Clicker.Utils
 		{
 			TimeOut,
 			EndOfAirbone,
+			ClearSkill
+		}
+		
+		
+		public enum EEffectClassName
+		{
+			Bleeding,
+			Poison,
+			Ignite,
+			Heal,
+			AttackBuff,
+			MoveSpeedBuff,
+			AttackSpeedBuff,
+			LifeStealBuff,
+			ReduceDmgBuff,
+			ThornsBuff,
+			Knockback,
+			Airborne,
+			PullEffect,
+			Stun,
+			Freeze,
+			CleanDebuff,
 		}
 		
 		public enum EEffectType

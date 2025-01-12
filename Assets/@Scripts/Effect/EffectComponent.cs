@@ -5,13 +5,14 @@ using Clicker.Manager;
 using Clicker.Manger;
 using Clicker.Utils;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Clicker.Effect
 {
     public class EffectComponent : MonoBehaviour
     {
 
-        [SerializeField] private List<EffectBase> _effectList = new();
+        [FormerlySerializedAs("_effectList")] [SerializeField] private List<EffectBase> _activateEffectList = new();
         private Creature _owner;
         
         public virtual void SetInfo(Creature owner)
@@ -30,20 +31,35 @@ namespace Clicker.Effect
 
             GameObject go = Managers.Object.SpawnGameObject(_owner.transform.position, "EffectBase");
             var effect = go.AddComponent(System.Type.GetType(name)) as EffectBase;
+            effect.Init(Define.EObjectType.Effect);
+            
             effect.transform.SetParent(transform);
             effect.transform.localPosition = Vector3.zero;
-            Managers.Object.EffectSet.Add(effect);
+            effect.transform.name = className;
             
-            _effectList.Add(effect);
+            Managers.Object.EffectSet.Add(effect);
+            _activateEffectList.Add(effect);
             effect.SetInfo(Managers.Data.EffectDataDict[id], CompleteEffect);
             effect.ApplyEffect(_owner, effectData);
         }
 
+        public void RemoveAllDebuffEffect()
+        {
+            for (int i = _activateEffectList.Count - 1; i >= 0; i--)
+            {
+                EffectBase effectBase = _activateEffectList[i];
+                if (effectBase.EEffectType == Define.EEffectType.Debuff)
+                {
+                    effectBase.CompleteEffect(Define.EffectClearType.ClearSkill);
+                }
+            }
+        }
+
         public void CompleteEffect(EffectBase effect)
         {
-            if (_effectList.Contains(effect))
+            if (_activateEffectList.Contains(effect))
             {
-                _effectList.Remove(effect);
+                _activateEffectList.Remove(effect);
             }
             
             Managers.Object.Despawn(effect);

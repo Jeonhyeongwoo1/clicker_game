@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Clicker.Utils;
+using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace Clicker.ContentData
 {
@@ -21,10 +23,11 @@ namespace Clicker.ContentData
             }
         }
 
-        private bool _isDirty;
-        private float _value;
-        private float _baseValue;
-
+        [SerializeField][ReadOnly] private float _value;
+        [SerializeField][ReadOnly] private float _baseValue;
+        [SerializeField] private float _debugCalcuatedValue;
+        
+        private bool _isDirty = true;
         private List<StatModifer> _statModiferList = new List<StatModifer>();
         
         public CreatureStat(float baseValue)
@@ -39,7 +42,9 @@ namespace Clicker.ContentData
                 _isDirty = true;
             }
             
+            // Debug.Log($"{statModifer.EStatModType} / {Sys}");
             _statModiferList.Add(statModifer);
+            _debugCalcuatedValue = CalculateFinalValue();
         }
 
         public void RemoveStat(StatModifer statModifer)
@@ -48,6 +53,7 @@ namespace Clicker.ContentData
             {
                 _statModiferList.Remove(statModifer);
                 _isDirty = true;
+                _debugCalcuatedValue = CalculateFinalValue();
             }
         }
 
@@ -57,6 +63,7 @@ namespace Clicker.ContentData
             if (count > 0)
             {
                 _isDirty = true;
+                _debugCalcuatedValue = CalculateFinalValue();
             }
         }
 
@@ -87,7 +94,7 @@ namespace Clicker.ContentData
                 switch (statModifer.EStatModType)
                 {
                     case Define.EStatModType.PercentAdd:
-                        sumValue *= 1 + statModifer.Value;
+                        sumValue += statModifer.Value;
                         if (i == _statModiferList.Count - 1 ||
                             _statModiferList[i + 1].EStatModType != Define.EStatModType.PercentAdd)
                         {
@@ -103,7 +110,6 @@ namespace Clicker.ContentData
                         break;
                 }
             }
-
 
             return finalValue;
         }

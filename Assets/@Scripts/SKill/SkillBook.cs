@@ -90,6 +90,11 @@ namespace Clicker.Skill
                 _activeSkillList.Remove(skill);
             }
 
+            if (skill.Id == 10019)
+            {
+                int a = 0;
+            }
+            Debug.LogError("USeSKill" + skill.Id);
             skill.StartSkillProcess();
         }
 

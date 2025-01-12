@@ -11,7 +11,7 @@ namespace Clicker.Skill
 {
     public class AreaSkill : BaseSKill
     {
-        protected virtual float Angle => 120f;
+        protected virtual float Angle => 360f;
         
         protected SpellIndicator _spellIndicator;
         protected Vector3 _direction = Vector3.zero;

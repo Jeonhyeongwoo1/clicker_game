@@ -28,6 +28,8 @@ namespace Clicker.Controllers
         
         private EnvData _envData;
         private Define.EnvState _envState;
+        private float _maxHp;
+        private float _currentHp;
 
         private static class AnimationName
         {

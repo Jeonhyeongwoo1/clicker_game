@@ -6,23 +6,30 @@ using Clicker.Controllers;
 using Clicker.Entity;
 using Clicker.Utils;
 using Cysharp.Threading.Tasks;
-using Spine.Unity;
 using UnityEngine;
 
 namespace Clicker.Effect
 {
     public class EffectBase : BaseObject
     {
+        public Define.EEffectType EEffectType => _effectType;
+        
         protected EffectData _effectData;
         protected Action _onApplyEffectAction;
         protected Creature _owner;
+        protected Define.EEffectType _effectType;
         
         private float _remainTime;
         private CancellationTokenSource _tickCts;
         private List<CreatureStat> _creatureStatList = new();
         private Action<EffectBase> _onCompleteEffectAction;
-        
-        public void SetInfo(EffectData effectData, Action<EffectBase> onCompleteEffectAction)
+
+        public override bool Init(Define.EObjectType eObjectType)
+        {
+            return base.Init(eObjectType);
+        }
+
+        public virtual void SetInfo(EffectData effectData, Action<EffectBase> onCompleteEffectAction)
         {
             _effectData = effectData;
             _onCompleteEffectAction = onCompleteEffectAction;
@@ -31,92 +38,50 @@ namespace Clicker.Effect
             {
                 SetSpinAnimation(effectData.SkeletonDataID);
             }
-            
-            // _animation = GetComponent<SkeletonAnimation>();
-            // if (_animation)
-            // {
-            //     _animation.skeletonDataAsset = null;
-            // }   
         }
         
         public virtual void ApplyEffect(Creature owner, EffectData effectData)
         {
             _owner = owner;
             ExecuteTick().Forget();
-            ApplyBuffAndDebuff();
         }
 
-        private void ApplyBuffAndDebuff()
+        protected void ApplyBuff(CreatureStat creatureStat, object source, int order = 0)
         {
-            Define.BuffAndDebuffType type;
-            try
-            {
-                type = Util.ParseEnum<Define.BuffAndDebuffType>(_effectData.ClassName);
-            }
-            catch (Exception e)
-            {
-                return;
-            }
-
-            CreatureStat creatureStat = null;
-            switch (type)
-            {
-                case Define.BuffAndDebuffType.MoveSpeedBuff:
-                    creatureStat = _owner.MoveSpeed;
-                    break;
-                case Define.BuffAndDebuffType.AttackSpeedBuff:
-                    // creatureStat = _owner.AttackRange
-                    break;
-                case Define.BuffAndDebuffType.LifeStealBuff:
-                    break;
-            }
-
             if (creatureStat == null)
             {
+                LogUtils.LogError("stat is null");
                 return;
             }
-
+            
             if (_effectData.Amount != 0)
             {
                 float amount = _effectData.Amount;
-                StatModifer modifer = new StatModifer(Define.EStatModType.Add, amount, this, 0);
+                StatModifer modifer = new StatModifer(Define.EStatModType.Add, amount, source, order);
                 creatureStat.AddStat(modifer);
-                _creatureStatList.Add(creatureStat);
             }
 
             if (_effectData.PercentAdd != 0)
             {
                 float percent = _effectData.PercentAdd;
-                StatModifer modifer = new StatModifer(Define.EStatModType.PercentAdd, percent, this, 0);
+                StatModifer modifer = new StatModifer(Define.EStatModType.PercentAdd, percent, source, order);
                 creatureStat.AddStat(modifer);
-                _creatureStatList.Add(creatureStat);
             }
 
             if (_effectData.PercentMult != 0)
             {
                 float percent = _effectData.PercentMult;
-                StatModifer modifer = new StatModifer(Define.EStatModType.PercentMult, percent, this, 0);
+                StatModifer modifer = new StatModifer(Define.EStatModType.PercentMult, percent, source, order);
                 creatureStat.AddStat(modifer);
-                _creatureStatList.Add(creatureStat);
             }
         }
 
-        private void RemoveStat()
+        protected void RemoveBuff(CreatureStat creatureStat, object source)
         {
-            if (_creatureStatList.Count == 0)
-            {
-                return;
-            }
-            
-            foreach (CreatureStat creatureStat in _creatureStatList)
-            {
-                creatureStat.RemoveStatBySource(this);
-            }
-            
-            _creatureStatList.Clear();
+            creatureStat.RemoveStatBySource(source);
         }
-
-        protected virtual void CompleteEffect(Define.EffectClearType effectClearType)
+        
+        public virtual void CompleteEffect(Define.EffectClearType effectClearType)
         {
             _remainTime = 0;
             Util.SafeCancelToken(ref _tickCts);
@@ -128,7 +93,6 @@ namespace Clicker.Effect
                     break;
             }
             
-            RemoveStat();
             _onCompleteEffectAction?.Invoke(this);
         }
 

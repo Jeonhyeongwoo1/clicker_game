@@ -9,6 +9,7 @@ using Clicker.Manager;
 using Clicker.Skill;
 using Clicker.Utils;
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using Spine;
 using UnityEngine;
 using Spine.Unity;  
@@ -27,23 +28,33 @@ namespace Clicker.Controllers
         
         protected MapManager Map => Managers.Map;
 
-        #region Data
-     
+        #region CreatureStat
         public CreatureStat MoveSpeed => _moveSpeed;
         public CreatureStat Atk => _atk;
         public CreatureStat AtkBonus => _atkBonus;
         public CreatureStat CriRate => _criRate;
         public CreatureStat CriDamage => _criDamage;
         public CreatureStat AttackRange => _attackRange;
-        protected CreatureData _creatureData;
-
-        protected CreatureStat _atk;
-        protected CreatureStat _attackRange;
-        protected CreatureStat _moveSpeed;
-        protected CreatureStat _atkBonus;
-        protected CreatureStat _criRate;
-        protected CreatureStat _criDamage;
+        public CreatureStat ReduceDamageRate => _reduceDamageRate;
+        public CreatureStat ThornsDamageRate => _thornsDamageRate;
+        public CreatureStat AttackSpeedRate => _attackSpeedRate;
+        public CreatureStat LifeStealRate => _lifeStealRate;
         
+        [SerializeField][ReadOnly] protected CreatureStat _atk;
+        [SerializeField][ReadOnly] protected CreatureStat _attackRange;
+        [SerializeField][ReadOnly] protected CreatureStat _moveSpeed;
+        [SerializeField][ReadOnly] protected CreatureStat _atkBonus;
+        [SerializeField][ReadOnly] protected CreatureStat _criRate;
+        [SerializeField][ReadOnly] protected CreatureStat _criDamage;
+        [SerializeField][ReadOnly] protected CreatureStat _maxHp;
+        [SerializeField][ReadOnly] protected CreatureStat _reduceDamageRate;
+        [SerializeField][ReadOnly] protected CreatureStat _thornsDamageRate;
+        [SerializeField][ReadOnly] protected CreatureStat _attackSpeedRate;
+        [SerializeField][ReadOnly] protected CreatureStat _lifeStealRate;
+
+        protected float _currentHp;
+        protected CreatureData _creatureData;
+  
         #endregion
 
         protected float AttackDistance
@@ -52,7 +63,7 @@ namespace Clicker.Controllers
             {
                 //최소범위
                 float radius = (_targetObject.Radius + Radius + 0.1f);//+ 1.0f);
-                return radius + _attackRange.Value;
+                return radius + AttackRange.Value;
             }
         }
 
@@ -89,12 +100,7 @@ namespace Clicker.Controllers
             _collider2D.offset = new Vector2(_creatureData.ColliderOffsetX, _creatureData.ColliderOffsetY);
             _collider2D.radius = _creatureData.ColliderRadius;
 
-            _maxHp = _currentHp = _creatureData.MaxHp;
-            _atk = new CreatureStat(_creatureData.Atk);
-            _attackRange = new CreatureStat(_creatureData.AtkRange);
-            _moveSpeed = new CreatureStat(_creatureData.MoveSpeed);
-            _atkBonus = new CreatureStat(_creatureData.AtkBonus);
-
+            SetCreatureStat();
             SetSpinAnimation(_creatureData.SkeletonDataID);
             _effectComponent = Util.GetOrAddComponent<EffectComponent>(gameObject);
             _effectComponent.SetInfo(this);
@@ -107,6 +113,22 @@ namespace Clicker.Controllers
             _skillBook.AddSkill(_creatureData.SkillBId, Define.SkillType.SkillB);
             
             ChangeState(Define.CreatureState.Idle);
+        }
+
+        protected virtual void SetCreatureStat()
+        {
+            _currentHp = _creatureData.MaxHp;
+            _maxHp = new CreatureStat(_creatureData.Atk);
+            _atk = new CreatureStat(_creatureData.Atk);
+            _attackRange = new CreatureStat(_creatureData.AtkRange);
+            _moveSpeed = new CreatureStat(_creatureData.MoveSpeed);
+            _atkBonus = new CreatureStat(_creatureData.AtkBonus);
+            _reduceDamageRate = new CreatureStat(0);
+            _thornsDamageRate = new CreatureStat(0);
+            _attackSpeedRate = new CreatureStat(1);
+            _criDamage = new CreatureStat(CreatureData.CriDamage);
+            _criRate = new CreatureStat(CreatureData.CriRate);
+            _lifeStealRate = new CreatureStat(0);
         }
 
         public void ChangeState(Define.CreatureState state)
@@ -162,8 +184,8 @@ namespace Clicker.Controllers
             base.TakeDamage(attacker, skillData);
             
             float damage = attacker.Atk.Value * skillData.DamageMultiplier + attacker.AtkBonus.Value;
-            bool isCritical = Random.value >= _creatureData.CriRate;
-            float finalDamage = isCritical ? damage * _creatureData.CriDamage : damage;
+            bool isCritical = Random.value >= CriRate.Value;
+            float finalDamage = isCritical ? damage * CriDamage.Value : damage;
             
             _currentHp -= (int) Mathf.Clamp(finalDamage, 0, finalDamage);
             if (_currentHp <= 0)

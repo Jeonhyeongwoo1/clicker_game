@@ -83,7 +83,7 @@
       "CriDamage": 1.5,
       "IconImage": "004.sprite",
       "SkeletonDataID": "004_SkeletonData",
-      "DefaultSkillId": 10019 ,
+      "DefaultSkillId": 10001 ,
       "EnvSkillId": 0,
       "SkillAId": 10018,
       "SkillBId": 10019

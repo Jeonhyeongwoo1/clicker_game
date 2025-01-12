@@ -23,8 +23,6 @@ namespace Clicker.Entity
         [SerializeField] protected SkeletonAnimation _animation;
 
         protected Define.EObjectType objectType;
-        protected float _maxHp;
-        protected float _currentHp;
         protected int _id;
         
         private HurtFlashEffect _hurtFlashEffect;
@@ -78,6 +76,12 @@ namespace Clicker.Entity
             
             string skeletonDataID = id;
             var dataAsset = Managers.Resource.Load<SkeletonDataAsset>(skeletonDataID);
+            if (dataAsset == null)
+            {
+                LogUtils.LogError($"Failed get skieleton asset : {skeletonDataID}");
+                return;
+            }
+            
             _animation.skeletonDataAsset = dataAsset;
             _animation.Initialize(true);
             

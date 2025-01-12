@@ -57,7 +57,7 @@ namespace Clicker.Effect
             CompleteEffect(Define.EffectClearType.EndOfAirbone);
         }
 
-        protected override void CompleteEffect(Define.EffectClearType effectClearType)
+        public override void CompleteEffect(Define.EffectClearType effectClearType)
         {
             base.CompleteEffect(effectClearType);
 

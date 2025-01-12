@@ -12,6 +12,7 @@ namespace Clicker.Skill
     public abstract class BaseSKill : MonoBehaviour
     {
         public Define.SkillType SkillType => _skillType;
+        public int Id => _id;
         
         protected SkillData _skillData;
         protected Creature _onwer;

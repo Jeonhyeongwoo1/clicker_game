@@ -11,9 +11,8 @@ namespace Clicker.Skill
     {
         protected override float Angle => _angle;
 
-        private float _angle = 90;
-
-
+        private float _angle = 120;
+        
         protected override void OnAttackEvent()
         {
             CoolTimeAsync().Forget();

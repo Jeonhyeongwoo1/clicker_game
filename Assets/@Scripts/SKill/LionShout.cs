@@ -8,6 +8,8 @@ namespace Clicker.Skill
 {
     public class LionShout : AreaSkill
     {
+        protected override float Angle => 360f;
+
         protected override void OnAttackEvent()
         {
             CoolTimeAsync().Forget();
