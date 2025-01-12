@@ -19,6 +19,7 @@ namespace Clicker.Effect
         
         private float _remainTime;
         private CancellationTokenSource _tickCts;
+        private List<CreatureStat> _creatureStatList = new();
         private Action<EffectBase> _onCompleteEffectAction;
         
         public void SetInfo(EffectData effectData, Action<EffectBase> onCompleteEffectAction)
@@ -42,6 +43,7 @@ namespace Clicker.Effect
         {
             _owner = owner;
             ExecuteTick().Forget();
+            ApplyBuffAndDebuff();
         }
 
         private void ApplyBuffAndDebuff()
@@ -73,27 +75,45 @@ namespace Clicker.Effect
             {
                 return;
             }
-            
-            
+
             if (_effectData.Amount != 0)
             {
                 float amount = _effectData.Amount;
                 StatModifer modifer = new StatModifer(Define.EStatModType.Add, amount, this, 0);
+                creatureStat.AddStat(modifer);
+                _creatureStatList.Add(creatureStat);
             }
 
             if (_effectData.PercentAdd != 0)
             {
                 float percent = _effectData.PercentAdd;
                 StatModifer modifer = new StatModifer(Define.EStatModType.PercentAdd, percent, this, 0);
+                creatureStat.AddStat(modifer);
+                _creatureStatList.Add(creatureStat);
             }
 
             if (_effectData.PercentMult != 0)
             {
                 float percent = _effectData.PercentMult;
                 StatModifer modifer = new StatModifer(Define.EStatModType.PercentMult, percent, this, 0);
+                creatureStat.AddStat(modifer);
+                _creatureStatList.Add(creatureStat);
+            }
+        }
+
+        private void RemoveStat()
+        {
+            if (_creatureStatList.Count == 0)
+            {
+                return;
             }
             
+            foreach (CreatureStat creatureStat in _creatureStatList)
+            {
+                creatureStat.RemoveStatBySource(this);
+            }
             
+            _creatureStatList.Clear();
         }
 
         protected virtual void CompleteEffect(Define.EffectClearType effectClearType)
@@ -108,6 +128,7 @@ namespace Clicker.Effect
                     break;
             }
             
+            RemoveStat();
             _onCompleteEffectAction?.Invoke(this);
         }
 

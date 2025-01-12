@@ -51,7 +51,7 @@ namespace Clicker.ContentData
             }
         }
 
-        public void RemoveStatBySoruce(object source)
+        public void RemoveStatBySource(object source)
         {
             int count = _statModiferList.RemoveAll(x=> x.Source == source);
             if (count > 0)
