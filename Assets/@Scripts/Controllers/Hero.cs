@@ -1,14 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Clicker.ContentData;
 using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
-using Cysharp.Threading.Tasks;
 using Scripts;
+using Spine;
 using UnityEngine;
 
 namespace Clicker.Controllers
@@ -30,15 +24,8 @@ namespace Clicker.Controllers
         {
             base.Spawn(spawnPosition);
             AIProcessAsync().Forget();
-            
-            if (_moveToCor != null)
-            {
-                StopCoroutine(_moveToCor);
-                _moveToCor = null;
-            }
-
             _cellPosition = Map.WorldToCell(spawnPosition);
-            _moveToCor = StartCoroutine(MoveTo());
+            StartMoveToCellPosition();
         }
 
         protected override void IdleState()
@@ -165,6 +152,8 @@ namespace Clicker.Controllers
             
             float distA = (_targetObject.transform.position - transform.position).sqrMagnitude;
             float distB = AttackDistance * AttackDistance;
+            
+            // if(ObjectType == Define.EObjectType.Hero)
             // Debug.Log($"{distA} / {distB}");
             
             //공격 범위안에 들어왔는가
@@ -195,31 +184,11 @@ namespace Clicker.Controllers
                 _targetObject = null;
                 ChangeState(Define.CreatureState.Idle);
                 HeroMoveState = Define.HeroMoveState.Idle;
-                if (_isUseSKill)
-                {
-                    _isUseSKill = false;
-                    _skillBook.StopSkill();
-                }
-                return;
-            }
-
-            Vector3 direction = (_targetObject.transform.position - transform.position).normalized;
-            SetFlip(Mathf.Sign(direction.x) == 1);
-            
-            //기존에 있던 모든 이동 경로는 지운다.
-            if (_pathQueue.Count > 0)
-            {
-                _pathQueue.Clear();
-                //_cellPosition = transform.position;
-            }
-            
-            if (_isUseSKill)
-            {
+                _skillBook.StopAllSKill();
                 return;
             }
             
-            _isUseSKill = true;
-            _skillBook.UseSKill(this);
+            base.AttackState();
         }
 
         protected override void OnEnable()
@@ -246,13 +215,7 @@ namespace Clicker.Controllers
                 case Define.EUIEvent.Click:
                     break;
                 case Define.EUIEvent.PointerDown:
-                    // StopAIProcess();
-                    if (_isUseSKill)
-                    {
-                        _isUseSKill = false;
-                        _skillBook.StopSkill();
-                    }
-                    
+                    _skillBook.StopAllSKill();
                     ChangeState(Define.CreatureState.Move);
                     HeroMoveState = Define.HeroMoveState.ForceMove;
                     break;

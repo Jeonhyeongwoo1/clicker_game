@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 namespace Clicker.Utils
@@ -69,6 +70,26 @@ namespace Clicker.Utils
 		public static T ParseEnum<T>(string value)
 		{
 			return (T)Enum.Parse(typeof(T), value, true);
+		}
+
+		public static void SafeCancelToken(ref CancellationTokenSource cts)
+		{
+			if (cts != null)
+			{
+				cts.Cancel();
+				cts = null;
+			}
+		}
+
+		public static void SafeAllocateToken(ref CancellationTokenSource cts)
+		{
+			if (cts != null)
+			{
+				cts.Cancel();
+				cts = null;
+			}
+
+			cts = new CancellationTokenSource();
 		}
 	}
 }

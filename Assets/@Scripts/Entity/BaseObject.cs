@@ -68,13 +68,37 @@ namespace Clicker.Entity
         protected virtual void UpdateAnimation()
         {
         }
+
+        protected void SetSpinAnimation(string id)
+        {
+            if (id == null)
+            {
+                return;
+            }
+            
+            string skeletonDataID = id;
+            var dataAsset = Managers.Resource.Load<SkeletonDataAsset>(skeletonDataID);
+            _animation.skeletonDataAsset = dataAsset;
+            _animation.Initialize(true);
+            
+            _animation.AnimationState.Event += OnAnimationEvent;
+            _animation.AnimationState.Complete += OnAnimationComplete;
+            
+        }
         
-        public void PlayAnimation(int trackIndex, string AnimName, bool loop)
+        public TrackEntry PlayAnimation(int trackIndex, string animName, bool loop)
         {
             if (_animation == null)
-                return;
+                return null;
 
-            _animation.AnimationState.SetAnimation(trackIndex, AnimName, loop);
+            TrackEntry entry = _animation.AnimationState.SetAnimation(trackIndex, animName, loop);
+            //animation blending
+            if (animName == Define.AnimationName.Dead)
+                entry.MixDuration = 0;
+            else
+                entry.MixDuration = 0.2f;
+
+            return entry;
         }
                 
         protected virtual void OnAnimationComplete(TrackEntry trackEntry)

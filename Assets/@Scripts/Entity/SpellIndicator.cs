@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using Clicker.ContentData;
-using Clicker.Entity;
 using Clicker.Utils;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -15,6 +12,8 @@ namespace Clicker.Entity
         private SpriteRenderer _spriteRenderer;
         private CancellationTokenSource _skillCts;
         private SkillData _skillData;
+        
+        private readonly int Angle = Shader.PropertyToID("_Angle");
         private readonly int Duration = Shader.PropertyToID("_Duration");
 
         public void SetInfo(Transform owner, SkillData skillData)
@@ -27,9 +26,11 @@ namespace Clicker.Entity
             transform.SetParent(owner);
         }
         
-        public async UniTask ConeFillAsync(BaseObject targetObject, float duration)
+        public async UniTask ConeFillAsync(BaseObject targetObject, float duration, float angle)
         {
-            _skillCts = new CancellationTokenSource();
+            Util.SafeAllocateToken(ref _skillCts);
+            _spriteRenderer.material.SetFloat(Duration, 0);
+            _spriteRenderer.material.SetFloat(Angle, angle);
             
             if (!gameObject.activeSelf)
             {
@@ -37,8 +38,8 @@ namespace Clicker.Entity
             }
             
             Vector3 direction = (transform.position - targetObject.transform.position).normalized;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            float a = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(a, Vector3.forward);
             
             float elapsed = 0;
             // Material material = ;
@@ -63,12 +64,8 @@ namespace Clicker.Entity
 
         public void Cancel()
         {
-            if (_skillCts != null)
-            {
-                _skillCts.Cancel();
-                _skillCts = null;
-            }
-            
+            // Debug.Log("Cancel");
+            Util.SafeCancelToken(ref _skillCts);
             _spriteRenderer.material.SetFloat(Duration, 0);
             gameObject.SetActive(false);
         }

@@ -1,67 +1,93 @@
+using System;
 using Clicker.ContentData;
 using Clicker.Controllers;
-using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
+using Cysharp.Threading.Tasks;
+using Spine;
+using UnityEngine;
 
 namespace Clicker.Skill
 {
-    public abstract class BaseSKill : BaseObject
+    public abstract class BaseSKill : MonoBehaviour
     {
+        public Define.SkillType SkillType => _skillType;
+        
         protected SkillData _skillData;
         protected Creature _onwer;
+
+        private Define.SkillType _skillType;
+        private int _id;
+        private Action<BaseSKill> _onStopSkillAction;
+        private Action<BaseSKill> _onCompleteSkillAction;
         
-        // private CancellationTokenSource _skillCts;
-        
-        public override bool Init(Define.EObjectType eObjectType)
+        public virtual void SetInfo(int id, Creature owner, Define.SkillType skillType, Action<BaseSKill> onCompleteSkillAction, Action<BaseSKill> onStopSkillAction)
         {
-            if (base.Init(eObjectType) == false)
-            {
-                return false;
-            }
-
-            objectType = eObjectType;
-            
-            return true;
-        }
-
-        public override void SetInfo(int id)
-        {
-            base.SetInfo(id);
-
-            _skillData = Managers.Data.SkillDataDict[id];
-        }
-
-        public void StartSkillProcess(Creature owner)
-        {
+            _id = id;
+            _skillType = skillType;
             _onwer = owner;
-            _onwer.PlayAnimation(0, _skillData.AnimName, false);
-            _onwer.SkeletonAnimation.AnimationState.Event += OnAnimationEvent;
-            _onwer.SkeletonAnimation.AnimationState.Complete += OnAnimationComplete;
+            _skillData = Managers.Data.SkillDataDict[id];
+            _onStopSkillAction = onStopSkillAction;
+            _onCompleteSkillAction = onCompleteSkillAction;
+            if (_onwer != null && _onwer.SkeletonAnimation != null)
+            {
+                _onwer.SkeletonAnimation.AnimationState.Event += OnAnimationEvent;
+                _onwer.SkeletonAnimation.AnimationState.Complete += OnAnimationComplete;
+            }
+        }
+
+        public void StartSkillProcess()
+        {
             UseSKill();
         }
 
-        public abstract void UseSKill();
-        
-        public virtual void StopSkill()
+        private void OnDisable()
         {
             if (_onwer != null && _onwer.SkeletonAnimation.AnimationState != null)
             {
                 _onwer.SkeletonAnimation.AnimationState.Event -= OnAnimationEvent;
                 _onwer.SkeletonAnimation.AnimationState.Complete -= OnAnimationComplete;
             }
-            
-            // if (_skillCts != null)
-            // {
-            //     _skillCts.Cancel();
-            //     _skillData = null;
-            // }
+        }
+        
+        public virtual void StopSkill()
+        {
+            _onStopSkillAction?.Invoke(this);
+        }
 
-            // if (_onwer != null && _onwer.SkeletonAnimation.AnimationState != null)
-            // {
-            //     _onwer.SkeletonAnimation.AnimationState.Event -= OnAnimationEvent;
-            //     _onwer.SkeletonAnimation.AnimationState.Complete -= OnAnimationComplete;
-            // }
+        protected async UniTaskVoid CoolTimeAsync()
+        {
+            float coolTime = _skillData.CoolTime;
+            
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(coolTime), cancelImmediately: true);
+            }
+            catch (Exception e) when (e is not OperationCanceledException)
+            {
+                LogUtils.LogError($"error {nameof(CoolTimeAsync)} / {e.Message}");   
+            }
+            
+            StopSkill();
+        }
+        
+        protected virtual void OnAnimationComplete(TrackEntry trackEntry)
+        {
+            _onCompleteSkillAction?.Invoke(this);
+            if (trackEntry.Animation.Name == _skillData.AnimName)
+            {
+                OnAttackEvent();
+            }
+        }
+
+        protected abstract void UseSKill();
+        protected virtual void OnAnimationEvent(TrackEntry trackEntry, Spine.Event e)
+        {
+        }
+        
+        protected virtual void OnAttackEvent()
+        {
+            CoolTimeAsync().Forget();
         }
     }
 }

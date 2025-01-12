@@ -1,5 +1,4 @@
 using Clicker.Entity;
-using Clicker.GameComponent;
 using Clicker.Manager;
 using Clicker.Utils;
 using UnityEngine;
@@ -22,73 +21,34 @@ namespace Clicker.Controllers
         {
             base.Spawn(spawnPosition);
             AIProcessAsync().Forget();
-            
-            if (_moveToCor != null)
-            {
-                StopCoroutine(_moveToCor);
-                _moveToCor = null;
-            }
 
             _cellPosition = Map.WorldToCell(spawnPosition);
             _spawnPosition = _cellPosition;
-            _moveToCor = StartCoroutine(MoveTo());
+            StartMoveToCellPosition();
         }
 
         protected override void AttackState()
         {
-            base.AttackState();
-            
-            //타겟이 죽었는가?
-            if (!_targetObject.IsValid())
-            {
-                _targetObject = null;
-                ChangeState(Define.CreatureState.Idle);
-                if (_isUseSKill)
-                {
-                    _isUseSKill = false;
-                    _skillBook.StopSkill();
-                }
-                return;
-            }
-
-            Vector3 direction = (_targetObject.transform.position - transform.position).normalized;
-            SetFlip(Mathf.Sign(direction.x) == 1);
-            
             //공격중에 타겟이 사정거리 밖으로 이동한다면 추적
             float distA = (transform.position - _targetObject.transform.position).sqrMagnitude;
             float distB = AttackDistance * AttackDistance;
-            //공격 범위안에 들어왔는가
-            if (distA <= distB)
-            {
-                if (_isUseSKill)
-                {
-                    return;
-                }
-
-                _isUseSKill = true;
-                _skillBook.UseSKill(this);
-            }
-            else
-            {
-                
+            //공격 범위밖인가
+            if (distA > distB)
+            {  
                 //추적할 수 있는 거리를 벗어났을 때
                 float chaseDistance = _chaseDistance * _chaseDistance;
                 if (chaseDistance < distA)
                 {
                     ChangeState(Define.CreatureState.Idle);
+                    return;
                 }
-                else
-                {
-                    if (_isUseSKill)
-                    {
-                        _isUseSKill = false;
-                        _skillBook.StopSkill();
-                    }
-                    
-                    ChangeState(Define.CreatureState.Move);
-                    FindPath(_targetObject);
-                }
+
+                _skillBook.StopAllSKill();
+                ChangeState(Define.CreatureState.Move);
+                FindPath(_targetObject);
             }
+            
+            base.AttackState();
         }
 
         protected override void IdleState()

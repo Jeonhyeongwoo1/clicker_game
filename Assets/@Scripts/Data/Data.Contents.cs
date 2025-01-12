@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Clicker.Manger;
+using Clicker.Utils;
 using UnityEngine;
 
 namespace Clicker.ContentData
@@ -122,12 +123,11 @@ namespace Clicker.ContentData
 	{
 		public int DataId;
 		public string Name;
+		public string ClassName;
 		public string ComponentName;
 		public string ProjectileSpriteName;
 		public string PrefabLabel;
 		public float Duration;
-		public float NumBounce;
-		public float NumPenerations;
 		public float HitSound;
 		public float ProjRange;
 		public float ProjSpeed;
@@ -147,7 +147,7 @@ namespace Clicker.ContentData
 		}
 	}
 	#endregion
-
+	
 	#region Env
 	[Serializable]
 	public class EnvData
@@ -171,6 +171,39 @@ namespace Clicker.ContentData
 			Dictionary<int, EnvData> dict = new Dictionary<int, EnvData>();
 			foreach (EnvData env in envs)
 				dict.Add(env.DataId, env);
+			return dict;
+		}
+	}
+	#endregion
+	
+	#region EffectData
+	[Serializable]
+	public class EffectData
+	{
+		public int DataId;
+		public string Name;
+		public string ClassName;
+		public string DescriptionTextID;
+		public string SkeletonDataID;
+		public string IconLabel;
+		public string SoundLabel;
+		public float Amount;
+		public float PercentAdd;
+		public float PercentMult;
+		public float TickTime;
+		public float TickCount;
+		public Define.EEffectType EffectType;
+	}
+
+	[Serializable]
+	public class EffectDataLoader : ILoader<int, EffectData>
+	{
+		public List<EffectData> effects = new List<EffectData>();
+		public Dictionary<int, EffectData> MakeDict()
+		{
+			Dictionary<int, EffectData> dict = new Dictionary<int, EffectData>();
+			foreach (EffectData effect in effects)
+				dict.Add(effect.DataId, effect);
 			return dict;
 		}
 	}

@@ -3,38 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Clicker.ContentData;
+using Clicker.Effect;
 using Clicker.Entity;
 using Clicker.Manager;
-using Clicker.Manger;
 using Clicker.Skill;
 using Clicker.Utils;
 using Cysharp.Threading.Tasks;
 using Spine;
 using UnityEngine;
-using Spine.Unity;
+using Spine.Unity;  
 using UnityEngine.Events;
-using Event = Spine.Event;
+using Random = UnityEngine.Random;
 
 namespace Clicker.Controllers
 {
     public class Creature : BaseObject
     {
+        public CreatureData CreatureData => _creatureData;
         public bool IsDead => CreatureState == Define.CreatureState.Dead;
         public Define.CreatureState CreatureState => _creatureState;
         public BaseObject TargetObject => _targetObject;
+        public EffectComponent EffectComponent => _effectComponent;
+        
         protected MapManager Map => Managers.Map;
 
-        [SerializeField] protected Define.CreatureState _creatureState;
-        
         #region Data
      
-        public float MoveSpeed => _moveSpeed;
-        public float Atk => _atk;
-        public float AttackRange => _attackRange;
+        public CreatureStat MoveSpeed => _moveSpeed;
+        public CreatureStat Atk => _atk;
+        public CreatureStat AtkBonus => _atkBonus;
+        public CreatureStat CriRate => _criRate;
+        public CreatureStat CriDamage => _criDamage;
+        public CreatureStat AttackRange => _attackRange;
         protected CreatureData _creatureData;
-        protected float _atk;
-        protected float _attackRange;
-        protected float _moveSpeed;
+
+        protected CreatureStat _atk;
+        protected CreatureStat _attackRange;
+        protected CreatureStat _moveSpeed;
+        protected CreatureStat _atkBonus;
+        protected CreatureStat _criRate;
+        protected CreatureStat _criDamage;
         
         #endregion
 
@@ -44,23 +52,26 @@ namespace Clicker.Controllers
             {
                 //최소범위
                 float radius = (_targetObject.Radius + Radius + 0.1f);//+ 1.0f);
-                return radius + _attackRange;
+                return radius + _attackRange.Value;
             }
         }
-        
+
         protected SkillBook _skillBook;
-        protected float _chaseDistance = 8f;
-        protected float _searchDistance = 8f;
+        protected EffectComponent _effectComponent;
         protected CancellationTokenSource _aiCts;
         protected BaseObject _targetObject;
-        [SerializeField] protected bool _isUseSKill = false;
         protected Queue<Vector3Int> _pathQueue = new Queue<Vector3Int>();
-        protected Coroutine _moveToCor;
         protected Vector3 _cellPosition;
+        [SerializeField] protected Define.CreatureState _creatureState = Define.CreatureState.None;
 
         private Vector3 _endMovePosition;
-        private readonly int _distanceToTargetThreshold = 5;
         private Vector3 _targetPosition;
+        private CancellationTokenSource _moveCts;
+            
+        private Coroutine _coWait = null;
+        protected readonly float _chaseDistance = 8f;
+        protected readonly float _searchDistance = 8f;
+        private readonly int _distanceToTargetThreshold = 5;
         
         public override void SetInfo(int id)
         {
@@ -79,22 +90,23 @@ namespace Clicker.Controllers
             _collider2D.radius = _creatureData.ColliderRadius;
 
             _maxHp = _currentHp = _creatureData.MaxHp;
-            _atk = _creatureData.Atk;
-            _attackRange = _creatureData.AtkRange;
-            _moveSpeed = _creatureData.MoveSpeed;
+            _atk = new CreatureStat(_creatureData.Atk);
+            _attackRange = new CreatureStat(_creatureData.AtkRange);
+            _moveSpeed = new CreatureStat(_creatureData.MoveSpeed);
+            _atkBonus = new CreatureStat(_creatureData.AtkBonus);
 
-            string skeletonDataID = _creatureData.SkeletonDataID;
-            var dataAsset = Managers.Resource.Load<SkeletonDataAsset>(skeletonDataID);
-            _animation.skeletonDataAsset = dataAsset;
-            _animation.Initialize(true);
-
+            SetSpinAnimation(_creatureData.SkeletonDataID);
+            _effectComponent = Util.GetOrAddComponent<EffectComponent>(gameObject);
+            _effectComponent.SetInfo(this);
+            
             _skillBook = Util.GetOrAddComponent<SkillBook>(gameObject);
-            _skillBook.AddSkill(_creatureData.DefaultSkillId);
-
-            _animation.AnimationState.Event += OnAnimationEvent;
-            _animation.AnimationState.Complete += OnAnimationComplete;
+            _skillBook.SetInfo(this);
+            _skillBook.AddSkill(_creatureData.DefaultSkillId, Define.SkillType.DefaultSkill);
+            _skillBook.AddSkill(_creatureData.EnvSkillId, Define.SkillType.EnvSkill);
+            _skillBook.AddSkill(_creatureData.SkillAId, Define.SkillType.SkillA);
+            _skillBook.AddSkill(_creatureData.SkillBId, Define.SkillType.SkillB);
+            
             ChangeState(Define.CreatureState.Idle);
-            PlayAnimation(0, Define.AnimationName.Idle, true);
         }
 
         public void ChangeState(Define.CreatureState state)
@@ -126,6 +138,14 @@ namespace Clicker.Controllers
                 case Define.CreatureState.Dead:
                     PlayAnimation(0, Define.AnimationName.Dead, false);
                     break;
+                case Define.CreatureState.Stun:
+
+                    if (_animation.AnimationState.GetCurrent(0).Animation.Name != Define.AnimationName.Idle)
+                    {
+                        PlayAnimation(0, Define.AnimationName.Idle, false);    
+                    }
+                    
+                    break;
             }
         }
 
@@ -133,33 +153,51 @@ namespace Clicker.Controllers
         {
             base.Dead();
             ChangeState(Define.CreatureState.Dead);
-            if (_moveToCor != null)
-            {
-                StopCoroutine(_moveToCor);
-                _moveToCor = null;
-            }
-            
-            _skillBook.StopSkill();
+            Util.SafeCancelToken(ref _moveCts);
+            _skillBook.StopAllSKill();
         }
         
         public override void TakeDamage(Creature attacker, SkillData skillData)
         {
             base.TakeDamage(attacker, skillData);
             
-            float damage = attacker.Atk * skillData.DamageMultiplier;
-            _currentHp -= (int) Mathf.Clamp(damage , 0, damage);
+            float damage = attacker.Atk.Value * skillData.DamageMultiplier + attacker.AtkBonus.Value;
+            bool isCritical = Random.value >= _creatureData.CriRate;
+            float finalDamage = isCritical ? damage * _creatureData.CriDamage : damage;
+            
+            _currentHp -= (int) Mathf.Clamp(finalDamage, 0, finalDamage);
             if (_currentHp <= 0)
             {
                 Dead();
             }
             
+            ShowDamageFont(finalDamage, isCritical);
+            ApplyEffect(skillData.EffectIds);
+        }
+
+        public void ApplyEffect(List<int> effectIdList)
+        {
+            if (effectIdList == null)
+            {
+                return;
+            }
+            
+            foreach (int id in effectIdList)
+            {
+                EffectData effectData = Managers.Data.EffectDataDict[id];
+                _effectComponent.ExecuteEffect(effectData);
+            }
+        }
+
+        private void ShowDamageFont(float finalDamage, bool isCritical)
+        {
             GameObject prefab = Managers.Resource.Instantiate("DamageFont");
             if (!prefab.TryGetComponent(out DamageFont damageFont))
             {
                 return;
             }
             
-            damageFont.SetInfo(transform.position + Vector3.up, damage);
+            damageFont.SetInfo(transform.position + Vector3.up, finalDamage, null, isCritical);
         }
         
         public void SetFlip(bool leftLook)
@@ -190,34 +228,36 @@ namespace Clicker.Controllers
         {
             base.OnAnimationComplete(trackEntry);
 
-            if (trackEntry.Animation.Name == Define.AnimationName.Attack &&
-                _creatureState == Define.CreatureState.Attack)
-            {
-                PlayAnimation(0, Define.AnimationName.Attack, false);
-            }
-            else if (trackEntry.Animation.Name == Define.AnimationName.Attack_a &&
-                     _creatureState == Define.CreatureState.Attack)
-            {
-                PlayAnimation(0, Define.AnimationName.Attack_a, false);
-            }
-            else if (trackEntry.Animation.Name == Define.AnimationName.Attack_b &&
-                     _creatureState == Define.CreatureState.Attack)
-            {
-                PlayAnimation(0, Define.AnimationName.Attack_b, false);
-            }
-            else if (trackEntry.Animation.Name == Define.AnimationName.Dead &&
+            // if (trackEntry.Animation.Name == Define.AnimationName.Attack &&
+            //     _creatureState == Define.CreatureState.Attack)
+            // {
+            //     PlayAnimation(0, Define.AnimationName.Attack, false);
+            // }
+            // else if (trackEntry.Animation.Name == Define.AnimationName.Attack_a &&
+            //          _creatureState == Define.CreatureState.Attack)
+            // {
+            //     PlayAnimation(0, Define.AnimationName.Attack_a, false);
+            // }
+            // else if (trackEntry.Animation.Name == Define.AnimationName.Attack_b &&
+            //          _creatureState == Define.CreatureState.Attack)
+            // {
+            //     PlayAnimation(0, Define.AnimationName.Attack_b, false);
+            // }
+            // else 
+            //
+            if (trackEntry.Animation.Name == Define.AnimationName.Dead &&
                      _creatureState == Define.CreatureState.Dead)
             {
-                StartCoroutine(Delay(1, () => Managers.Object.Despawn(this)));
+               // StartCoroutine(Delay(1, () => Managers.Object.Despawn(this)));
             }
         }
 
-        private IEnumerator Delay(float delay, UnityAction callback)
+        protected IEnumerator Delay(float delay, UnityAction callback = null)
         {
             yield return new WaitForSeconds(delay);
             callback?.Invoke();
+            _coWait = null;
         }
-        
         
         protected async UniTaskVoid AIProcessAsync()
         {
@@ -237,6 +277,9 @@ namespace Clicker.Controllers
                         break;
                     case Define.CreatureState.Dead:
                         DeadState();
+                        break;
+                    case Define.CreatureState.Stun:
+                        StunState();
                         break;
                 }
 
@@ -260,11 +303,37 @@ namespace Clicker.Controllers
                 _aiCts = null;
             }
         }
+
+        protected virtual void StunState()
+        {
+            _skillBook.StopAllSKill();
+        }
         
         protected virtual void ChaseAndAttack() {}
         protected virtual void IdleState() {}
         protected virtual void MoveState(){}
-        protected virtual void AttackState(){}
+
+        protected virtual void AttackState()
+        {
+            if (_coWait != null)
+            {
+                return;
+            }
+            
+            _skillBook.UseSKill();
+            TrackEntry trackEntry = _animation.AnimationState.GetCurrent(0);
+            float delay = trackEntry.Animation.Duration;
+            _coWait = StartCoroutine(Delay(delay));
+         
+            Vector3 direction = (_targetObject.transform.position - transform.position).normalized;
+            SetFlip(Mathf.Sign(direction.x) == 1);
+     
+            //기존에 있던 모든 이동 경로는 지운다.
+            if (_pathQueue.Count > 0)
+            {
+                _pathQueue.Clear();
+            }
+        }
 
         protected virtual void DeadState()
         {
@@ -325,46 +394,84 @@ namespace Clicker.Controllers
             }
         }
 
-
-        protected IEnumerator MoveTo()
+        protected void StartMoveToCellPosition()
         {
-            while (true)
+            Util.SafeAllocateToken(ref _moveCts);
+            MoveToCellPosition().Forget();
+        }
+
+        protected void StopMoveToCellPosition()
+        {
+            Util.SafeCancelToken(ref _moveCts);
+        }
+        
+        private async UniTaskVoid MoveToCellPosition()
+        {
+            while (_moveCts != null && _moveCts.IsCancellationRequested == false)
             {
                 if (CreatureState == Define.CreatureState.Attack)
                 {
-                    yield return null;
+                    try
+                    {
+                        await UniTask.Yield(cancellationToken: _moveCts.Token);
+                    }
+                    catch (Exception e) when (e is not OperationCanceledException)
+                    {
+                        Util.SafeCancelToken(ref _moveCts);
+                        return;
+                    }
+                    
                     continue;
                 }
+
                 Vector3 myPos = transform.position;
                 while ((myPos - _cellPosition).sqrMagnitude >= 1f)
                 {
-                    float speed = MoveSpeed;
+                    float speed = MoveSpeed.Value;
                     //일정 거리 이상일 경우에는 스피드를 올려준다.
                     if ((myPos - _endMovePosition).sqrMagnitude > _distanceToTargetThreshold * 2)
                     {
                         speed *= 2f;
                     }
-                    
+
                     myPos = transform.position;
-                    
+
                     Vector3 dir = _cellPosition - transform.position;
                     //일관성 있게 이동하기 위해서
                     float moveDist = Mathf.Min(dir.magnitude, speed * Time.deltaTime);
                     transform.position += dir.normalized * moveDist;
-                    
+
                     // Vector3 pos = Vector3.Lerp(myPos, _cellPosition, Time.fixedDeltaTime * speed);
                     // Rigidbody2D.MovePosition(pos);
 
                     Vector3 direction = (_cellPosition - myPos).normalized;
                     SetFlip(Mathf.Sign(direction.x) == 1);
-                    yield return null;
+                    
+                    try
+                    {
+                        await UniTask.Yield(cancellationToken: _moveCts.Token);
+                    }
+                    catch (Exception e) when (e is not OperationCanceledException)
+                    {
+                        Util.SafeCancelToken(ref _moveCts);
+                        return;
+                    }
                 }
 
                 SetMoveToCellPosition();
-                yield return null;
+               
+                try
+                {
+                    await UniTask.Yield(cancellationToken: _moveCts.Token);
+                }
+                catch (Exception e) when (e is not OperationCanceledException)
+                {
+                    Util.SafeCancelToken(ref _moveCts);
+                    return;
+                }
             }
         }
-
+        
         public bool useGizmos = false;
         
         private void OnDrawGizmos()
@@ -385,5 +492,19 @@ namespace Clicker.Controllers
                 Gizmos.DrawSphere(Managers.Map.CellToWorld(vector3Int), 0.3f);
             }
         }
+
+        #region Effect
+        
+        public void ApplyCrowdControlEffect()
+        {
+            ChangeState(Define.CreatureState.Stun);
+        }
+
+        public void CompleteCrowdControlEffect()
+        {
+            ChangeState(Define.CreatureState.Idle);
+        }
+
+        #endregion
     }
 }

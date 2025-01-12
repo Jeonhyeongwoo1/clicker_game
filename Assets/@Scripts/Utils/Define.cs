@@ -36,8 +36,10 @@ namespace Clicker.Utils
 			Env,
 			HeroCamp,
 			Skill,
-			Projectile
+			Projectile,
+			Effect,
 		}
+		
 		public enum ECreatureType
 		{
 			None,
@@ -51,7 +53,8 @@ namespace Clicker.Utils
 			Idle,
 			Move,
 			Attack,
-			Dead
+			Dead,
+			Stun
 		}
 
 		public enum HeroMoveState
@@ -99,6 +102,41 @@ namespace Clicker.Utils
 			SemiWall //영웅들을 지나갈 수 없고 herocamp만 가능
 		}
 		
+		public enum SkillType
+		{
+			DefaultSkill,
+			EnvSkill,
+			SkillA,
+			SkillB,
+		}
+		
+		public enum EffectClearType
+		{
+			TimeOut,
+			EndOfAirbone,
+		}
+		
+		public enum EEffectType
+		{
+			Buff,
+			Debuff,
+			CrowdControl,
+		}
+		
+		public enum BuffAndDebuffType
+		{
+			MoveSpeedBuff,
+			AttackSpeedBuff,
+			LifeStealBuff
+		}
+		
+		public enum EStatModType
+		{
+			PercentAdd,
+			PercentMult,
+			Add
+		}
+
 		public class AnimationName
 		{
 			public static string Idle = "idle";
@@ -109,6 +147,7 @@ namespace Clicker.Utils
 			public static string Dead = "dead";
 			public static string Hit = "hit";
 			public static string skill_a = "skill_a";
+			public static string skill_b = "skill_b";
 		}
 
 		public const char MAP_TOOL_WALL = '0';

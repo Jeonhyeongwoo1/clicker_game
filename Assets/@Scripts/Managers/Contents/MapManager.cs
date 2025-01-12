@@ -90,13 +90,12 @@ namespace Clicker.Manager
         
         public void CreateBaseObjects()
         {
-            // return;
             Tilemap tm = Util.FindChild<Tilemap>(_mapObject, "Tilemap_Object", true);
 
             if (tm != null)
                 tm.gameObject.SetActive(false);
+            return;
 
-            int count = 0;
             for (int y = tm.cellBounds.yMax; y >= tm.cellBounds.yMin; y--)
             {
                 for (int x = tm.cellBounds.xMin; x <= tm.cellBounds.xMax; x++)
@@ -114,17 +113,6 @@ namespace Clicker.Manager
                     }
                     else if(tile.ObjectType == Define.EObjectType.Monster)
                     {
-                        if (tile.DataTemplateID != 202006)// || tile.DataTemplateID == 202006)
-                        {
-                            continue;
-                        }
-
-                        if (count > 0)
-                        {
-                            continue;
-                        }
-
-                        count++;
                         var monster = Managers.Object.CreateObject<Monster>(tile.ObjectType, tile.DataTemplateID);
                         Vector3 worldPosition = CellToWorld(cellPos);
                         monster.Spawn(worldPosition);
