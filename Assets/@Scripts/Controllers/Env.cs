@@ -25,7 +25,9 @@ namespace Clicker.Controllers
                 }
             }
         }
-        
+
+        protected override int SortingOrder => Define.SortingLayers.ENV;
+
         private EnvData _envData;
         private Define.EnvState _envState;
         private float _maxHp;

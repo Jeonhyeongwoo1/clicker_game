@@ -20,6 +20,7 @@ namespace Clicker.Entity
         {
             _skillData = skillData;
             _spriteRenderer = Util.FindChild<SpriteRenderer>(gameObject, "Cone");
+            _spriteRenderer.sortingOrder = Define.SortingLayers.SPELL_INDICATOR;
             transform.localScale = Vector3.zero;
             transform.localScale = Vector3.one * (_skillData.ScaleMultiplier * _skillData.SkillRange);
             transform.localPosition = Vector3.zero;

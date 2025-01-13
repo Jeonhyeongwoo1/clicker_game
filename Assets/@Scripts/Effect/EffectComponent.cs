@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using Clicker.ContentData;
 using Clicker.Controllers;
 using Clicker.Manager;
 using Clicker.Manger;
 using Clicker.Utils;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -11,8 +13,10 @@ namespace Clicker.Effect
 {
     public class EffectComponent : MonoBehaviour
     {
-
-        [FormerlySerializedAs("_effectList")] [SerializeField] private List<EffectBase> _activateEffectList = new();
+        [SerializeField] 
+        [ReadOnly]
+        private List<EffectBase> _activateEffectList = new();
+        
         private Creature _owner;
         
         public virtual void SetInfo(Creature owner)
@@ -28,7 +32,7 @@ namespace Clicker.Effect
             string namespaceString = "Clicker.Effect";
             string className = dataManager.EffectDataDict[id].ClassName;
             string name = $"{namespaceString}.{className}";
-
+            
             GameObject go = Managers.Object.SpawnGameObject(_owner.transform.position, "EffectBase");
             var effect = go.AddComponent(System.Type.GetType(name)) as EffectBase;
             effect.Init(Define.EObjectType.Effect);
@@ -50,6 +54,28 @@ namespace Clicker.Effect
                 EffectBase effectBase = _activateEffectList[i];
                 if (effectBase.EEffectType == Define.EEffectType.Debuff)
                 {
+                    effectBase.CompleteEffect(Define.EffectClearType.ClearSkill);
+                }
+            }
+        }
+
+        public void RemoveAllSkillEffect()
+        {
+            for (int i = _activateEffectList.Count - 1; i >= 0; i--)
+            {
+                EffectBase effectBase = _activateEffectList[i];
+                effectBase.CompleteEffect(Define.EffectClearType.ClearSkill);
+            }
+        }
+
+        public void RemoveEffect(int id)
+        {
+            for (int i = _activateEffectList.Count - 1; i >= 0; i--)
+            {
+                EffectBase effectBase = _activateEffectList[i];
+                if (effectBase.Id == id)
+                {
+                    Debug.Log($"Remove {_owner.name} / {id}");
                     effectBase.CompleteEffect(Define.EffectClearType.ClearSkill);
                 }
             }

@@ -67,6 +67,8 @@ namespace Clicker.Controllers
             }
         }
 
+        protected override int SortingOrder => Define.SortingLayers.CREATURE;
+
         protected SkillBook _skillBook;
         protected EffectComponent _effectComponent;
         protected CancellationTokenSource _aiCts;
@@ -174,6 +176,7 @@ namespace Clicker.Controllers
         public override void Dead()
         {
             base.Dead();
+            EffectComponent.RemoveAllSkillEffect();
             ChangeState(Define.CreatureState.Dead);
             Util.SafeCancelToken(ref _moveCts);
             _skillBook.StopAllSKill();
@@ -195,6 +198,11 @@ namespace Clicker.Controllers
             
             ShowDamageFont(finalDamage, isCritical);
             ApplyEffect(skillData.EffectIds);
+            
+            if (skillData != null && skillData.AoEId != 0)
+            {
+                _skillBook.ExecuteAoESkill(transform.position, skillData);
+            }
         }
 
         public void ApplyEffect(List<int> effectIdList)
@@ -494,6 +502,32 @@ namespace Clicker.Controllers
             }
         }
         
+        #region Effect
+        
+        public void DotDamage(float amount)
+        {
+            float damage = amount;
+            _currentHp -= (int) Mathf.Clamp(damage, 0, damage);
+            if (_currentHp <= 0)
+            {
+                Dead();
+            }
+            
+            ShowDamageFont(damage, false);
+        }
+
+        public void Buff()
+        {
+            
+        }
+
+        public void RemoveDotDamage()
+        {
+            
+        }
+
+        #endregion
+
         public bool useGizmos = false;
         
         private void OnDrawGizmos()
@@ -515,18 +549,5 @@ namespace Clicker.Controllers
             }
         }
 
-        #region Effect
-        
-        public void ApplyCrowdControlEffect()
-        {
-            ChangeState(Define.CreatureState.Stun);
-        }
-
-        public void CompleteCrowdControlEffect()
-        {
-            ChangeState(Define.CreatureState.Idle);
-        }
-
-        #endregion
     }
 }

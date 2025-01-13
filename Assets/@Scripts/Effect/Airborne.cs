@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Clicker.Effect
 {
-    public class Airbone : EffectBase
+    public class Airborne : EffectBase
     {
         private CancellationTokenSource _airbonEffectCts;
         private Define.CreatureState _lastCreatureState;

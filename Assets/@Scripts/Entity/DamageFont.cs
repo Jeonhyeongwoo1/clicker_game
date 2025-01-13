@@ -13,7 +13,7 @@ public class DamageFont : MonoBehaviour
 	public void SetInfo(Vector2 pos, float damage = 0, Transform parent = null, bool isCritical = false)
 	{
 		_damageText = GetComponent<TextMeshPro>();
-		_damageText.sortingOrder = 100;
+		_damageText.sortingOrder = Define.SortingLayers.DAMAGE_FONT;
 
 		transform.position = pos;
 

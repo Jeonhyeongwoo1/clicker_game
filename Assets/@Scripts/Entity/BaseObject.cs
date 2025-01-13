@@ -7,6 +7,7 @@ using Clicker.Utils;
 using Spine;
 using Spine.Unity;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Clicker.Entity
 {
@@ -17,6 +18,7 @@ namespace Clicker.Entity
         public Rigidbody2D Rigidbody2D => _rigidbody2D;
         public CircleCollider2D Collider2D => _collider2D;
         public SkeletonAnimation SkeletonAnimation => _animation;
+        protected virtual int SortingOrder => Define.SortingLayers.CREATURE;
         
         [SerializeField] protected Rigidbody2D _rigidbody2D;
         [SerializeField] protected CircleCollider2D _collider2D;
@@ -84,6 +86,11 @@ namespace Clicker.Entity
             
             _animation.skeletonDataAsset = dataAsset;
             _animation.Initialize(true);
+            
+            // Spine SkeletonAnimation은 SpriteRenderer 를 사용하지 않고 MeshRenderer을 사용함
+            // 그렇기떄문에 2D Sort Axis가 안먹히게 되는데 SortingGroup을 SpriteRenderer,MeshRenderer을 같이 계산함.
+            SortingGroup sg = Util.GetOrAddComponent<SortingGroup>(gameObject);
+            sg.sortingOrder = SortingOrder;
             
             _animation.AnimationState.Event += OnAnimationEvent;
             _animation.AnimationState.Complete += OnAnimationComplete;

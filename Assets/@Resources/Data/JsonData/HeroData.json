@@ -35,7 +35,7 @@
       "AtkRange": 1.8,
       "AtkBonus": 2.0,
       "MoveSpeed": 5.0,
-      "CriRate": 1.0,
+      "CriRate": 0.15,
       "CriDamage": 1.5,
       "IconImage": "001.sprite",
       "SkeletonDataID": "001_SkeletonData",
@@ -83,7 +83,7 @@
       "CriDamage": 1.5,
       "IconImage": "004.sprite",
       "SkeletonDataID": "004_SkeletonData",
-      "DefaultSkillId": 10001 ,
+      "DefaultSkillId": 10001,
       "EnvSkillId": 0,
       "SkillAId": 10018,
       "SkillBId": 10019

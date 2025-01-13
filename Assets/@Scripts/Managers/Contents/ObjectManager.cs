@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Clicker.Controllers;
 using Clicker.Effect;
 using Clicker.Entity;
@@ -14,6 +15,8 @@ namespace Clicker.Manager
         public HashSet<Creature> MonsterSet => _monsterSet;
         public HashSet<Env> EnvSet => _envSet;
         public HashSet<EffectBase> EffectSet => _effectSet;
+        public HashSet<BaseAoE> AoESet => _aoeSet;
+        
         public HeroCamp HeroCamp => _heroCamp;
         
         private readonly HashSet<Creature> _heroSet = new();
@@ -21,6 +24,8 @@ namespace Clicker.Manager
         private readonly HashSet<Env> _envSet = new();
         private readonly HashSet<Projectile> _projectileSet = new();
         private readonly HashSet<EffectBase> _effectSet = new();
+        private readonly HashSet<BaseAoE> _aoeSet = new();
+        
         private HeroCamp _heroCamp;
         
         public GameObject SpawnGameObject(Vector3 position, string prefabName)
@@ -89,6 +94,9 @@ namespace Clicker.Manager
                 case Define.EObjectType.Effect:
                     _effectSet.Remove(obj as EffectBase);
                     break;
+                case Define.EObjectType.Aoe:
+                    _aoeSet.Remove(obj as BaseAoE);
+                    break;
             }
             
             Managers.Resource.Destroy(obj.gameObject);
@@ -124,6 +132,11 @@ namespace Clicker.Manager
             }
 
             return selectedCreature as Hero;
+        }
+
+        public HashSet<Creature> GetCreatureList()
+        {
+            return _heroSet.Concat(_monsterSet).ToHashSet();
         }
     }
 }

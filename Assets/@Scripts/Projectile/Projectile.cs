@@ -34,7 +34,7 @@ namespace Clicker.Skill
             base.SetInfo(id);
             _projectileData = Managers.Data.ProjectileDataDict[id];
             _spriteRenderer.sprite = Managers.Resource.Load<Sprite>(_projectileData.ProjectileSpriteName);
-            _spriteRenderer.sortingOrder = (int)Define.SortingOrder.Projectile;
+            _spriteRenderer.sortingOrder = Define.SortingLayers.PROJECTILE;
             
             string namespaceString = "Clicker.Skill";
             _motionComponent =

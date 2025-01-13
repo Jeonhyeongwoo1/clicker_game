@@ -91,5 +91,26 @@ namespace Clicker.Utils
 
 			cts = new CancellationTokenSource();
 		}
+		
+		public static float GetEffectRadius(Define.EEffectSize size)
+		{
+			switch (size)
+			{
+				case Define.EEffectSize.CircleSmall:
+					return Define.EFFECT_SMALL_RADIUS;
+				case Define.EEffectSize.CircleNormal:
+					return Define.EFFECT_NORMAL_RADIUS;
+				case Define.EEffectSize.CircleBig:
+					return Define.EFFECT_BIG_RADIUS;
+				case Define.EEffectSize.ConeSmall:
+					return Define.EFFECT_SMALL_RADIUS * 2f;
+				case Define.EEffectSize.ConeNormal:
+					return Define.EFFECT_NORMAL_RADIUS * 2f;
+				case Define.EEffectSize.ConeBig:
+					return Define.EFFECT_BIG_RADIUS * 2f;
+				default:
+					return Define.EFFECT_SMALL_RADIUS;
+			}
+		}
 	}
 }

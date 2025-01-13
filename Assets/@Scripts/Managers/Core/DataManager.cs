@@ -21,6 +21,7 @@ namespace Clicker.Manger
 		public Dictionary<int, ProjectileData> ProjectileDataDict { get; set; }
 		public Dictionary<int, SkillData> SkillDataDict { get; set; }
 		public Dictionary<int, EffectData> EffectDataDict { get; set; }
+		public Dictionary<int, AoEData> AoEDataDict { get; set; }
 		
 		public void Init()
 		{
@@ -30,6 +31,7 @@ namespace Clicker.Manger
 			ProjectileDataDict = LoadJson<ProjectileDataLoader, int, ProjectileData>("ProjectileData").MakeDict();
 			SkillDataDict = LoadJson<SkillDataLoader, int, SkillData>("SkillData").MakeDict();
 			EffectDataDict = LoadJson<EffectDataLoader, int, EffectData>("EffectData").MakeDict();	
+			AoEDataDict = LoadJson<AoEDataLoader, int, AoEData>("AoEData").MakeDict();
 		}
 
 		private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>

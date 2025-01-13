@@ -258,7 +258,7 @@
     {
       "DataId": 62002,
       "Name": "에어본",
-      "ClassName": "Airbone",
+      "ClassName": "Airborne",
       "DescriptionTextID": "Duration동안 에어본",
       "SkeletonDataID": null,
       "IconLabel": null,

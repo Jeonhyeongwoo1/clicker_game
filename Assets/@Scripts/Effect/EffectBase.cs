@@ -12,8 +12,10 @@ namespace Clicker.Effect
 {
     public class EffectBase : BaseObject
     {
+        public int Id => _effectData.DataId;
         public Define.EEffectType EEffectType => _effectType;
-        
+        protected override int SortingOrder => Define.SortingLayers.SKILL_EFFECT;
+
         protected EffectData _effectData;
         protected Action _onApplyEffectAction;
         protected Creature _owner;
@@ -95,6 +97,11 @@ namespace Clicker.Effect
             
             _onCompleteEffectAction?.Invoke(this);
         }
+        
+        protected void DotDamage()
+        {
+            _owner.DotDamage(_effectData.Amount);
+        }
 
         protected async UniTaskVoid ExecuteTick()
         {
@@ -108,6 +115,7 @@ namespace Clicker.Effect
 
                 if (sumTime >= _effectData.TickTime)
                 {
+                    DotDamage();
                     _onApplyEffectAction?.Invoke();
                     sumTime -= _effectData.TickTime;
                 }

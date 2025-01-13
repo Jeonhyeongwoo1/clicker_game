@@ -90,11 +90,6 @@ namespace Clicker.Skill
                 _activeSkillList.Remove(skill);
             }
 
-            if (skill.Id == 10019)
-            {
-                int a = 0;
-            }
-            Debug.LogError("USeSKill" + skill.Id);
             skill.StartSkillProcess();
         }
 
@@ -113,6 +108,28 @@ namespace Clicker.Skill
             {
                 baseSKill.StopSkill();
             }
+        }
+        
+        public void ExecuteAoESkill(Vector3 spawnPosition, SkillData skillData)
+        {
+            GameObject obj = Managers.Object.SpawnGameObject(spawnPosition, "AoE");
+            
+            DataManager dataManager = Managers.Data;
+            string namespaceString = "Clicker.Skill";
+
+            int id = skillData.AoEId;
+            string className = dataManager.AoEDataDict[id].ClassName;
+            string name = $"{namespaceString}.{className}";
+            var skill = obj.AddComponent(Type.GetType(name)) as BaseAoE;
+            if (skill == null)
+            {
+                LogUtils.LogError("Failed add skill " + id);
+                return;
+            }
+            
+            Managers.Object.AoESet.Add(skill);
+            skill.Init(Define.EObjectType.Aoe);
+            skill.SetInfo(id, skillData, _owner);
         }
     }
 }

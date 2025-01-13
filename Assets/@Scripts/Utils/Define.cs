@@ -38,6 +38,7 @@ namespace Clicker.Utils
 			Skill,
 			Projectile,
 			Effect,
+			Aoe
 		}
 		
 		public enum ECreatureType
@@ -89,11 +90,6 @@ namespace Clicker.Utils
 			Hit,
 			Dead
 		}
-		
-		public enum SortingOrder
-		{
-			Projectile = 30
-		}	
 		
 		public enum CollisionType
 		{
@@ -158,7 +154,17 @@ namespace Clicker.Utils
 			PercentMult,
 			Add
 		}
-
+		
+		public enum EEffectSize
+		{
+			CircleSmall,
+			CircleNormal,
+			CircleBig,
+			ConeSmall,
+			ConeNormal,
+			ConeBig,
+		}
+		
 		public class AnimationName
 		{
 			public static string Idle = "idle";
@@ -172,8 +178,23 @@ namespace Clicker.Utils
 			public static string skill_b = "skill_b";
 		}
 
+		public static class SortingLayers
+		{
+			public const int AOE = 1;
+			public const int SPELL_INDICATOR = 200;
+			public const int CREATURE = 300;
+			public const int ENV = 300;
+			public const int PROJECTILE = 310;
+			public const int SKILL_EFFECT = 310;
+			public const int DAMAGE_FONT = 410;
+		}
+		
 		public const char MAP_TOOL_WALL = '0';
 		public const char MAP_TOOL_NONE = '1';
 		public const char MAP_TOOL_SEMI_WALL = '2';
+			
+		public const float EFFECT_SMALL_RADIUS = 2.5f;
+		public const float EFFECT_NORMAL_RADIUS = 4.5f;
+		public const float EFFECT_BIG_RADIUS = 5.5f;
 	}
 }

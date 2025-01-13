@@ -2,6 +2,7 @@ using System;
 using Clicker.ContentData;
 using Clicker.Controllers;
 using Clicker.Manager;
+using Clicker.Manger;
 using Clicker.Utils;
 using Cysharp.Threading.Tasks;
 using Spine;
