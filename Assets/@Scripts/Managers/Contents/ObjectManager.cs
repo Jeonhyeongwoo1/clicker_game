@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Clicker.ContentData;
 using Clicker.Controllers;
 using Clicker.Effect;
 using Clicker.Entity;
@@ -25,6 +26,7 @@ namespace Clicker.Manager
         private readonly HashSet<Projectile> _projectileSet = new();
         private readonly HashSet<EffectBase> _effectSet = new();
         private readonly HashSet<BaseAoE> _aoeSet = new();
+        private readonly HashSet<Npc> _npcSet = new();
         
         private HeroCamp _heroCamp;
         
@@ -66,6 +68,10 @@ namespace Clicker.Manager
                 case Define.EObjectType.Projectile:
                     Projectile projectile = baseObject as Projectile;
                     _projectileSet.Add(projectile);
+                    break;
+                case Define.EObjectType.Npc:
+                    Npc npc = baseObject as Npc;
+                    _npcSet.Add(npc);
                     break;
             }
 

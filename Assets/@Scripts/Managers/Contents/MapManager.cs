@@ -4,6 +4,7 @@ using Clicker.Controllers;
 using Clicker.Entity;
 using Clicker.Utils;
 using UnityEditor.Rendering;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -11,6 +12,8 @@ namespace Clicker.Manager
 {
     public class MapManager
     {
+        public StageTranslation StageTranslation => _stageTranslation;
+        
         private Dictionary<Vector3Int, TileBase> _heroCampMoveableTileDict = new();
         private Define.CollisionType[,] _collisionArray;
         private Grid _grid;
@@ -19,6 +22,7 @@ namespace Clicker.Manager
         private int _maxX;
         private int _maxY;
         private GameObject _mapObject;
+        private StageTranslation _stageTranslation;
         
         private readonly Vector3Int[] _dirArray =
         {
@@ -58,6 +62,8 @@ namespace Clicker.Manager
             GameObject mapPrefab = Managers.Resource.Instantiate(mapName);
             _mapObject = mapPrefab;
             _grid = _mapObject.GetComponent<Grid>();
+            _stageTranslation = _mapObject.GetComponent<StageTranslation>();
+            _stageTranslation.SetInfo();
             ParseCollision(mapName);
             SetHeroCampMoveableTile();
         }
@@ -85,40 +91,6 @@ namespace Clicker.Manager
             if (tileObject.activeSelf)
             {
                 tileObject.SetActive(false);
-            }
-        }
-        
-        public void CreateBaseObjects()
-        {
-            Tilemap tm = Util.FindChild<Tilemap>(_mapObject, "Tilemap_Object", true);
-
-            if (tm != null)
-                tm.gameObject.SetActive(false);
-            return;
-
-            for (int y = tm.cellBounds.yMax; y >= tm.cellBounds.yMin; y--)
-            {
-                for (int x = tm.cellBounds.xMin; x <= tm.cellBounds.xMax; x++)
-                {
-                    Vector3Int cellPos = new Vector3Int(x, y, 0);
-                    CustomTile tile = tm.GetTile(cellPos) as CustomTile;
-                    if (tile == null)
-                        continue;
-
-                    if (tile.ObjectType == Define.EObjectType.Env)
-                    {
-                        var env = Managers.Object.CreateObject<Env>(tile.ObjectType, tile.DataTemplateID);
-                        Vector3 worldPosition = CellToWorld(cellPos);
-                        env.Spawn(worldPosition);
-                    }
-                    else if(tile.ObjectType == Define.EObjectType.Monster)
-                    {
-                        var monster = Managers.Object.CreateObject<Monster>(tile.ObjectType, tile.DataTemplateID);
-                        Vector3 worldPosition = CellToWorld(cellPos);
-                        monster.Spawn(worldPosition);
-                    }
-                    
-                }
             }
         }
 

@@ -38,7 +38,8 @@ namespace Clicker.Utils
 			Skill,
 			Projectile,
 			Effect,
-			Aoe
+			Aoe,
+			Npc
 		}
 		
 		public enum ECreatureType
@@ -170,6 +171,17 @@ namespace Clicker.Utils
 			None,
 			Success,
 			Fail
+		}
+
+		public enum ENpcType
+		{
+			Camp,
+			Portal,
+			Waypoint,
+			BlackSmith,
+			Guild,
+			TreasureBox,
+			Dungeon
 		}
 		
 		public class AnimationName

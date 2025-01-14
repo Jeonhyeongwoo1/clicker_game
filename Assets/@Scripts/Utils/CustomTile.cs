@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using Clicker.Utils;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
+
+#if UNITY_EDITOR
+using System.IO;
+using UnityEditor;
+#endif
 
 public class CustomTile : Tile
 {
-	[FormerlySerializedAs("eObjectType")]
-	[Space]
-	[Space]
-	[Header("For Designer")]
-	public Define.EObjectType ObjectType;
-	public Define.ECreatureType CreatureType;
-	public int DataTemplateID;
-	public string Name;
+    [Space] [Space] [Header("For Zombie")] 
+    public Define.EObjectType ObjectType;
+    public int DataId;
+    public string Name;
+    public bool isStartPos = false;
+    public bool isWayPoint = false;
 }
