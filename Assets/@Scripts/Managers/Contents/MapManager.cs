@@ -56,6 +56,21 @@ namespace Clicker.Manager
         {
             return _grid.CellToWorld(cellPosition);
         }
+
+        public void ChangeStage(string name)
+        {
+            bool isSuccess = StageTranslation.TryChangeStage(name);
+            if (isSuccess)
+            {
+                Vector3 startPos = StageTranslation.GetWayPosition();
+                foreach (Creature creature in Managers.Object.HeroSet)
+                {
+                    creature.SetPosition(startPos);
+                }
+                
+                Managers.Object.HeroCamp.MoveToWaypointPosition(startPos);
+            }
+        }
         
         public void CreateMap(string mapName)
         {

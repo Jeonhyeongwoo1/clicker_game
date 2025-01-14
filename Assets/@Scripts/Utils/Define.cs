@@ -42,13 +42,6 @@ namespace Clicker.Utils
 			Npc
 		}
 		
-		public enum ECreatureType
-		{
-			None,
-			Hero,
-			Monster,
-			Npc,
-		}
 		public enum CreatureState
 		{
 			None,

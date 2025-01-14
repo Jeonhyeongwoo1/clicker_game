@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Clicker.ContentData;
 using Clicker.Controllers;
 using Clicker.Manager;
 using Clicker.Utils;
@@ -9,20 +7,75 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
+[Serializable]
+public struct SpawnData
+{
+    public int dataId;
+    public Vector3 spawnWorldPosition;
+    public bool isStartPos;
+    public bool isWayPoint;
+    public Define.EObjectType objectType;
+
+    public SpawnData(int dataId, Define.EObjectType objectType, Vector3 spawnWorldPosition, bool isStartPos, bool isWayPoint)
+    {
+        this.dataId = dataId;
+        this.objectType = objectType;
+        this.spawnWorldPosition = spawnWorldPosition;
+        this.isStartPos = isStartPos;
+        this.isWayPoint = isWayPoint;
+    }
+}
+
 public class Stage : MonoBehaviour
 {
-    [SerializeField] private Tilemap _terrainTileMap;
+    [SerializeField] private Tilemap _terrainTileMap; // 오브젝트 셋팅용
     [SerializeField] private Tilemap _objectTileMap;
+
+    private List<SpawnData> _objectSpawnList = new();
 
     public void SetInfo()
     {
         _terrainTileMap = Util.FindChild<Tilemap>(gameObject, "Terrain_01");
-        SpawnObject();
+        SaveSpawnInfos();
+    }
+
+    public void DisableObject()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public Vector3 GetWaypointPosition()
+    {
+        foreach (SpawnData spawnData in _objectSpawnList)
+        {
+            if (spawnData.isWayPoint)
+            {
+                return spawnData.spawnWorldPosition;
+            }
+        }
+
+        Debug.Log("failed");
+        return Vector3.zero;
     }
 
     public void SpawnObject()
     {
-        SaveSpawnInfos();    
+        gameObject.SetActive(true);
+        foreach (SpawnData spawnData in _objectSpawnList)
+        {
+            Define.EObjectType objectType = spawnData.objectType;
+            switch (objectType)
+            {
+                // case Define.EObjectType.Monster:
+                //     var monster = Managers.Object.CreateObject<Monster>(Define.EObjectType.Monster, tile.DataId);
+                //     monster.Spawn(worldPos);
+                //     break;
+                case Define.EObjectType.Npc:
+                    var npc = Managers.Object.CreateObject<Npc>(Define.EObjectType.Npc, spawnData.dataId);
+                    npc.Spawn(spawnData.spawnWorldPosition);
+                    break;
+            }
+        }
     }
     
     private void SaveSpawnInfos()
@@ -42,18 +95,9 @@ public class Stage : MonoBehaviour
 
                 Vector3 worldPos = Managers.Map.CellToWorld(cellPos);
 
-                Debug.Log($"{tile.ObjectType} / {tile.DataId} / {worldPos}");
-                switch (tile.ObjectType)
-                {
-                    // case Define.EObjectType.Monster:
-                    //     var monster = Managers.Object.CreateObject<Monster>(Define.EObjectType.Monster, tile.DataId);
-                    //     monster.Spawn(worldPos);
-                    //     break;
-                    case Define.EObjectType.Npc:
-                        var npc = Managers.Object.CreateObject<Npc>(Define.EObjectType.Npc, tile.DataId);
-                        npc.Spawn(worldPos);
-                        break;
-                }
+                SpawnData spawnData = new SpawnData(tile.DataId, tile.ObjectType, worldPos, tile.isStartPos,
+                    tile.isWayPoint);
+                _objectSpawnList.Add(spawnData);
                 
                 // ObjectSpawnInfo info = new ObjectSpawnInfo(tile.Name, tile.DataId, x, y, worldPos, tile.ObjectType);
                 

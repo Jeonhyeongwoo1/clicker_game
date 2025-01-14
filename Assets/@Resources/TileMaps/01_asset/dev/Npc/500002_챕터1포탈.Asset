@@ -34,7 +34,7 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
   m_ColliderType: 1
-  ObjectType: 4
+  ObjectType: 9
   DataId: 500002
   Name: "\uCC55\uD1301\uD3EC\uD0C8"
   isStartPos: 0

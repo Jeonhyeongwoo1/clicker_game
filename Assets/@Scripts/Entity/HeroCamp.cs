@@ -45,6 +45,12 @@ namespace Clicker.Entity
             InputHandler.onPointerUpAction -= SetDirection;
         }
 
+        public void MoveToWaypointPosition(Vector3 waypointPosition)
+        {
+            transform.position = waypointPosition;
+            // _cameraController.MoveToWayPoint(waypointPosition);
+        }
+
         private void SetDirection(Vector2 position)
         {
             _direction = position;

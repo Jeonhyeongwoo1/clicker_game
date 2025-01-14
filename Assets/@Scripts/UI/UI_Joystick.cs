@@ -21,7 +21,7 @@ namespace Clicker.UI.Panel
         {
             return base.Init();
         }
-
+        
         public void OnDrag(PointerEventData eventData)
         {
             Vector2 pos;
@@ -53,8 +53,8 @@ namespace Clicker.UI.Panel
         public void OnPointerDown(PointerEventData eventData)
         {
             SetEuiEvent(Define.EUIEvent.PointerDown);
-            Vector2 beginPosition = eventData.position;
-            // _inputVector = beginPosition;
+            Vector2 beginPosition = eventData.pressEventCamera.ScreenToWorldPoint(eventData.position);
+            _inputVector = beginPosition;
             _joystickBg.position = beginPosition;
             _joystick.position = beginPosition;
             _canvasGroup.alpha = 1;

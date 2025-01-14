@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace Clicker.Utils
 {
@@ -55,6 +57,12 @@ namespace Clicker.Utils
 			}
 
 			return null;
+		}
+
+		public static void SafeAddButtonListener(this Button button, UnityAction action)
+		{
+			button.onClick.RemoveAllListeners();
+			button.onClick.AddListener(action);
 		}
 
 		public static Color HexToColor(string color)

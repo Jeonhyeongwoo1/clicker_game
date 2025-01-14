@@ -172,6 +172,11 @@ namespace Clicker.Controllers
             }
         }
 
+        public void SetPosition(Vector3 position)
+        {
+            transform.position = position;
+        }
+        
         public override void Dead()
         {
             base.Dead();

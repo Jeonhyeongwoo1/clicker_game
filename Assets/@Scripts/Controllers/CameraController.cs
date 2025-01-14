@@ -16,6 +16,11 @@ namespace Clicker.Controllers
             _target = target;
         }
 
+        public void MoveToWayPoint(Vector3 waypointPosition)
+        {
+            transform.position = waypointPosition;
+        }
+
         private void Update()
         {
             _prevPos = transform.position;

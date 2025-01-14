@@ -202,7 +202,7 @@ Canvas:
   m_GameObject: {fileID: 7585355888172306898}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -255,7 +255,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2039
 --- !u!114 &5502824162943197309
 MonoBehaviour:
   m_ObjectHideFlags: 0
