@@ -42,13 +42,13 @@ public class Stage : MonoBehaviour
 
                 Vector3 worldPos = Managers.Map.CellToWorld(cellPos);
 
-                Debug.Log($"{tile.ObjectType} / {worldPos}");
+                Debug.Log($"{tile.ObjectType} / {tile.DataId} / {worldPos}");
                 switch (tile.ObjectType)
                 {
-                    case Define.EObjectType.Monster:
-                        var monster = Managers.Object.CreateObject<Monster>(Define.EObjectType.Monster, tile.DataId);
-                        monster.Spawn(worldPos);
-                        break;
+                    // case Define.EObjectType.Monster:
+                    //     var monster = Managers.Object.CreateObject<Monster>(Define.EObjectType.Monster, tile.DataId);
+                    //     monster.Spawn(worldPos);
+                    //     break;
                     case Define.EObjectType.Npc:
                         var npc = Managers.Object.CreateObject<Npc>(Define.EObjectType.Npc, tile.DataId);
                         npc.Spawn(worldPos);

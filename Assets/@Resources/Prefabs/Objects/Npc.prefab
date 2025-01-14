@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8947726597730866744}
   - component: {fileID: -2515410240981250036}
   - component: {fileID: -3760500730446889117}
-  - component: {fileID: 2404237076251364206}
+  - component: {fileID: 8301081257242702846}
   m_Layer: 7
   m_Name: Npc
   m_TagString: Untagged
@@ -161,7 +161,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1989438424406686306}
   m_Mesh: {fileID: 0}
---- !u!114 &2404237076251364206
+--- !u!114 &8301081257242702846
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,6 +170,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1989438424406686306}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eb79a234b9493842b690a179115ae19, type: 3}
+  m_Script: {fileID: 11500000, guid: 18e293ce74f279147aa1afb9a186f9b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rigidbody2D: {fileID: 0}
+  _collider2D: {fileID: 0}
+  _animation: {fileID: 0}

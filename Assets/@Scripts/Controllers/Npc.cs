@@ -18,6 +18,7 @@ namespace Clicker.Controllers
             base.SetInfo(id);
 
             _npcData = Managers.Data.NPCDataDict[id];
+            SetSpinAnimation(_npcData.SkeletonDataID);
         }
     }
 }
