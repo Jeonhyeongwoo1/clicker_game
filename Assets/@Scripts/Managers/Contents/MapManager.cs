@@ -122,7 +122,7 @@ namespace Clicker.Manager
             }
         }
 
-        private Dictionary<Vector3Int, BaseObject> _cellDict = new Dictionary<Vector3Int, BaseObject>();
+        public Dictionary<Vector3Int, BaseObject> _cellDict = new Dictionary<Vector3Int, BaseObject>();
         private Dictionary<Vector3Int, BaseObject> _moveableTargetPositionDict = new();
 
         public bool MoveToCell(Vector3Int cellPos, Vector3Int previousCellPos, BaseObject baseObject)
@@ -135,39 +135,60 @@ namespace Clicker.Manager
             //이미 선정된 상태일 수 있음
             return _cellDict.TryAdd(cellPos, baseObject);
         }
-        
-        public Vector3Int GetMoveableTargetPosition(BaseObject baseObject, BaseObject targetObject)
+        public void RemoveCellPosition(Vector3Int cellPos, BaseObject baseObject)
         {
-            foreach (var (key, value) in _moveableTargetPositionDict)
-            {
-                if (value != baseObject)
-                {
-                    continue;
-                }
-                
-                _moveableTargetPositionDict.Remove(key);
-                break;
-            }
+            _cellDict.Remove(cellPos);
+            // _cellDict.TryAdd(cellPos, baseObject);
+        }
 
-            float mutilplier = 1;
-            while (true)
-            {
-                for (int i = 0; i < _dirArray.Length; i++)
-                {
-                    Vector3 targetPos = targetObject.transform.position+ (Vector3) _dirArray[i] * mutilplier;
-                    Vector3Int worldToCellPos = WorldToCell(targetPos);
-                    if (!_moveableTargetPositionDict.ContainsKey(worldToCellPos))
-                    {
-                        _moveableTargetPositionDict[worldToCellPos] = baseObject;
-                        return worldToCellPos;
-                    }
-                }
-
-                mutilplier++;
-            }
+        public void SetCellPosition(Vector3Int cellPos, BaseObject baseObject)
+        {
+            _cellDict.TryAdd(cellPos, baseObject);
         }
         
-        public List<Vector3Int> PathFinding(Vector3Int startPosition, Vector3Int destPosition)
+        public Vector3Int GetMoveableTargetPosition(BaseObject targetObject)
+        {
+            foreach (var (key, value) in _cellDict)
+            {
+                if (value == targetObject)
+                {
+                    return key;
+                }
+            }
+
+            Vector3Int worldToPosition = WorldToCell(targetObject.transform.position);
+            return worldToPosition;
+
+            // foreach (var (key, value) in _moveableTargetPositionDict)
+            // {
+            //     if (value != baseObject)
+            //     {
+            //         continue;
+            //     }
+            //     
+            //     _moveableTargetPositionDict.Remove(key);
+            //     break;
+            // }
+            //
+            // float mutilplier = 1;
+            // while (true)
+            // {
+            //     for (int i = 0; i < _dirArray.Length; i++)
+            //     {
+            //         Vector3 targetPos = targetObject.transform.position+ (Vector3) _dirArray[i] * mutilplier;
+            //         Vector3Int worldToCellPos = WorldToCell(targetPos);
+            //         if (!_moveableTargetPositionDict.ContainsKey(worldToCellPos))
+            //         {
+            //             _moveableTargetPositionDict[worldToCellPos] = baseObject;
+            //             return worldToCellPos;
+            //         }
+            //     }
+            //
+            //     mutilplier++;
+            // }
+        }
+        
+        public List<Vector3Int> PathFinding(Vector3Int startPosition, Vector3Int destPosition, BaseObject targetObject)
         {
             // 상하좌우 + 대각선 (8 방향)
             //int[] cost = { 10, 10, 10, 10, 14, 14, 14, 14 }; // 대각선 이동은 비용 14
@@ -224,7 +245,7 @@ namespace Clicker.Manager
                 {
                     int nextY = node.y + _dirArray[i].y;
                     int nextX = node.x + _dirArray[i].x;
-                    if (!CanGo(nextX, nextY))
+                    if (!CanGo(nextX, nextY, targetObject))
                     {
                         continue;
                     }
@@ -269,17 +290,33 @@ namespace Clicker.Manager
             return list;
         }
 
-        private bool CanGo(int x, int y)
+        private BaseObject GetBaseObject(Vector3Int cellPos)
+        {
+            if (_cellDict.TryGetValue(cellPos, out BaseObject baseObject))
+            {
+                return baseObject;
+            }
+
+            return null;
+        }
+
+        private bool CanGo(int x, int y, BaseObject targetObject)
         {
             if (y < _minY || y > _maxY || x < _minX || x > _maxX)
             {
                 return false;
             }
 
-            if (_cellDict.ContainsKey(new Vector3Int(x, y)))
+            BaseObject baseObject = GetBaseObject(new Vector3Int(x, y, 0));
+            if (baseObject != null && baseObject != targetObject)
             {
                 return false;
             }
+            
+            // if (_cellDict.ContainsKey(new Vector3Int(x, y)))
+            // {
+            //     return false;
+            // }
 
             int targetX = x - _minX;
             int targetY = _maxY - y;

@@ -128,7 +128,7 @@
       "Atk": 2.0,
       "AtkRange": 1.8,
       "AtkBonus": 2.0,
-      "MoveSpeed": 6.0,
+      "MoveSpeed": 2.0,
       "CriRate": 0.0,
       "CriDamage": 1.5,
       "IconImage": "003.sprite",

@@ -113,7 +113,6 @@ namespace Clicker.Controllers
             _skillBook.AddSkill(_creatureData.EnvSkillId, Define.SkillType.EnvSkill);
             _skillBook.AddSkill(_creatureData.SkillAId, Define.SkillType.SkillA);
             _skillBook.AddSkill(_creatureData.SkillBId, Define.SkillType.SkillB);
-            
             ChangeState(Define.CreatureState.Idle);
         }
 
@@ -370,6 +369,7 @@ namespace Clicker.Controllers
             ChangeState(Define.CreatureState.Dead);
         }
 
+        private List<Vector3Int> _reserveCellPos = new List<Vector3Int>();
         protected void SetMoveToCellPosition()
         {
             if (_pathQueue.Count == 0)
@@ -377,43 +377,79 @@ namespace Clicker.Controllers
                 return;
             }
             
+               
+            foreach (Vector3Int reserveCellPo in _reserveCellPos)
+            {
+                Map.RemoveCellPosition(reserveCellPo, this);
+            }
+
+            _reserveCellPos.Clear();
             Vector3Int position = _pathQueue.Dequeue();
+            
+            for (int i = - ExtraSize; i <= ExtraSize; i++)
+            {
+                for (int j = -ExtraSize; j <= ExtraSize; j++)
+                {
+                    if (i == 0 && j == 0)
+                    {
+                        continue;
+                    }
+                    
+                    Vector3Int pos = new Vector3Int(position.x + i, position.y + j, 0);
+                    _reserveCellPos.Add(pos);
+                }
+            }
+            
             bool isPossibleMove = Map.MoveToCell(position, Map.WorldToCell(_cellPosition), this);
             if (isPossibleMove)
             {
-                Vector3 cellToWorld = Map.CellToWorld(position);
-                _cellPosition = cellToWorld;
+                _cellPosition = Map.CellToWorld(position);
+               
+            }
+            
+            foreach (Vector3Int reserveCellPo in _reserveCellPos)
+            {
+                if (isPossibleMove)
+                {
+                    Map.SetCellPosition(reserveCellPo, this);
+                }
+                else
+                {
+                    Map.RemoveCellPosition(reserveCellPo, this);
+                }
             }
         }
 
-        protected void FindPath(Vector3 destinationPosition)
+        protected Define.PathFineResultType FindPath(Vector3Int destinationPosition)
         {
             Vector3Int startPosition = Map.WorldToCell(transform.position);
-            Vector3Int destPosition = Map.WorldToCell(destinationPosition);
-            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition);
+            List<Vector3Int> list = Map.PathFinding(startPosition, destinationPosition, this);
             if (list.Count <= 2)
             {
-                return;
+                return Define.PathFineResultType.Fail;
             }
             
             _pathQueue = new Queue<Vector3Int>(list);
             _endMovePosition = Map.CellToWorld(list[^1]);
+            
+            return Define.PathFineResultType.Success;
         }
 
-        protected void FindPath(BaseObject targetObj, bool forceFindPath = false)
+        protected Define.PathFineResultType FindPath(BaseObject targetObj, bool forceFindPath = false)
         {
             Vector3 targetPos = targetObj.transform.position;
             if (!forceFindPath && (targetPos - transform.position).sqrMagnitude < _distanceToTargetThreshold)
             {
-                return;
+                return Define.PathFineResultType.None;
             }
             
             Vector3Int startPosition = Map.WorldToCell(transform.position);
-            Vector3Int destPosition = Map.GetMoveableTargetPosition(this, targetObj);
-            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition);
+            Vector3Int destPosition = Map.GetMoveableTargetPosition(targetObj);
+            // Debug.Log($"{destPosition} /{targetObj.name}");
+            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition, this);
             if (list.Count < 2)
             {
-                return;
+                return Define.PathFineResultType.Fail;
             }
             
             _pathQueue = new Queue<Vector3Int>(list);
@@ -422,6 +458,8 @@ namespace Clicker.Controllers
             {
                 SetMoveToCellPosition();
             }
+
+            return Define.PathFineResultType.Success;
         }
 
         protected void StartMoveToCellPosition()
@@ -464,16 +502,17 @@ namespace Clicker.Controllers
                         speed *= 2f;
                     }
 
+                    if (ObjectType == Define.EObjectType.Monster)
+                    {
+                        Debug.Log($"{_cellPosition}");
+                    }
+
                     myPos = transform.position;
 
                     Vector3 dir = _cellPosition - transform.position;
                     //일관성 있게 이동하기 위해서
                     float moveDist = Mathf.Min(dir.magnitude, speed * Time.deltaTime);
                     transform.position += dir.normalized * moveDist;
-
-                    // Vector3 pos = Vector3.Lerp(myPos, _cellPosition, Time.fixedDeltaTime * speed);
-                    // Rigidbody2D.MovePosition(pos);
-
                     Vector3 direction = (_cellPosition - myPos).normalized;
                     SetFlip(Mathf.Sign(direction.x) == 1);
                     
@@ -537,10 +576,10 @@ namespace Clicker.Controllers
                 return;
             }
 
-            if (!useGizmos)
-            {
-                return;
-            }
+            // if (!useGizmos)
+            // {
+            //     return;
+            // }
 
             Gizmos.color = Color.yellow;
             foreach (Vector3Int vector3Int in _pathQueue)

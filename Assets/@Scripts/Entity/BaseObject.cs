@@ -8,11 +8,13 @@ using Spine;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
 namespace Clicker.Entity
 {
     public class BaseObject : MonoBehaviour
     {
+        public int ExtraSize { get; set; }
         public float Radius => _collider2D.radius;
         public Define.EObjectType ObjectType => objectType;
         public Rigidbody2D Rigidbody2D => _rigidbody2D;
@@ -26,6 +28,7 @@ namespace Clicker.Entity
 
         protected Define.EObjectType objectType;
         protected int _id;
+        protected Vector3 _spawnPosition;
         
         private HurtFlashEffect _hurtFlashEffect;
         
@@ -58,7 +61,10 @@ namespace Clicker.Entity
         
         public virtual void Spawn(Vector3 spawnPosition)
         {
-            transform.position = spawnPosition;
+            Vector3Int spawnPos = Managers.Map.WorldToCell(spawnPosition);
+            Managers.Map.SetCellPosition(spawnPos, this);
+            _spawnPosition = Managers.Map.CellToWorld(spawnPos);
+            transform.position = _spawnPosition;
         }
 
         public virtual void Dead()

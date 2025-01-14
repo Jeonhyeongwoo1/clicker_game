@@ -165,6 +165,13 @@ namespace Clicker.Utils
 			ConeBig,
 		}
 		
+		public enum PathFineResultType
+		{
+			None,
+			Success,
+			Fail
+		}
+		
 		public class AnimationName
 		{
 			public static string Idle = "idle";

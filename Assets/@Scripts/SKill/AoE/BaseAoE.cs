@@ -36,7 +36,7 @@ namespace Clicker.Skill
             Util.SafeAllocateToken(ref _cts);
             float duration = _aoeData.Duration;
             LifeCycle(duration).Forget();
-            FindCreatureInCircleRange().Forget();
+            FindCreatureInCircleRange().Forget(); 
 
             PlayAnimation(0, Define.AnimationName.Idle, false);
         }

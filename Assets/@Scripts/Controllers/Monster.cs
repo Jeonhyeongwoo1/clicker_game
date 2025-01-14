@@ -7,7 +7,6 @@ namespace Clicker.Controllers
 {
     public class Monster : Creature
     {
-        private Vector3 _spawnPosition;
         
         public override bool Init(Define.EObjectType eObjectType)
         {
@@ -21,10 +20,8 @@ namespace Clicker.Controllers
         {
             base.Spawn(spawnPosition);
             AIProcessAsync().Forget();
-
-            _cellPosition = Map.WorldToCell(spawnPosition);
-            _spawnPosition = _cellPosition;
             StartMoveToCellPosition();
+            _cellPosition = _spawnPosition;
         }
 
         protected override void AttackState()
@@ -64,8 +61,6 @@ namespace Clicker.Controllers
                 _targetObject = creature;
                 return;
             }
-
-            Rigidbody2D.velocity = Vector2.zero;
         }
 
         protected override void MoveState()
@@ -93,7 +88,8 @@ namespace Clicker.Controllers
                 return;
             }
 
-            FindPath(_spawnPosition);
+            Vector3Int spawnPos = Map.WorldToCell(_spawnPosition);
+            Define.PathFineResultType resultType = FindPath(spawnPos);
         }
 
         protected override void ChaseAndAttack()
@@ -125,7 +121,12 @@ namespace Clicker.Controllers
                     return;
                 }
                 
-                FindPath(_targetObject);
+                Define.PathFineResultType resultType = FindPath(_targetObject);
+                if (resultType == Define.PathFineResultType.Fail)
+                {
+                    Debug.LogWarning("ChaseAttack");
+                    ChangeState(Define.CreatureState.Idle);
+                }
             }
         }
     }

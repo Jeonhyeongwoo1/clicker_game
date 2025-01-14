@@ -99,7 +99,7 @@ namespace Clicker.Skill
         
         private void OnStopSKill(BaseSKill skill)
         {
-            _activeSkillList.Add(skill);
+            _activeSkillList.Remove(skill);
         }
         
         public void StopAllSKill()

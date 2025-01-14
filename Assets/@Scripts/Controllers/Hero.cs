@@ -24,8 +24,8 @@ namespace Clicker.Controllers
         {
             base.Spawn(spawnPosition);
             AIProcessAsync().Forget();
-            _cellPosition = Map.WorldToCell(spawnPosition);
             StartMoveToCellPosition();
+            _cellPosition = _spawnPosition;
         }
 
         protected override void IdleState()
@@ -90,7 +90,7 @@ namespace Clicker.Controllers
             {
                 ChangeState(Define.CreatureState.Move);
                 HeroMoveState = Define.HeroMoveState.ForceMove;
-                FindPath(Managers.Object.HeroCamp);
+                Define.PathFineResultType type = FindPath(Managers.Object.HeroCamp);
                 return;
             }
             
