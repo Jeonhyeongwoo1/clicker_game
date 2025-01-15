@@ -1,11 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
-using Clicker.Controllers;
 using Clicker.Entity;
 using Clicker.Utils;
-using Sirenix.OdinInspector;
-using UnityEditor.Rendering;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -14,7 +10,7 @@ namespace Clicker.Manager
     public class MapManager
     {
         public StageTranslation StageTranslation => _stageTranslation;
-        public readonly Dictionary<Vector3Int, BaseObject> cellDict = new();
+        public Dictionary<Vector3Int, BaseObject> _cellDict = new();
         
         private Dictionary<Vector3Int, TileBase> _heroCampMoveableTileDict = new();
         private Define.CollisionType[,] _collisionArray;
@@ -96,39 +92,77 @@ namespace Clicker.Manager
             }
         }
 
-        public bool MoveToCell(Vector3Int cellPos, Vector3Int previousCellPos, BaseObject baseObject, bool forceMove = false)
+        public bool MoveToCell(Vector3Int cellPos, Vector3Int previousCellPos, BaseObject baseObject)
         {
-            Debug.Log("Cango :" + CanGo(cellPos.x, cellPos.y, baseObject));
-            if (!CanGo(cellPos.x, cellPos.y, baseObject))
-            {
+            if (CanGo(cellPos.x, cellPos.y, baseObject) == false)
                 return false;
-            }
-            
-            if (cellDict.ContainsKey(previousCellPos))
-            {
-                cellDict.Remove(previousCellPos);
-            }
 
-            //이미 선정된 상태일 수 있음
-            bool isPossibleMove = cellDict.TryAdd(cellPos, baseObject);
-            if (!isPossibleMove)
-            {
-                return false;
-            }
-            
-            baseObject.SetCellPosition(cellPos, CellToWorld(cellPos), forceMove);
+            // 기존 좌표에 있던 오브젝트를 밀어준다.
+            // (단, 처음 신청했으면 해당 CellPos의 오브젝트가 본인이 아닐 수도 있음)
+            RemoveObject(baseObject);
+
+            // 새 좌표에 오브젝트를 등록한다.
+            AddObject(baseObject, cellPos);
+
+            // 셀 좌표 이동
+            baseObject.SetCellPosition(cellPos, WorldToCell(cellPos));
+            //Debug.Log($"Move To {cellPos}");
+
             return true;
+        }
+        
+        void RemoveObject(BaseObject obj)
+        {
+            // 기존의 좌표 제거
+            int extraCells = 0;
+            if (obj != null)
+                extraCells = obj.ExtraSize;
+
+            Vector3Int cellPos = obj.CellPosition;
+
+            for (int dx = -extraCells; dx <= extraCells; dx++)
+            {
+                for (int dy = -extraCells; dy <= extraCells; dy++)
+                {
+                    Vector3Int newCellPos = new Vector3Int(cellPos.x + dx, cellPos.y + dy);
+                    BaseObject prev = GetBaseObject(newCellPos);
+
+                    if (prev == obj)
+                        _cellDict.Remove(newCellPos);
+                }
+            }
+        }
+
+        void AddObject(BaseObject obj, Vector3Int cellPos)
+        {
+            int extraCells = 0;
+            if (obj != null)
+                extraCells = obj.ExtraSize;
+
+            for (int dx = -extraCells; dx <= extraCells; dx++)
+            {
+                for (int dy = -extraCells; dy <= extraCells; dy++)
+                {
+                    Vector3Int newCellPos = new Vector3Int(cellPos.x + dx, cellPos.y + dy);
+
+                    BaseObject prev = GetBaseObject(newCellPos);
+                    if (prev != null && prev != obj)
+                        Debug.LogWarning($"AddObject 수상함");
+
+                    _cellDict[newCellPos] = obj;
+                }
+            }
         }
         
         public void RemoveCellPosition(Vector3Int cellPos, BaseObject baseObject)
         {
-            cellDict.Remove(cellPos);
+            _cellDict.Remove(cellPos);
             // _cellDict.TryAdd(cellPos, baseObject);
         }
 
         public void SetCellPosition(Vector3Int cellPos, BaseObject baseObject)
         {
-            cellDict.TryAdd(cellPos, baseObject);
+            _cellDict.TryAdd(cellPos, baseObject);
         }
         
         public List<Vector3Int> PathFinding(Vector3Int startPosition, Vector3Int destPosition, BaseObject targetObject, int maxDepth = 10)
@@ -229,13 +263,13 @@ namespace Clicker.Manager
 
             list.Add(now);
             list.Reverse();
-            Debug.Log($"now {depth} {now} / {destPosition} / {closePos} / {startPosition} / {list.Count}");
+            // Debug.Log($"now {depth} {now} / {destPosition} / {closePos} / {startPosition} / {list.Count}");
             return list;
         }
 
         public BaseObject GetBaseObject(Vector3Int cellPos)
         {
-            if (cellDict.TryGetValue(cellPos, out BaseObject baseObject))
+            if (_cellDict.TryGetValue(cellPos, out BaseObject baseObject))
             {
                 return baseObject;
             }

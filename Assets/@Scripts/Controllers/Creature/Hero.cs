@@ -73,7 +73,6 @@ namespace Clicker.Controllers
             
             //3. heroCamp보다 멀리 떨어져 있으면 이동한다.
             Define.PathFineResultType resultType = FindPath(Managers.Object.HeroCamp);
-            Debug.Log("REsult :" + resultType);
             if (resultType == Define.PathFineResultType.Success)
             {
                 ChangeState(Define.CreatureState.Move);
@@ -98,20 +97,21 @@ namespace Clicker.Controllers
             else
             {
                 BaseObject baseObject = Map.GetBaseObject(position);
-                //Hero이면 종료
-                if (baseObject != null && baseObject is Hero) 
+                //Hero이고 내가 아니면 종료
+                if (baseObject != null && baseObject is Hero && baseObject != this) 
                 {
                     HeroMoveState = Define.HeroMoveState.None;
                 }
             }
         }
 
+
         private bool CheckHeroCampDistance()
         {
-            if (HeroMoveState != Define.HeroMoveState.None)
-            {
-                return false;
-            }
+            // if (HeroMoveState != Define.HeroMoveState.None)
+            // {
+            //     return false;
+            // }
             
             Vector3 targetPos = Managers.Object.HeroCamp.transform.position;
             if ((targetPos - transform.position).sqrMagnitude < _distanceToTargetThreshold)
@@ -126,7 +126,7 @@ namespace Clicker.Controllers
                 return false;
             }
             
-            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition, this);
+            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition, this, 30);
             if (list.Count < 2)
             {
                 return false;
@@ -154,9 +154,10 @@ namespace Clicker.Controllers
             //0. 사용자가 이동을 하게 될경우에는 강제로 이동하도록 한다
             if (HeroMoveState == Define.HeroMoveState.ForceMove)
             {
-                ChangeState(Define.CreatureState.Move);
                 Define.PathFineResultType type = FindPath(Managers.Object.HeroCamp);
-                HeroMoveState = Define.HeroMoveState.ForcePath;
+                if (type == Define.PathFineResultType.Success)
+                {
+                }
                 return;
             }
             
@@ -169,26 +170,29 @@ namespace Clicker.Controllers
 
             if (HeroMoveState == Define.HeroMoveState.MoveToEnv)
             {
-                //몬스터가 있으면 포기
-                //채집완료이면 포기
+                //1. 근처에 적이 있는지 확인한다.
+                BaseObject creature =
+                    FindNearestCreatureInRange(_searchDistance, Managers.Object.MonsterSet) as Creature;
+                if (creature.IsValid())
+                {
+                    ChangeState(Define.CreatureState.Move);
+                    HeroMoveState = Define.HeroMoveState.MoveToCreature;
+                    _targetObject = creature;
+                    return;
+                }
+            
+                //2. env가 존재하지 않으면 return
+                if (!_targetObject.IsValid())
+                {
+                    ChangeState(Define.CreatureState.Move);
+                    HeroMoveState = Define.HeroMoveState.ReturnToHeroCamp;
+                    return;
+                }
                 
                 ChaseAndAttack();
                 return;
             }
-
-            // if (HeroMoveState == Define.HeroMoveState.Idle)
-            // {
-            //     switch (_pathQueue.Count)
-            //     {
-            //         case > 0:
-            //             HeroMoveState = Define.HeroMoveState.ReturnToHeroCamp;
-            //             break;
-            //         case 0:
-            //             ChangeState(Define.CreatureState.Idle);
-            //             break;
-            //     }
-            // }
-            //
+            
             if (HeroMoveState == Define.HeroMoveState.ReturnToHeroCamp)
             {
                 Define.PathFineResultType type = FindPath(Managers.Object.HeroCamp);
@@ -204,23 +208,21 @@ namespace Clicker.Controllers
                     HeroMoveState = Define.HeroMoveState.Idle;
                     return;
                 }
-
+                
                 if (type == Define.PathFineResultType.Fail)
                 {
                     BaseObject baseObject = Map.GetBaseObject(CellPosition);
-                    //Hero이면 종료
-                    if (baseObject != null && baseObject is Hero) 
+                    if (baseObject == this || (baseObject as Hero).CreatureState == Define.CreatureState.Idle)
                     {
                         HeroMoveState = Define.HeroMoveState.Idle;
                         ChangeState(Define.CreatureState.Idle);
                     }
                 }
             }
-
+            
             if (HeroMoveState == Define.HeroMoveState.None)
             {
-                ChangeState(Define.CreatureState.Idle);
-                HeroMoveState = Define.HeroMoveState.Idle;
+                HeroMoveState = Define.HeroMoveState.ReturnToHeroCamp;
             }
         }
         
@@ -269,12 +271,18 @@ namespace Clicker.Controllers
                 
                 Define.PathFineResultType resultType = 
                     FindNextPath(_targetObject, 5);
-                Debug.Log(resultType);
             }
         }
 
         protected override void AttackState()
         {
+            //0. 사용자가 이동을 하게 될경우에는 강제로 이동하도록 한다
+            if (HeroMoveState == Define.HeroMoveState.ForceMove)
+            {
+                ChangeState(Define.CreatureState.Move);
+                return;
+            }
+            
             if (!_targetObject.IsValid())
             {
                 _targetObject = null;
@@ -312,7 +320,6 @@ namespace Clicker.Controllers
                     break;
                 case Define.EUIEvent.PointerDown:
                     _skillBook.StopAllSKill();
-                    ChangeState(Define.CreatureState.Move);
                     HeroMoveState = Define.HeroMoveState.ForceMove;
                     break;
                 case Define.EUIEvent.PointerUp:
@@ -320,6 +327,7 @@ namespace Clicker.Controllers
                     HeroMoveState = Define.HeroMoveState.Idle;
                     break;
                 case Define.EUIEvent.Drag:
+                    HeroMoveState = Define.HeroMoveState.ForceMove;
                     break;
             }
         }

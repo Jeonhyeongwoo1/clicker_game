@@ -62,10 +62,10 @@ namespace Clicker.UI.Panel
 
         private void SetEuiEvent(Define.EUIEvent euiEvent)
         {
-            if (_euiEvent == euiEvent)
-            {
-                return;
-            }
+            // if (_euiEvent == euiEvent)
+            // {
+            //     return;
+            // }
 
             _euiEvent = euiEvent;
             InputHandler.onChangedUIEvent.Invoke(_euiEvent);

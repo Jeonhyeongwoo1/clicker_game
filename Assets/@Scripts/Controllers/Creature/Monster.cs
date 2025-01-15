@@ -67,6 +67,9 @@ namespace Clicker.Controllers
                 _targetObject = creature;
                 return;
             }
+            
+            //타켓이 없으면 다시 원래 위치로 이동
+            MoveToSpawnPosition();
         }
 
         protected override void MoveState()
@@ -80,22 +83,31 @@ namespace Clicker.Controllers
                 return;
             }
 
-            //타켓이 없으면 다시 원래 위치로 이동
-            // MoveToSpawnPosition();
-            return;
+            MoveForcePath();
         }
-
-        private void MoveToSpawnPosition()
+        
+        private void MoveForcePath()
         {
-            float distToSpawnSqrt = (transform.position - _spawnPosition).sqrMagnitude;
-            if (distToSpawnSqrt < 3f)
+            if (_pathQueue.Count == 0)
             {
                 ChangeState(Define.CreatureState.Idle);
                 return;
             }
 
-            Vector3Int spawnPos = Map.WorldToCell(_spawnPosition);
-            Define.PathFineResultType resultType = FindPath(spawnPos);
+            Vector3Int position = _pathQueue.Peek();
+            if (CanMoveToCell(position, _cellPosition))
+            {
+                _pathQueue.Dequeue();
+            }
+        }
+        
+        private void MoveToSpawnPosition()
+        {
+            Define.PathFineResultType resultType = FindPath(_spawnPosition);
+            if (resultType == Define.PathFineResultType.Success)
+            {
+                ChangeState(Define.CreatureState.Move);
+            }
         }
 
         protected override void ChaseAndAttack()
@@ -106,8 +118,8 @@ namespace Clicker.Controllers
                 ChangeState(Define.CreatureState.Idle);
                 return;
             }
-            
-            float distA = (transform.position - _targetObject.transform.position).sqrMagnitude;
+
+            float distA = DistToTargetSqr;
             float distB = AttackDistance * AttackDistance;
             
             //공격 범위안에 들어왔는가
@@ -124,15 +136,11 @@ namespace Clicker.Controllers
                 if (chaseDistance < distA)
                 {
                     _targetObject = null;
+                    ChangeState(Define.CreatureState.Idle);
                     return;
                 }
                 
-                // Define.PathFineResultType resultType = 
-                //     FindNextPath(_targetObject, 10);
-                // if (resultType == Define.PathFineResultType.Fail)
-                // {
-                //     ChangeState(Define.CreatureState.Idle);
-                // }
+                Define.PathFineResultType resultType = FindNextPath(_targetObject, 5);
             }
         }
     }

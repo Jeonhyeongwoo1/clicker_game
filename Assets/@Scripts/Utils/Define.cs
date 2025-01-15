@@ -165,7 +165,8 @@ namespace Clicker.Utils
 			None,
 			Lerp,
 			Success,
-			Fail
+			Fail,
+			FailToMove,
 		}
 
 		public enum ENpcType

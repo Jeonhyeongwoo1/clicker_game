@@ -38,7 +38,7 @@ namespace Clicker.Manager
                 foreach (Creature creature in Managers.Object.HeroSet)
                 {
                     Vector3Int position = GetNearbyPosition(creature, startPos);
-                    Managers.Map.MoveToCell(position, creature.CellPosition, creature, true);
+                    Managers.Map.MoveToCell(position, creature.CellPosition, creature);
                 }
                 
                 Managers.Object.HeroCamp.MoveToWaypointPosition(startPos);

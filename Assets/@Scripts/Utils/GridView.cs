@@ -16,12 +16,12 @@ public class GridView : MonoBehaviour
     
     private void Update()
     {
-        cellDict = Managers.Map.cellDict;
+        cellDict = Managers.Map._cellDict;
     }
 
     private void OnDrawGizmos()
     {
-        var dict = Managers.Map.cellDict;
+        var dict = Managers.Map._cellDict;
         if (dict.Count == 0)
         {
             return;

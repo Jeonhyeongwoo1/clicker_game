@@ -36,6 +36,7 @@ namespace Clicker.Skill
             _spriteRenderer.sprite = Managers.Resource.Load<Sprite>(_projectileData.ProjectileSpriteName);
             _spriteRenderer.sortingOrder = Define.SortingLayers.PROJECTILE;
             
+            Debug.Log($"{_spriteRenderer.sprite} / {Managers.Resource.Load<Sprite>(_projectileData.ProjectileSpriteName)}");
             string namespaceString = "Clicker.Skill";
             _motionComponent =
                 gameObject.AddComponent(Type.GetType($"{namespaceString}.{_projectileData.ComponentName}")) as

@@ -12,7 +12,8 @@ using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using Spine;
 using UnityEngine;
-using Spine.Unity;  
+using Spine.Unity;
+using Unity.VisualScripting;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
@@ -89,9 +90,10 @@ namespace Clicker.Controllers
 
         private Vector3 _endMovePosition;
         private Vector3 _targetPosition;
-        private CancellationTokenSource _moveCts;
+        private CancellationTokenSource _moveCts; 
             
         private Coroutine _coWait = null;
+        protected bool _isLerpCompleted = false;
         protected readonly float _chaseDistance = 8f;
         protected readonly float _searchDistance = 8f;
         protected readonly int _distanceToTargetThreshold = 5;
@@ -435,24 +437,9 @@ namespace Clicker.Controllers
             }
         }
 
-        protected Define.PathFineResultType FindPath(Vector3Int destinationPosition)
-        {
-            Vector3Int startPosition = Map.WorldToCell(transform.position);
-            List<Vector3Int> list = Map.PathFinding(startPosition, destinationPosition, this);
-            if (list.Count <= 2)
-            {
-                return Define.PathFineResultType.Fail;
-            }
-            
-            _pathQueue = new Queue<Vector3Int>(list);
-            _endMovePosition = Map.CellToWorld(list[^1]);
-            
-            return Define.PathFineResultType.Success;
-        }
-
         protected Define.PathFineResultType FindNextPath(BaseObject targetObj, int depth)
         {
-            if (IsLerp)
+            if (!_isLerpCompleted)
             {
                 return Define.PathFineResultType.Lerp;
             }
@@ -471,16 +458,6 @@ namespace Clicker.Controllers
                 return Define.PathFineResultType.Fail;
             }
             
-            // _pathQueue = new Queue<Vector3Int>(list);
-            
-            // for (var i = 0; i < list.Count; i++)
-            // {
-            //     Debug.Log($"iii {list[i]} / {i} / {_cellPosition}");
-            // }
-            
-            // Vector3Int dirCellPos = list[1] - CellPosition;
-            //Vector3Int dirCellPos = destCellPos - CellPos;
-            // Vector3Int nextPos = CellPosition + dirCellPos;
             Vector3Int nextPos = list[1];
             if(CanMoveToCell(nextPos, _cellPosition))
                 return Define.PathFineResultType.Success;
@@ -490,22 +467,38 @@ namespace Clicker.Controllers
 
         protected Define.PathFineResultType FindPath(BaseObject targetObj, bool forceFindPath = false)
         {
-            Vector3 targetPos = targetObj.transform.position;
-            if (!forceFindPath && (targetPos - transform.position).sqrMagnitude < _distanceToTargetThreshold)
+            return FindPath(targetObj.transform.position, forceFindPath);
+        }
+
+        protected Define.PathFineResultType FindPath(Vector3 destinationPosition, bool forceFindPath = false, int depth = 5)
+        {
+            if (!_isLerpCompleted)
+            {
+                return Define.PathFineResultType.Lerp;
+            }
+
+            if (!forceFindPath && (destinationPosition - transform.position).sqrMagnitude < _distanceToTargetThreshold)
             {
                 return Define.PathFineResultType.None;
             }
             
             Vector3Int startPosition = Map.WorldToCell(transform.position);
-            Vector3Int destPosition = Map.WorldToCell(targetObj.transform.position);
-            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition, this);
-            if (list.Count < 2)
+            Vector3Int destPosition = Map.WorldToCell(destinationPosition);
+            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition, this, depth);
+            if (list.Count <= 2)
             {
                 return Define.PathFineResultType.Fail;
             }
             
             _pathQueue = new Queue<Vector3Int>(list);
             _pathQueue.Dequeue();
+
+            Vector3Int nextPosition = _pathQueue.Peek();
+            if (!Map.MoveToCell(nextPosition, CellPosition, this))
+            {
+                return Define.PathFineResultType.FailToMove;
+            }
+            
             return Define.PathFineResultType.Success;
         }
 
@@ -538,28 +531,35 @@ namespace Clicker.Controllers
 
         protected bool CanMoveToCell(Vector3Int nextPosition, Vector3Int prevPosition)
         {
+            if (!_isLerpCompleted)
+            {
+                return false;
+            }
+            
             Vector3 myPos = transform.position;
             Vector3 cellPos = Managers.Map.CellToWorld(_cellPosition);
             return Map.MoveToCell(nextPosition, prevPosition, this) && (myPos - cellPos).sqrMagnitude <= 1f;
         }
 
-        private bool IsLerp = false;
-        
         private async UniTaskVoid MoveToCellPosition()
         {
             while (_moveCts != null && _moveCts.IsCancellationRequested == false)
             {
                 Vector3 myPos = transform.position;
                 Vector3 cellPos = Managers.Map.CellToWorld(_cellPosition);
-                IsLerp = false;
                 while ((myPos - cellPos).sqrMagnitude >= 1f)
                 {
-                    IsLerp = true;
+                    _isLerpCompleted = false;
                     myPos = transform.position;
                     cellPos = Managers.Map.CellToWorld(_cellPosition);
-                    float multiplier = Mathf.Max(1, (cellPos - myPos).sqrMagnitude / 3);
-                    float speed = MoveSpeed.Value * multiplier;
 
+                    float speed = MoveSpeed.Value;
+                    if (this is Hero)
+                    {
+                        float multiplier = Mathf.Max(1, (cellPos - myPos).sqrMagnitude / 3);
+                        speed *= multiplier;
+                    }
+                    
                     Vector3 dir = cellPos - myPos;
                     //일관성 있게 이동하기 위해서
                     float moveDist = Mathf.Min(dir.magnitude, speed * Time.deltaTime);
@@ -577,6 +577,7 @@ namespace Clicker.Controllers
                     }
                 }
 
+                _isLerpCompleted = true;
                 // SetMoveToCellPosition();
                
                 try

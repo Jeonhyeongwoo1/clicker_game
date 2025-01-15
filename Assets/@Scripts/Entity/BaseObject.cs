@@ -66,7 +66,7 @@ namespace Clicker.Entity
         public virtual void Spawn(Vector3 spawnPosition)
         {
             Vector3Int spawnPos = Managers.Map.WorldToCell(spawnPosition);
-            Managers.Map.MoveToCell(spawnPos, Vector3Int.zero, this, true);
+            Managers.Map.MoveToCell(spawnPos, Vector3Int.zero, this);
             _spawnPosition = spawnPos;
             // transform.position = spawnPosition;
         }
@@ -82,11 +82,6 @@ namespace Clicker.Entity
         public virtual void SetCellPosition(Vector3Int cellPos, Vector3 cellWorldPos, bool forceMove = false)
         {
             _cellPosition = cellPos;
-
-            if (ObjectType == Define.EObjectType.Hero)
-            {
-                Debug.LogError($"{cellWorldPos} / {cellPos}");
-            }
             // Debug.LogError($"{transform.GetInstanceID()} / {cellPos} / {cellWorldPos} / {forceMove}");
             if (forceMove)
             {
