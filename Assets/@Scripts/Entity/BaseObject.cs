@@ -65,9 +65,6 @@ namespace Clicker.Entity
         
         public virtual void Spawn(Vector3 spawnPosition)
         {
-            Vector3Int spawnPos = Managers.Map.WorldToCell(spawnPosition);
-            Managers.Map.MoveToCell(spawnPos, Vector3Int.zero, this);
-            _spawnPosition = spawnPos;
             transform.position = spawnPosition;
         }
 

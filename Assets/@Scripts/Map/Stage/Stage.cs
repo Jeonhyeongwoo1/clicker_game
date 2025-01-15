@@ -33,8 +33,8 @@ public class Stage : MonoBehaviour
     [SerializeField] private Tilemap _objectTileMap;// 오브젝트 셋팅용
 
     private bool _isActive = false;
-    [SerializeField] private List<SpawnData> _objectSpawnDataList = new();
-    [SerializeField] private List<BaseObject> _spawnedObjectList = new();
+    private List<SpawnData> _objectSpawnDataList = new(); 
+    private List<BaseObject> _spawnedObjectList = new();
 
     public void SetInfo()
     {
@@ -55,6 +55,7 @@ public class Stage : MonoBehaviour
         {
             Managers.Object.Despawn(baseObject);
         }
+        
         _spawnedObjectList.Clear();
         gameObject.SetActive(false);
     }
@@ -103,10 +104,16 @@ public class Stage : MonoBehaviour
             Define.EObjectType objectType = spawnData.objectType;
             switch (objectType)
             {
-                // case Define.EObjectType.Monster:
-                //     var monster = Managers.Object.CreateObject<Monster>(Define.EObjectType.Monster, tile.DataId);
-                //     monster.Spawn(worldPos);
-                //     break;
+                case Define.EObjectType.Monster:
+                    if (spawnData.dataId == 202004)
+                    {
+                        continue;
+                    }
+                    
+                    var monster = Managers.Object.CreateObject<Monster>(Define.EObjectType.Monster, spawnData.dataId);
+                    monster.Spawn(spawnData.spawnWorldPosition);
+                    _spawnedObjectList.Add(monster);
+                    break;
                 case Define.EObjectType.Npc:
                     var npc = Managers.Object.CreateObject<Npc>(Define.EObjectType.Npc, spawnData.dataId);
                     npc.Spawn(spawnData.spawnWorldPosition);
@@ -119,7 +126,9 @@ public class Stage : MonoBehaviour
     private void SaveSpawnInfos()
     {
         if (_objectTileMap != null)
+        {
             _objectTileMap.gameObject.SetActive(false);
+        }
 
         for (int y = _objectTileMap.cellBounds.yMax; y >= _objectTileMap.cellBounds.yMin; y--)
         {
@@ -129,30 +138,14 @@ public class Stage : MonoBehaviour
                 CustomTile tile = _objectTileMap.GetTile(new Vector3Int(x, y, 0)) as CustomTile;
 
                 if (tile == null)
+                {
                     continue;
-
+                }
+                    
                 Vector3 worldPos = Managers.Map.CellToWorld(cellPos);
-
-                Debug.Log($"{worldPos}");
                 SpawnData spawnData = new SpawnData(tile.DataId, tile.ObjectType, worldPos, tile.isStartPos,
                     tile.isWayPoint);
                 _objectSpawnDataList.Add(spawnData);
-                
-                // ObjectSpawnInfo info = new ObjectSpawnInfo(tile.Name, tile.DataId, x, y, worldPos, tile.ObjectType);
-                
-                // if (tile.isStartPos)
-                // {
-                //     StartSpawnInfo = info;
-                //     continue;
-                // }
-                //
-                // Debug.Log($"{tile.name} , {tile.isWayPoint}, {tile.ObjectType}");
-                // if (tile.isWayPoint)
-                // {
-                //     WaypointSpawnInfo = info;
-                // }
-                //
-                // _spawnInfos.Add(info);
             }
         }
     }

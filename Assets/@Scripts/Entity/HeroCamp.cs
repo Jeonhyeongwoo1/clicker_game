@@ -33,6 +33,11 @@ namespace Clicker.Entity
             return true;
         }
 
+        public void SetPosition(Vector3 position)
+        {
+            transform.position = position;
+        }
+
         protected override void OnEnable()
         {
             InputHandler.onDragAction += SetDirection;

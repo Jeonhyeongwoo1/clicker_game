@@ -128,6 +128,15 @@ namespace Clicker.Controllers
             ChangeState(Define.CreatureState.Idle);
         }
 
+        public override void Spawn(Vector3 spawnPosition)
+        {
+            base.Spawn(spawnPosition);
+            
+            Vector3Int spawnPos = Managers.Map.WorldToCell(spawnPosition);
+            Managers.Map.MoveToCell(spawnPos, Vector3Int.zero, this);
+            _spawnPosition = spawnPos;
+        }
+
         protected virtual void SetCreatureStat()
         {
             _currentHp = _creatureData.MaxHp;
@@ -203,6 +212,7 @@ namespace Clicker.Controllers
             ChangeState(Define.CreatureState.Dead);
             Util.SafeCancelToken(ref _moveCts);
             _skillBook.StopAllSKill();
+            Map.RemoveObject(this);
         }
         
         public override void TakeDamage(Creature attacker, SkillData skillData)

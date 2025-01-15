@@ -36,7 +36,6 @@ namespace Clicker.Skill
             _spriteRenderer.sprite = Managers.Resource.Load<Sprite>(_projectileData.ProjectileSpriteName);
             _spriteRenderer.sortingOrder = Define.SortingLayers.PROJECTILE;
             
-            Debug.Log($"{_spriteRenderer.sprite} / {Managers.Resource.Load<Sprite>(_projectileData.ProjectileSpriteName)}");
             string namespaceString = "Clicker.Skill";
             _motionComponent =
                 gameObject.AddComponent(Type.GetType($"{namespaceString}.{_projectileData.ComponentName}")) as
@@ -51,10 +50,23 @@ namespace Clicker.Skill
                 Destroy();
                 return;
             }
-            
+
+            _elapsed = 0;
             _owner = owner;
             _skillData = skillData;
-            _motionComponent.Shoot(owner, this, _projectileData);
+
+            var motion = _motionComponent as ParabolaMotion;
+            if (motion)
+            {
+                motion.SetInfo(_owner.transform.position, _owner.TargetObject.transform.position, 1, 180, 10);
+                motion.DoMotion(owner, this, _projectileData);
+            }
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            _elapsed = 0f;
         }
 
         private void Update()

@@ -100,7 +100,7 @@
       "ColliderOffsetX": 0.0,
       "ColliderOffsetY": 0.5,
       "ColliderRadius": 0.5,
-      "MaxHp": 400.0,
+      "MaxHp": 100.0,
       "UpMaxHpBonus": 4.0,
       "Atk": 2.0,
       "AtkRange": 4.0,

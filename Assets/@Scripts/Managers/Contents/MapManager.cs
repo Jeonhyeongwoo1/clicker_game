@@ -111,7 +111,7 @@ namespace Clicker.Manager
             return true;
         }
         
-        void RemoveObject(BaseObject obj)
+        public void RemoveObject(BaseObject obj)
         {
             // 기존의 좌표 제거
             int extraCells = 0;

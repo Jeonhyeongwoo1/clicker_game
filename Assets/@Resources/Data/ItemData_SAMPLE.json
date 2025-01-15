@@ -1,0 +1,635 @@
+﻿{
+  "weapons": [
+    {
+      "id": "1",
+      "name": "낡은숏소드",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "2",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/001"
+    },
+    {
+      "id": "2",
+      "name": "스파이크클럽",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "4",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/002"
+    },
+    {
+      "id": "3",
+      "name": "모닝스타",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "6",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/003"
+    },
+    {
+      "id": "4",
+      "name": "에페",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "12",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/004"
+    },
+    {
+      "id": "5",
+      "name": "브로드소드",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "12",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/005"
+    },
+    {
+      "id": "6",
+      "name": "레테소드",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "14",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/006"
+    },
+    {
+      "id": "7",
+      "name": "파이터소드",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "14",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/007"
+    },
+    {
+      "id": "8",
+      "name": "다크다운폴소드",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "16",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/008"
+    },
+    {
+      "id": "9",
+      "name": "골드엑스",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "21",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/009"
+    },
+    {
+      "id": "10",
+      "name": "히어로소드",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "22",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/010"
+    },
+    {
+      "id": "11",
+      "name": "파이어소드",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "32",
+      "grade": "Epic",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/011"
+    },
+    {
+      "id": "12",
+      "name": "프로즌소드",
+      "itemType": "Equipment",
+      "subType": "Weapon",
+      "damage": "35",
+      "grade": "Epic",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Weapons/012"
+    }
+  ],
+  "armors": [
+    {
+      "id": "101",
+      "name": "낡은천옷",
+      "itemType": "Equipment",
+      "subType": "Armor",
+      "defence": "1",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Armors/001"
+    },
+    {
+      "id": "102",
+      "name": "래더아머",
+      "itemType": "Equipment",
+      "subType": "Armor",
+      "defence": "3",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Armors/002"
+    },
+    {
+      "id": "103",
+      "name": "울프아머",
+      "itemType": "Equipment",
+      "subType": "Armor",
+      "defence": "8",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Armors/003"
+    },
+    {
+      "id": "104",
+      "name": "본아머",
+      "itemType": "Equipment",
+      "subType": "Armor",
+      "defence": "10",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Armors/004"
+    },
+    {
+      "id": "105",
+      "name": "플래임브레이커",
+      "itemType": "Equipment",
+      "subType": "Armor",
+      "defence": "21",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Armors/005"
+    },
+    {
+      "id": "106",
+      "name": "프로즌브레이커",
+      "itemType": "Equipment",
+      "subType": "Armor",
+      "defence": "22",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Armors/006"
+    },
+    {
+      "id": "107",
+      "name": "히어로아머",
+      "itemType": "Equipment",
+      "subType": "Armor",
+      "defence": "25",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Armors/007"
+    },
+    {
+      "id": "108",
+      "name": "스토머아머",
+      "itemType": "Equipment",
+      "subType": "Armor",
+      "defence": "28",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Armors/008"
+    },
+    {
+      "id": "109",
+      "name": "골든메트라",
+      "itemType": "Equipment",
+      "subType": "Armor",
+      "defence": "32",
+      "grade": "Epic",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Armors/009"
+    },
+    {
+      "id": "110",
+      "name": "데몬브레스",
+      "itemType": "Equipment",
+      "subType": "Armor",
+      "defence": "35",
+      "grade": "Epic",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Armors/010"
+    },
+    {
+      "id": "201",
+      "name": "낡은밴드",
+      "itemType": "Equipment",
+      "subType": "Gloves",
+      "defence": "1",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Gloves/001"
+    },
+    {
+      "id": "202",
+      "name": "카나인핸드",
+      "itemType": "Equipment",
+      "subType": "Gloves",
+      "defence": "3",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Gloves/002"
+    },
+    {
+      "id": "203",
+      "name": "그린핸드",
+      "itemType": "Equipment",
+      "subType": "Gloves",
+      "defence": "12",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Gloves/003"
+    },
+    {
+      "id": "204",
+      "name": "아이언핸드",
+      "itemType": "Equipment",
+      "subType": "Gloves",
+      "defence": "18",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Gloves/004"
+    },
+    {
+      "id": "205",
+      "name": "오리에드핸드",
+      "itemType": "Equipment",
+      "subType": "Gloves",
+      "defence": "24",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Gloves/005"
+    },
+    {
+      "id": "206",
+      "name": "라이징플레임",
+      "itemType": "Equipment",
+      "subType": "Gloves",
+      "defence": "31",
+      "grade": "Epic",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Gloves/006"
+    },
+    {
+      "id": "301",
+      "name": "낡은천신발",
+      "itemType": "Equipment",
+      "subType": "Shoes",
+      "speed": "1",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Boots/001"
+    },
+    {
+      "id": "302",
+      "name": "카나인클로",
+      "itemType": "Equipment",
+      "subType": "Shoes",
+      "speed": "3",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Boots/002"
+    },
+    {
+      "id": "303",
+      "name": "그린슈즈",
+      "itemType": "Equipment",
+      "subType": "Shoes",
+      "speed": "8",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Boots/003"
+    },
+    {
+      "id": "304",
+      "name": "가디언부츠",
+      "itemType": "Equipment",
+      "subType": "Shoes",
+      "speed": "12",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Boots/004"
+    },
+    {
+      "id": "305",
+      "name": "스토머",
+      "itemType": "Equipment",
+      "subType": "Shoes",
+      "speed": "22",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Boots/005"
+    },
+    {
+      "id": "306",
+      "name": "히어로부츠",
+      "itemType": "Equipment",
+      "subType": "Shoes",
+      "speed": "31",
+      "grade": "Epic",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Boots/006"
+    },
+    {
+      "id": "401",
+      "name": "낡은천모자",
+      "itemType": "Equipment",
+      "subType": "Helmet",
+      "defence": "1",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Helmets/001"
+    },
+    {
+      "id": "402",
+      "name": "가죽모자",
+      "itemType": "Equipment",
+      "subType": "Helmet",
+      "defence": "3",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Helmets/002"
+    },
+    {
+      "id": "403",
+      "name": "본헬름",
+      "itemType": "Equipment",
+      "subType": "Helmet",
+      "defence": "12",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Helmets/003"
+    },
+    {
+      "id": "404",
+      "name": "팔콘아이언",
+      "itemType": "Equipment",
+      "subType": "Helmet",
+      "defence": "16",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Helmets/004"
+    },
+    {
+      "id": "405",
+      "name": "라이언킹",
+      "itemType": "Equipment",
+      "subType": "Helmet",
+      "defence": "23",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Helmets/005"
+    },
+    {
+      "id": "406",
+      "name": "데몬플레임",
+      "itemType": "Equipment",
+      "subType": "Helmet",
+      "defence": "35",
+      "grade": "Epic",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Helmets/006"
+    },
+    {
+      "id": "501",
+      "name": "나무방패",
+      "itemType": "Equipment",
+      "subType": "Shield",
+      "defence": "2",
+      "grade": "None",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Shield/001"
+    },
+    {
+      "id": "502",
+      "name": "타이탄쉴드",
+      "itemType": "Equipment",
+      "subType": "Shield",
+      "defence": "10",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Shield/002"
+    },
+    {
+      "id": "503",
+      "name": "워리어쉴드",
+      "itemType": "Equipment",
+      "subType": "Shield",
+      "defence": "18",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Shield/003"
+    },
+    {
+      "id": "504",
+      "name": "골든데몬아이즈",
+      "itemType": "Equipment",
+      "subType": "Shield",
+      "defence": "32",
+      "grade": "Epic",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Shield/004"
+    },
+    {
+      "id": "505",
+      "name": "킹나이트",
+      "itemType": "Equipment",
+      "subType": "Shield",
+      "defence": "35",
+      "grade": "Epic",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Shield/005"
+    },
+    {
+      "id": "901",
+      "name": "호주머니",
+      "itemType": "Equipment",
+      "subType": "Bag",
+      "damage": "4",
+      "grade": "Normal",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Bag/001"
+    },
+    {
+      "id": "902",
+      "name": "서류가방",
+      "itemType": "Equipment",
+      "subType": "Bag",
+      "damage": "8",
+      "grade": "Rare",
+      "maxStack": "1",
+      "isConsumable": "false",
+      "iconPath": "Textures/Item/Bag/002"
+    }
+  ],
+  "accessories": [
+  ],
+  "scrolls": [
+    {
+      "id": "1001",
+      "name": "랜덤 스킬 스크롤",
+      "itemType": "Consume",
+      "subType": "Scroll",
+      "grade": "None",
+      "maxStack": "999",
+      "value": "1001",
+      "isConsumable": "true",
+      "cooltime": "30",
+      "iconPath": "Textures/Item/ConsumableItems/scroll"
+    }
+  ],
+  "potions": [
+    {
+      "id": "2001",
+      "name": "HP 회복물약",
+      "itemType": "Consume",
+      "subType": "Potion",
+      "potionType": "RecoveryHp",
+      "grade": "None",
+      "maxStack": "999",
+      "value": "50",
+      "isConsumable": "true",
+      "cooltime": "5",
+      "iconPath": "Textures/Item/ConsumableItems/hp"
+    },
+    {
+      "id": "2002",
+      "name": "MP 회복물약",
+      "itemType": "Consume",
+      "subType": "Potion",
+      "potionType": "RecoveryMp",
+      "grade": "None",
+      "maxStack": "999",
+      "value": "5",
+      "isConsumable": "true",
+      "cooltime": "30",
+      "iconPath": "Textures/Item/ConsumableItems/mp"
+    }
+  ],
+  "skillbooks": [
+    {
+      "id": "3001",
+      "name": "스킬북: 토르의 망치",
+      "itemType": "Skillbook",
+      "subType": "Active",
+      "grade": "None",
+      "maxStack": "1",
+      "skillId": "4",
+      "isConsumable": "true",
+      "iconPath": "Textures/Item/ConsumableItems/book"
+    },
+    {
+      "id": "3002",
+      "name": "스킬북: 쉐도우",
+      "itemType": "Skillbook",
+      "subType": "Active",
+      "grade": "None",
+      "maxStack": "1",
+      "skillId": "5",
+      "isConsumable": "true",
+      "iconPath": "Textures/Item/ConsumableItems/book"
+    },
+    {
+      "id": "3003",
+      "name": "스킬북: 헐크의 분노",
+      "itemType": "Skillbook",
+      "subType": "Active",
+      "grade": "None",
+      "maxStack": "1",
+      "skillId": "6",
+      "isConsumable": "true",
+      "iconPath": "Textures/Item/ConsumableItems/book"
+    },
+    {
+      "id": "3004",
+      "name": "스킬북: 아이스 스피어",
+      "itemType": "Skillbook",
+      "subType": "Active",
+      "grade": "None",
+      "maxStack": "1",
+      "skillId": "7",
+      "isConsumable": "true",
+      "iconPath": "Textures/Item/ConsumableItems/book"
+    },
+    {
+      "id": "3005",
+      "name": "스킬북: 로빈훗의 화살",
+      "itemType": "Skillbook",
+      "subType": "Active",
+      "grade": "None",
+      "maxStack": "1",
+      "skillId": "2",
+      "isConsumable": "true",
+      "iconPath": "Textures/Item/ConsumableItems/book"
+    },
+    {
+      "id": "3006",
+      "name": "스킬북: 블링크",
+      "itemType": "Skillbook",
+      "subType": "Active",
+      "grade": "None",
+      "maxStack": "1",
+      "skillId": "3",
+      "isConsumable": "true",
+      "iconPath": "Textures/Item/ConsumableItems/book"
+    }
+  ]
+}

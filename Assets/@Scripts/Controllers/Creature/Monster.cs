@@ -1,3 +1,4 @@
+using Clicker.ContentData;
 using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
@@ -108,6 +109,14 @@ namespace Clicker.Controllers
             {
                 ChangeState(Define.CreatureState.Move);
             }
+        }
+
+        public override void Dead()
+        {
+            base.Dead();
+            
+            //Drop
+            Managers.Object.DropItem((_creatureData as MonsterData).DropItemId, transform.position);
         }
 
         protected override void ChaseAndAttack()

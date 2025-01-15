@@ -39,7 +39,8 @@ namespace Clicker.Utils
 			Projectile,
 			Effect,
 			Aoe,
-			Npc
+			Npc,
+			Item
 		}
 		
 		public enum CreatureState
@@ -192,9 +193,50 @@ namespace Clicker.Utils
 			BattlePower,
 		}
 		
-		public enum HeroObtainType
+		public enum EItemGrade
 		{
-			
+			None,
+			Normal,
+			Rare,
+			Epic,
+			Legendary
+		}
+
+		public enum EItemGroupType
+		{
+			None,
+			Equipment,
+			Consumable,
+		}
+
+		public enum EItemType
+		{
+			None,
+			Weapon,
+			Armor,
+			Potion,
+			Scroll
+		}
+
+		public enum EItemSubType
+		{
+			None,
+
+			Sword,
+			Dagger,
+			Bow,
+
+			Helmet,
+			Armor,
+			Shield,
+			Gloves,
+			Shoes,
+
+			EnchantWeapon,
+			EnchantArmor,
+
+			HealthPotion,
+			ManaPotion,
 		}
 		
 		public class AnimationName

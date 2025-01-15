@@ -20,7 +20,7 @@ namespace Clicker.Controllers
         }
         
         [SerializeField] private Define.HeroMoveState _heroMoveState;
-
+        
         public override void Spawn(Vector3 spawnPosition)
         {
             base.Spawn(spawnPosition);

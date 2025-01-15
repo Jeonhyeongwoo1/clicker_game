@@ -6,6 +6,7 @@ using Clicker.Effect;
 using Clicker.Entity;
 using Clicker.Skill;
 using Clicker.Utils;
+using Scripts.Contents.Item;
 using UnityEngine;
 
 namespace Clicker.Manager
@@ -143,6 +144,65 @@ namespace Clicker.Manager
         public HashSet<Creature> GetCreatureList()
         {
             return _heroSet.Concat(_monsterSet).ToHashSet();
+        }
+
+        public ItemHolder DropItem(int dropItemId, Vector3 spawnPos)
+        {
+            if (!Managers.Data.DropTableDataDict.TryGetValue(dropItemId, out DropTableData dropTableData))
+            {
+                LogUtils.LogError("Failed to drop item " + dropItemId);
+                return null;
+            }
+
+            RewardData selectedRewardData = null;
+            int probability = 0;
+
+            List<RewardData> rewardDataList = dropTableData.Rewards.ToList();
+            rewardDataList.Sort((a, b)=> a.Probability > b. Probability ? -1 : 1);
+            
+            foreach (RewardData rewardData in rewardDataList)
+            {
+                probability += rewardData.Probability;
+            }
+
+            int index = 0;
+            while (true)
+            {
+                int num = probability / (int) Mathf.Pow(10, index);
+                if (num == 0)
+                {
+                    break;
+                }
+
+                index++;
+            }
+            
+            int select = Random.Range(0, (int) Mathf.Pow(10, index));
+            foreach (RewardData rewardData in rewardDataList)
+            {
+                if (select <= rewardData.Probability)
+                {
+                    selectedRewardData = rewardData;
+                }
+            }
+
+            if (selectedRewardData == null)
+            {
+                return null;
+            }
+
+            int id = selectedRewardData.ItemTemplateId;
+            if (!Managers.Data.ItemDataDict.TryGetValue(id, out ItemData itemData))
+            {
+                LogUtils.LogError("Failed to drop item " + id);
+                return null;
+            }
+            
+            //Drop
+            var item = CreateObject<ItemHolder>(Define.EObjectType.Item, itemData.DataId);
+            item.Spawn(spawnPos);
+            Debug.LogError("Spawn");
+            return item;
         }
     }
 }

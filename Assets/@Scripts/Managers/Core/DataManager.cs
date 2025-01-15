@@ -25,6 +25,10 @@ namespace Clicker.Manger
 		public Dictionary<int, NpcData> NPCDataDict { get; set; }
 		public Dictionary<int, HeroInfoData> HeroInfoDataDict { get; set; }
 		public Dictionary<string, TextData> TextDataDict { get; set; }
+		public Dictionary<int, ItemConsumableData> ItemConsumableDataDict { get; set; }
+		public Dictionary<int, ItemEquipmentData> ItemEquipmentDataDict { get; set; }
+		public Dictionary<int, DropTableData> DropTableDataDict { get; set; }
+		public Dictionary<int, ItemData> ItemDataDict { get; set; }
 		
 		public void Init()
 		{
@@ -38,6 +42,21 @@ namespace Clicker.Manger
 			NPCDataDict = LoadJson<NpcDataLoader, int, NpcData>("NpcData").MakeDict();
 			HeroInfoDataDict = LoadJson<HeroInfoDataLoader, int, HeroInfoData>("HeroInfoData").MakeDict();
 			TextDataDict = LoadJson<TextDataLoader, string, TextData>("TextData").MakeDict();
+			ItemConsumableDataDict = LoadJson<ItemConsumableDataLoader, int, ItemConsumableData>("Item_ConsumableData").MakeDict();
+			ItemEquipmentDataDict = LoadJson<ItemEquipmentDataLoader, int, ItemEquipmentData>("Item_EquipmentData").MakeDict();
+			DropTableDataDict = LoadJson<DropTableDataLoader, int, DropTableData>("DropTableData").MakeDict();
+
+			ItemDataDict = new Dictionary<int, ItemData>();
+			foreach (var (key, value) in ItemConsumableDataDict)
+			{
+				ItemDataDict[key] = value;
+			}
+			
+			foreach (var (key, value) in ItemEquipmentDataDict)
+			{
+				ItemDataDict[key] = value;
+			}
+			
 		}
 
 		private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
