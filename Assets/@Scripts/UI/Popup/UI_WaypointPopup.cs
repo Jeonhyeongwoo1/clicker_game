@@ -20,6 +20,7 @@ namespace Clicker.UI.Popup
                 return false;
             }
             
+            Refresh(Managers.Map.StageTranslation.StageList);
             return true;
         }
 
@@ -36,7 +37,7 @@ namespace Clicker.UI.Popup
             }
         }
 
-        public void SetInfo(List<Stage> stageList)
+        public void Refresh(List<Stage> stageList)
         {
             DestroySubItem();
             

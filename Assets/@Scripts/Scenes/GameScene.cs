@@ -27,7 +27,7 @@ namespace Clicker.Scene
 			Managers.Map.CreateMap("BaseMap");
 			Managers.Object.CreateObject<HeroCamp>(Define.EObjectType.HeroCamp, -1);
 
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < 1; i++)
 			{
 				Vector3 spawnPos =new Vector3(Random.Range(-5, 5), Random.Range(5, -5));
 				int id = 201001;
@@ -37,9 +37,9 @@ namespace Clicker.Scene
 				hero.Spawn(spawnPos);
 			}
 			
-			var monster = Managers.Object.CreateObject<Monster>(Define.EObjectType.Monster, 202005);
-			monster.ExtraSize = 1;
-			monster.Spawn(new Vector3(5,5));
+			// var monster = Managers.Object.CreateObject<Monster>(Define.EObjectType.Monster, 202005);
+			// monster.ExtraSize = 1;
+			// monster.Spawn(new Vector3(5,5));
 			
 			// var env = Managers.Object.CreateObject<Env>(Define.EObjectType.Env, 300001);
 			// env.Spawn(new Vector3(10, 10));

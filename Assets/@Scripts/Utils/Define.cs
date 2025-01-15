@@ -169,6 +169,11 @@ namespace Clicker.Utils
 			FailToMove,
 		}
 
+		public enum ELangauge
+		{
+			KOR,
+		}
+
 		public enum ENpcType
 		{
 			Camp,
@@ -178,6 +183,18 @@ namespace Clicker.Utils
 			Guild,
 			TreasureBox,
 			Dungeon
+		}
+		
+		public enum GoodsItemType
+		{
+			Dia,
+			Gold,
+			BattlePower,
+		}
+		
+		public enum HeroObtainType
+		{
+			
 		}
 		
 		public class AnimationName

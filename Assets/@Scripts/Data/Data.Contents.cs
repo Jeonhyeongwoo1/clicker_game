@@ -55,6 +55,58 @@ namespace Clicker.ContentData
 	}
 	#endregion
 
+	#region HeroInfoData
+	[Serializable]
+	public class HeroInfoData
+	{
+		public int DataId;
+		public string NameTextId;
+		public string DescriptionTextId;
+		public string Rarity;
+		public float GachaSpawnWeight;
+		public float GachaWeight;
+		public int GachaExpCount;
+		public string IconImage;
+	}
+
+	[Serializable]
+	public class HeroInfoDataLoader : ILoader<int, HeroInfoData>
+	{
+		public List<HeroInfoData> heroInfo = new List<HeroInfoData>();
+		public Dictionary<int, HeroInfoData> MakeDict()
+		{
+			Dictionary<int, HeroInfoData> dict = new Dictionary<int, HeroInfoData>();
+			foreach (HeroInfoData info in heroInfo)
+				dict.Add(info.DataId, info);
+			return dict;
+		}
+	}
+	#endregion
+
+	#region TextData
+
+	[Serializable]
+	public class TextData
+	{
+		public string DataId;
+		public string KOR;
+	}
+	
+	[Serializable]
+	public class TextDataLoader : ILoader<string, TextData>
+	{
+		public List<TextData> heroInfo = new List<TextData>();
+		public Dictionary<string, TextData> MakeDict()
+		{
+			Dictionary<string, TextData> dict = new Dictionary<string, TextData>();
+			foreach (TextData info in heroInfo)
+				dict.Add(info.DataId, info);
+			return dict;
+		}
+	}
+	
+	#endregion
+	
 	#region HeroData
 	[Serializable]
 	public class HeroData : CreatureData

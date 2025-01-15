@@ -1,4 +1,5 @@
 using Clicker.Manger;
+using Clicker.Utils;
 using TMPro.EditorUtilities;
 using UnityEngine;
 
@@ -35,7 +36,23 @@ namespace Clicker.Manager
 		public static SoundManager Sound { get { return Instance?._sound; } }
 		public static UIManager UI { get { return Instance?._ui; } }
 		#endregion
+
 		
+		#region Language
+		public Define.ELangauge Langauge => _langauge;
+		private Define.ELangauge _langauge;
+		public string GetLangaugeText(string id)
+		{
+			switch (_langauge)
+			{
+				case Define.ELangauge.KOR:
+					return Managers.Data.TextDataDict[id].KOR;
+			}
+
+			return "FAIL!!!!!!!!!!";
+		}
+		#endregion
+
 		public static void Init()
 		{
 			if (s_instance == null)

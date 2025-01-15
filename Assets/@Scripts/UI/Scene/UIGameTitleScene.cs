@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Clicker.Scene
 {
-	public class UI_TitleScene : UI_Scene
+	public class UIGameTitleScene : UI_Scene
 	{
 		public override bool Init()
 		{
@@ -26,8 +26,15 @@ namespace Clicker.Scene
 
 				if (count == totalCount)
 				{
-					Managers.Scene.LoadScene(Define.EScene.GameScene);
 					Managers.Data.Init();
+					bool isLoadedGameData = Managers.Game.LoadGameData();
+					if (!isLoadedGameData)
+					{
+						Managers.Game.InitGame();
+						Managers.Game.SaveGameData();
+					}
+					
+					Managers.Scene.LoadScene(Define.EScene.GameScene);
 				}
 			});
 		}

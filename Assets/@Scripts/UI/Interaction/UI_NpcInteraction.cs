@@ -43,7 +43,6 @@ namespace Clicker.UI
                 case Define.ENpcType.Waypoint:
                     var popup = Managers.UI.ShowPopupUI<UI_WaypointPopup>();
                     popup.Init();
-                    popup.SetInfo(Managers.Map.StageTranslation.StageList);
                     break;
                 case Define.ENpcType.BlackSmith:
                     break;

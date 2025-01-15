@@ -133,6 +133,7 @@ public class Stage : MonoBehaviour
 
                 Vector3 worldPos = Managers.Map.CellToWorld(cellPos);
 
+                Debug.Log($"{worldPos}");
                 SpawnData spawnData = new SpawnData(tile.DataId, tile.ObjectType, worldPos, tile.isStartPos,
                     tile.isWayPoint);
                 _objectSpawnDataList.Add(spawnData);

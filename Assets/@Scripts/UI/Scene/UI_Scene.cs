@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using Clicker.Manager;
 using Clicker.UI;
-using UnityEngine;
 
 namespace Clicker.Scene
 {
