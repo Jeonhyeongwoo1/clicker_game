@@ -59,7 +59,8 @@ namespace Clicker.Utils
 			MoveToCreature,
 			MoveToEnv,
 			ReturnToHeroCamp,
-			ForceMove
+			ForceMove,
+			ForcePath,
 		}
 
 		public enum ELayer
@@ -162,6 +163,7 @@ namespace Clicker.Utils
 		public enum PathFineResultType
 		{
 			None,
+			Lerp,
 			Success,
 			Fail
 		}

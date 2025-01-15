@@ -21,13 +21,13 @@ namespace Clicker.Controllers
             base.Spawn(spawnPosition);
             AIProcessAsync().Forget();
             StartMoveToCellPosition();
-            _cellPosition = _spawnPosition;
+            // _cellPosition = Managers.Map.WorldToCell(_spawnPosition);
         }
 
         protected override void AttackState()
         {
             //공격중에 타겟이 사정거리 밖으로 이동한다면 추적
-            float distA = (transform.position - _targetObject.transform.position).sqrMagnitude;
+            float distA = DistToTargetSqr;
             float distB = AttackDistance * AttackDistance;
             //공격 범위밖인가
             if (distA > distB)
@@ -42,7 +42,13 @@ namespace Clicker.Controllers
 
                 _skillBook.StopAllSKill();
                 ChangeState(Define.CreatureState.Move);
-                FindPath(_targetObject);
+                
+                Define.PathFineResultType resultType = 
+                    FindNextPath(_targetObject, 10);
+                if (resultType == Define.PathFineResultType.Fail)
+                {
+                    ChangeState(Define.CreatureState.Idle);
+                }
             }
             
             base.AttackState();
@@ -75,7 +81,7 @@ namespace Clicker.Controllers
             }
 
             //타켓이 없으면 다시 원래 위치로 이동
-            MoveToSpawnPosition();
+            // MoveToSpawnPosition();
             return;
         }
 
@@ -121,12 +127,12 @@ namespace Clicker.Controllers
                     return;
                 }
                 
-                Define.PathFineResultType resultType = FindPath(_targetObject);
-                if (resultType == Define.PathFineResultType.Fail)
-                {
-                    Debug.LogWarning("ChaseAttack");
-                    ChangeState(Define.CreatureState.Idle);
-                }
+                // Define.PathFineResultType resultType = 
+                //     FindNextPath(_targetObject, 10);
+                // if (resultType == Define.PathFineResultType.Fail)
+                // {
+                //     ChangeState(Define.CreatureState.Idle);
+                // }
             }
         }
     }

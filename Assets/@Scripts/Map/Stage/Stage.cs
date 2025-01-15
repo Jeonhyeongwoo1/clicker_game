@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Clicker.Controllers;
+using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
 using UnityEngine;
@@ -28,25 +29,50 @@ public struct SpawnData
 
 public class Stage : MonoBehaviour
 {
-    [SerializeField] private Tilemap _terrainTileMap; // 오브젝트 셋팅용
-    [SerializeField] private Tilemap _objectTileMap;
+    [SerializeField] private Tilemap _terrainTileMap; 
+    [SerializeField] private Tilemap _objectTileMap;// 오브젝트 셋팅용
 
-    private List<SpawnData> _objectSpawnList = new();
+    private bool _isActive = false;
+    [SerializeField] private List<SpawnData> _objectSpawnDataList = new();
+    [SerializeField] private List<BaseObject> _spawnedObjectList = new();
 
     public void SetInfo()
     {
+        _isActive = true; // 처음에는 모두 켜져있으니 꺼준다
         _terrainTileMap = Util.FindChild<Tilemap>(gameObject, "Terrain_01");
         SaveSpawnInfos();
     }
 
     public void DisableObject()
     {
+        if (!_isActive)
+        {
+            return;
+        }
+
+        _isActive = false;
+        foreach (BaseObject baseObject in _spawnedObjectList)
+        {
+            Managers.Object.Despawn(baseObject);
+        }
+        _spawnedObjectList.Clear();
         gameObject.SetActive(false);
     }
 
+    public bool IsStageInRange(Vector3 position)
+    {
+        Vector3Int cellPos = _terrainTileMap.layoutGrid.WorldToCell(position);
+        if (_terrainTileMap.GetTile(cellPos))
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
     public Vector3 GetWaypointPosition()
     {
-        foreach (SpawnData spawnData in _objectSpawnList)
+        foreach (SpawnData spawnData in _objectSpawnDataList)
         {
             if (spawnData.isWayPoint)
             {
@@ -54,15 +80,26 @@ public class Stage : MonoBehaviour
             }
         }
 
-        Debug.Log("failed");
         return Vector3.zero;
     }
 
     public void SpawnObject()
     {
+        // if (_isActive)
+        // {
+        //     return;
+        // }
+        
+        _isActive = true;
         gameObject.SetActive(true);
-        foreach (SpawnData spawnData in _objectSpawnList)
+        foreach (SpawnData spawnData in _objectSpawnDataList)
         {
+            Vector3Int cellPos = Managers.Map.WorldToCell(spawnData.spawnWorldPosition);
+            if (!Managers.Map.CanGo(cellPos.x, cellPos.y, null, true))
+            {
+                continue;
+            }
+            
             Define.EObjectType objectType = spawnData.objectType;
             switch (objectType)
             {
@@ -73,6 +110,7 @@ public class Stage : MonoBehaviour
                 case Define.EObjectType.Npc:
                     var npc = Managers.Object.CreateObject<Npc>(Define.EObjectType.Npc, spawnData.dataId);
                     npc.Spawn(spawnData.spawnWorldPosition);
+                    _spawnedObjectList.Add(npc);
                     break;
             }
         }
@@ -97,7 +135,7 @@ public class Stage : MonoBehaviour
 
                 SpawnData spawnData = new SpawnData(tile.DataId, tile.ObjectType, worldPos, tile.isStartPos,
                     tile.isWayPoint);
-                _objectSpawnList.Add(spawnData);
+                _objectSpawnDataList.Add(spawnData);
                 
                 // ObjectSpawnInfo info = new ObjectSpawnInfo(tile.Name, tile.DataId, x, y, worldPos, tile.ObjectType);
                 

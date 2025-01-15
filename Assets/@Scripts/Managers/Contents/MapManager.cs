@@ -3,6 +3,7 @@ using System.IO;
 using Clicker.Controllers;
 using Clicker.Entity;
 using Clicker.Utils;
+using Sirenix.OdinInspector;
 using UnityEditor.Rendering;
 using UnityEditor.Tilemaps;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Clicker.Manager
     public class MapManager
     {
         public StageTranslation StageTranslation => _stageTranslation;
+        public readonly Dictionary<Vector3Int, BaseObject> cellDict = new();
         
         private Dictionary<Vector3Int, TileBase> _heroCampMoveableTileDict = new();
         private Define.CollisionType[,] _collisionArray;
@@ -56,30 +58,15 @@ namespace Clicker.Manager
         {
             return _grid.CellToWorld(cellPosition);
         }
-
-        public void ChangeStage(string name)
-        {
-            bool isSuccess = StageTranslation.TryChangeStage(name);
-            if (isSuccess)
-            {
-                Vector3 startPos = StageTranslation.GetWayPosition();
-                foreach (Creature creature in Managers.Object.HeroSet)
-                {
-                    creature.SetPosition(startPos);
-                }
-                
-                Managers.Object.HeroCamp.MoveToWaypointPosition(startPos);
-            }
-        }
         
         public void CreateMap(string mapName)
         {
+            ParseCollision(mapName); //1번으로 처리
             GameObject mapPrefab = Managers.Resource.Instantiate(mapName);
             _mapObject = mapPrefab;
             _grid = _mapObject.GetComponent<Grid>();
             _stageTranslation = _mapObject.GetComponent<StageTranslation>();
             _stageTranslation.SetInfo();
-            ParseCollision(mapName);
             SetHeroCampMoveableTile();
         }
         
@@ -109,73 +96,42 @@ namespace Clicker.Manager
             }
         }
 
-        public Dictionary<Vector3Int, BaseObject> _cellDict = new Dictionary<Vector3Int, BaseObject>();
-        private Dictionary<Vector3Int, BaseObject> _moveableTargetPositionDict = new();
-
-        public bool MoveToCell(Vector3Int cellPos, Vector3Int previousCellPos, BaseObject baseObject)
+        public bool MoveToCell(Vector3Int cellPos, Vector3Int previousCellPos, BaseObject baseObject, bool forceMove = false)
         {
-            if (_cellDict.ContainsKey(previousCellPos))
+            Debug.Log("Cango :" + CanGo(cellPos.x, cellPos.y, baseObject));
+            if (!CanGo(cellPos.x, cellPos.y, baseObject))
             {
-                _cellDict.Remove(previousCellPos);
+                return false;
+            }
+            
+            if (cellDict.ContainsKey(previousCellPos))
+            {
+                cellDict.Remove(previousCellPos);
             }
 
             //이미 선정된 상태일 수 있음
-            return _cellDict.TryAdd(cellPos, baseObject);
+            bool isPossibleMove = cellDict.TryAdd(cellPos, baseObject);
+            if (!isPossibleMove)
+            {
+                return false;
+            }
+            
+            baseObject.SetCellPosition(cellPos, CellToWorld(cellPos), forceMove);
+            return true;
         }
+        
         public void RemoveCellPosition(Vector3Int cellPos, BaseObject baseObject)
         {
-            _cellDict.Remove(cellPos);
+            cellDict.Remove(cellPos);
             // _cellDict.TryAdd(cellPos, baseObject);
         }
 
         public void SetCellPosition(Vector3Int cellPos, BaseObject baseObject)
         {
-            _cellDict.TryAdd(cellPos, baseObject);
+            cellDict.TryAdd(cellPos, baseObject);
         }
         
-        public Vector3Int GetMoveableTargetPosition(BaseObject targetObject)
-        {
-            foreach (var (key, value) in _cellDict)
-            {
-                if (value == targetObject)
-                {
-                    return key;
-                }
-            }
-
-            Vector3Int worldToPosition = WorldToCell(targetObject.transform.position);
-            return worldToPosition;
-
-            // foreach (var (key, value) in _moveableTargetPositionDict)
-            // {
-            //     if (value != baseObject)
-            //     {
-            //         continue;
-            //     }
-            //     
-            //     _moveableTargetPositionDict.Remove(key);
-            //     break;
-            // }
-            //
-            // float mutilplier = 1;
-            // while (true)
-            // {
-            //     for (int i = 0; i < _dirArray.Length; i++)
-            //     {
-            //         Vector3 targetPos = targetObject.transform.position+ (Vector3) _dirArray[i] * mutilplier;
-            //         Vector3Int worldToCellPos = WorldToCell(targetPos);
-            //         if (!_moveableTargetPositionDict.ContainsKey(worldToCellPos))
-            //         {
-            //             _moveableTargetPositionDict[worldToCellPos] = baseObject;
-            //             return worldToCellPos;
-            //         }
-            //     }
-            //
-            //     mutilplier++;
-            // }
-        }
-        
-        public List<Vector3Int> PathFinding(Vector3Int startPosition, Vector3Int destPosition, BaseObject targetObject)
+        public List<Vector3Int> PathFinding(Vector3Int startPosition, Vector3Int destPosition, BaseObject targetObject, int maxDepth = 10)
         {
             // 상하좌우 + 대각선 (8 방향)
             //int[] cost = { 10, 10, 10, 10, 14, 14, 14, 14 }; // 대각선 이동은 비용 14
@@ -201,7 +157,6 @@ namespace Clicker.Manager
                 closePos = startPosition;
             }
 
-            int maxDepth = 10;
             while (!queue.IsEmpty())
             {
                 Node node = queue.Top();
@@ -274,12 +229,13 @@ namespace Clicker.Manager
 
             list.Add(now);
             list.Reverse();
+            Debug.Log($"now {depth} {now} / {destPosition} / {closePos} / {startPosition} / {list.Count}");
             return list;
         }
 
-        private BaseObject GetBaseObject(Vector3Int cellPos)
+        public BaseObject GetBaseObject(Vector3Int cellPos)
         {
-            if (_cellDict.TryGetValue(cellPos, out BaseObject baseObject))
+            if (cellDict.TryGetValue(cellPos, out BaseObject baseObject))
             {
                 return baseObject;
             }
@@ -287,17 +243,20 @@ namespace Clicker.Manager
             return null;
         }
 
-        private bool CanGo(int x, int y, BaseObject targetObject)
+        public bool CanGo(int x, int y, BaseObject targetObject, bool ignoreObject = false)
         {
             if (y < _minY || y > _maxY || x < _minX || x > _maxX)
             {
                 return false;
             }
 
-            BaseObject baseObject = GetBaseObject(new Vector3Int(x, y, 0));
-            if (baseObject != null && baseObject != targetObject)
+            if (!ignoreObject)
             {
-                return false;
+                BaseObject baseObject = GetBaseObject(new Vector3Int(x, y, 0));
+                if (baseObject != null && baseObject != targetObject)
+                {
+                    return false;
+                }
             }
             
             // if (_cellDict.ContainsKey(new Vector3Int(x, y)))

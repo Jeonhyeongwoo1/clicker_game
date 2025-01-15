@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Clicker.Manager;
@@ -12,16 +13,18 @@ namespace Clicker.UI.SubItem
         [SerializeField] private TextMeshProUGUI _stageNameText;
 
         private string _stageName;
+        private Action<string> _onSelectStageAction;
         
-        public void SetInfo(string stageName)
+        public void SetInfo(string stageName, Action<string> onSelectStageAction)
         {
             _stageNameText.text = stageName;
             _stageName = stageName;
+            _onSelectStageAction = onSelectStageAction;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Managers.Map.ChangeStage(_stageName);
+            _onSelectStageAction.Invoke(_stageName);
         }
     }
 }

@@ -56,6 +56,11 @@ namespace Clicker.UI
             }
         }
 
+        public void Destroy()
+        {
+            Managers.Resource.Destroy(gameObject);
+        }
+
         public void SetInfo(Npc owner)
         {
             _owner = owner;

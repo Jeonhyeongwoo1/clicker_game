@@ -62,19 +62,29 @@ namespace Clicker.Controllers
             get
             {
                 //최소범위
-                float radius = (_targetObject.Radius + Radius + 0.1f);//+ 1.0f);
+                float radius = (_targetObject.Radius + Radius);//+ 1.0f);
                 return radius + AttackRange.Value;
+
+                // return AttackRange.Value + _targetObject.Radius;
+            }
+        }
+
+        protected float DistToTargetSqr
+        {
+            get
+            {
+                Vector3 dir = (_targetObject.transform.position - transform.position);
+                float distToTarget = Math.Max(0, dir.magnitude - _targetObject.ExtraSize * 1f - ExtraSize * 1f); // TEMP
+                return distToTarget * distToTarget;
             }
         }
 
         protected override int SortingOrder => Define.SortingLayers.CREATURE;
-
         protected SkillBook _skillBook;
         protected EffectComponent _effectComponent;
         protected CancellationTokenSource _aiCts;
         protected BaseObject _targetObject;
         protected Queue<Vector3Int> _pathQueue = new Queue<Vector3Int>();
-        protected Vector3 _cellPosition;
         [SerializeField] protected Define.CreatureState _creatureState = Define.CreatureState.None;
 
         private Vector3 _endMovePosition;
@@ -84,7 +94,7 @@ namespace Clicker.Controllers
         private Coroutine _coWait = null;
         protected readonly float _chaseDistance = 8f;
         protected readonly float _searchDistance = 8f;
-        private readonly int _distanceToTargetThreshold = 5;
+        protected readonly int _distanceToTargetThreshold = 5;
         
         public override void SetInfo(int id)
         {
@@ -172,11 +182,18 @@ namespace Clicker.Controllers
             }
         }
 
-        public void SetPosition(Vector3 position)
+        public override void SetCellPosition(Vector3Int cellPos, Vector3 cellWorldPos, bool forceMove = false)
         {
-            transform.position = position;
+            base.SetCellPosition(cellPos, cellWorldPos, forceMove);
+            if (forceMove)
+            {
+                if (_pathQueue.Count > 0)
+                {
+                    _pathQueue.Clear();
+                }
+            }
         }
-        
+
         public override void Dead()
         {
             base.Dead();
@@ -232,11 +249,6 @@ namespace Clicker.Controllers
             }
             
             damageFont.SetInfo(transform.position + Vector3.up, finalDamage, null, isCritical);
-        }
-        
-        public void SetFlip(bool leftLook)
-        {
-            _animation.skeleton.ScaleX = leftLook ? -1 : 1;
         }
 
         protected BaseObject FindNearestCreatureInRange(float distance, IEnumerable<BaseObject> objectList)
@@ -382,7 +394,6 @@ namespace Clicker.Controllers
                 return;
             }
             
-               
             foreach (Vector3Int reserveCellPo in _reserveCellPos)
             {
                 Map.RemoveCellPosition(reserveCellPo, this);
@@ -405,12 +416,11 @@ namespace Clicker.Controllers
                 }
             }
             
-            bool isPossibleMove = Map.MoveToCell(position, Map.WorldToCell(_cellPosition), this);
-            if (isPossibleMove)
-            {
-                _cellPosition = Map.CellToWorld(position);
-               
-            }
+            bool isPossibleMove = Map.MoveToCell(position, _cellPosition, this);
+            // if (isPossibleMove)
+            // {
+            //     _cellPosition = position;
+            // }
             
             foreach (Vector3Int reserveCellPo in _reserveCellPos)
             {
@@ -440,6 +450,44 @@ namespace Clicker.Controllers
             return Define.PathFineResultType.Success;
         }
 
+        protected Define.PathFineResultType FindNextPath(BaseObject targetObj, int depth)
+        {
+            if (IsLerp)
+            {
+                return Define.PathFineResultType.Lerp;
+            }
+            
+            Vector3 targetPos = targetObj.transform.position;
+            if ((targetPos - transform.position).sqrMagnitude < _distanceToTargetThreshold)
+            {
+                return Define.PathFineResultType.None;
+            }
+
+            Vector3Int startPosition = CellPosition;
+            Vector3Int destPosition = Map.WorldToCell(targetPos);
+            List<Vector3Int> list = Map.PathFinding(startPosition, destPosition, this, depth);
+            if (list.Count < 2)
+            {
+                return Define.PathFineResultType.Fail;
+            }
+            
+            // _pathQueue = new Queue<Vector3Int>(list);
+            
+            // for (var i = 0; i < list.Count; i++)
+            // {
+            //     Debug.Log($"iii {list[i]} / {i} / {_cellPosition}");
+            // }
+            
+            // Vector3Int dirCellPos = list[1] - CellPosition;
+            //Vector3Int dirCellPos = destCellPos - CellPos;
+            // Vector3Int nextPos = CellPosition + dirCellPos;
+            Vector3Int nextPos = list[1];
+            if(CanMoveToCell(nextPos, _cellPosition))
+                return Define.PathFineResultType.Success;
+            
+            return Define.PathFineResultType.Fail;
+        }
+
         protected Define.PathFineResultType FindPath(BaseObject targetObj, bool forceFindPath = false)
         {
             Vector3 targetPos = targetObj.transform.position;
@@ -449,8 +497,7 @@ namespace Clicker.Controllers
             }
             
             Vector3Int startPosition = Map.WorldToCell(transform.position);
-            Vector3Int destPosition = Map.GetMoveableTargetPosition(targetObj);
-            // Debug.Log($"{destPosition} /{targetObj.name}");
+            Vector3Int destPosition = Map.WorldToCell(targetObj.transform.position);
             List<Vector3Int> list = Map.PathFinding(startPosition, destPosition, this);
             if (list.Count < 2)
             {
@@ -458,12 +505,7 @@ namespace Clicker.Controllers
             }
             
             _pathQueue = new Queue<Vector3Int>(list);
-            _endMovePosition = Map.CellToWorld(list[^1]);
-            if (!forceFindPath)
-            {
-                SetMoveToCellPosition();
-            }
-
+            _pathQueue.Dequeue();
             return Define.PathFineResultType.Success;
         }
 
@@ -473,53 +515,56 @@ namespace Clicker.Controllers
             MoveToCellPosition().Forget();
         }
 
-        protected void StopMoveToCellPosition()
+        protected override void OnDisable()
         {
-            Util.SafeCancelToken(ref _moveCts);
+            base.OnDisable();
+            StopAIProcess();
+            StopMoveToCellPosition();
         }
+
+        #region Effect
+        public void DotDamage(float amount)
+        {
+            float damage = amount;
+            _currentHp -= (int) Mathf.Clamp(damage, 0, damage);
+            if (_currentHp <= 0)
+            {
+                Dead();
+            }
+            
+            ShowDamageFont(damage, false);
+        }
+        #endregion
+
+        protected bool CanMoveToCell(Vector3Int nextPosition, Vector3Int prevPosition)
+        {
+            Vector3 myPos = transform.position;
+            Vector3 cellPos = Managers.Map.CellToWorld(_cellPosition);
+            return Map.MoveToCell(nextPosition, prevPosition, this) && (myPos - cellPos).sqrMagnitude <= 1f;
+        }
+
+        private bool IsLerp = false;
         
         private async UniTaskVoid MoveToCellPosition()
         {
             while (_moveCts != null && _moveCts.IsCancellationRequested == false)
             {
-                if (CreatureState == Define.CreatureState.Attack)
-                {
-                    try
-                    {
-                        await UniTask.Yield(cancellationToken: _moveCts.Token);
-                    }
-                    catch (Exception e) when (e is not OperationCanceledException)
-                    {
-                        Util.SafeCancelToken(ref _moveCts);
-                        return;
-                    }
-                    
-                    continue;
-                }
-
                 Vector3 myPos = transform.position;
-                while ((myPos - _cellPosition).sqrMagnitude >= 1f)
+                Vector3 cellPos = Managers.Map.CellToWorld(_cellPosition);
+                IsLerp = false;
+                while ((myPos - cellPos).sqrMagnitude >= 1f)
                 {
-                    float speed = MoveSpeed.Value;
-                    //일정 거리 이상일 경우에는 스피드를 올려준다.
-                    if ((myPos - _endMovePosition).sqrMagnitude > _distanceToTargetThreshold * 2)
-                    {
-                        speed *= 2f;
-                    }
-
-                    if (ObjectType == Define.EObjectType.Monster)
-                    {
-                        Debug.Log($"{_cellPosition}");
-                    }
-
+                    IsLerp = true;
                     myPos = transform.position;
+                    cellPos = Managers.Map.CellToWorld(_cellPosition);
+                    float multiplier = Mathf.Max(1, (cellPos - myPos).sqrMagnitude / 3);
+                    float speed = MoveSpeed.Value * multiplier;
 
-                    Vector3 dir = _cellPosition - transform.position;
+                    Vector3 dir = cellPos - myPos;
                     //일관성 있게 이동하기 위해서
                     float moveDist = Mathf.Min(dir.magnitude, speed * Time.deltaTime);
                     transform.position += dir.normalized * moveDist;
-                    Vector3 direction = (_cellPosition - myPos).normalized;
-                    SetFlip(Mathf.Sign(direction.x) == 1);
+                    SetFlip(Mathf.Sign(dir.x) == 1);
                     
                     try
                     {
@@ -532,7 +577,7 @@ namespace Clicker.Controllers
                     }
                 }
 
-                SetMoveToCellPosition();
+                // SetMoveToCellPosition();
                
                 try
                 {
@@ -545,33 +590,8 @@ namespace Clicker.Controllers
                 }
             }
         }
-        
-        #region Effect
-        
-        public void DotDamage(float amount)
-        {
-            float damage = amount;
-            _currentHp -= (int) Mathf.Clamp(damage, 0, damage);
-            if (_currentHp <= 0)
-            {
-                Dead();
-            }
-            
-            ShowDamageFont(damage, false);
-        }
 
-        public void Buff()
-        {
-            
-        }
-
-        public void RemoveDotDamage()
-        {
-            
-        }
-
-        #endregion
-
+        public Vector3Int _nextPos;
         public bool useGizmos = false;
         
         private void OnDrawGizmos()
@@ -585,13 +605,32 @@ namespace Clicker.Controllers
             // {
             //     return;
             // }
-
-            Gizmos.color = Color.yellow;
+            //
+            // if (ObjectType == Define.EObjectType.Monster)
+            // {
+            //     Gizmos.color = Color.yellow;
+            //
+            //     Gizmos.DrawSphere(Managers.Map.CellToWorld(_cellPosition), 0.3f);
+            //
+            //     Gizmos.color = Color.red;
+            //     Gizmos.DrawSphere(Managers.Map.CellToWorld(_nextPos), 0.3f);
+            // }
+            //
+            // else
+            // {
+            //     Gizmos.color = Color.gray;
+            //
+            //     Gizmos.DrawSphere(Managers.Map.CellToWorld(_cellPosition), 0.3f);
+            //
+            //     Gizmos.color = Color.green;
+            //     Gizmos.DrawSphere(Managers.Map.CellToWorld(_nextPos), 0.3f);
+            // }
+            
+            Gizmos.color = Color.gray;
             foreach (Vector3Int vector3Int in _pathQueue)
             {
                 Gizmos.DrawSphere(Managers.Map.CellToWorld(vector3Int), 0.3f);
             }
         }
-
     }
 }

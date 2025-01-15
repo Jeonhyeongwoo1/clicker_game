@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using Clicker.Utils;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace Clicker
 {
@@ -24,6 +21,8 @@ namespace Clicker
             OnChangedMap(_currentStageIndex);
         }
 
+        public bool IsInStageInRange(Vector3 position) => _stageList[_currentStageIndex].IsStageInRange(position);
+
         public bool TryChangeStage(string name)
         {
             for (var i = 0; i < _stageList.Count; i++)
@@ -38,17 +37,26 @@ namespace Clicker
             return false;
         }
 
+        public void ChangeStage(Vector3 position)
+        {
+            for (var index = 0; index < _stageList.Count; index++)
+            {
+                var stage = _stageList[index];
+                bool isInStage = stage.IsStageInRange(position);
+                if (isInStage)
+                {
+                    OnChangedMap(index);
+                    break;
+                }
+            }
+        }
+
         public Vector3 GetWayPosition() => _stageList[_currentStageIndex].GetWaypointPosition();
         
         public void OnChangedMap(int stageIndex)
         {
-            //기존에 있는건 모두 끈다
-            foreach (Stage stage in _stageList)
-            {
-                stage.DisableObject();
-            }
+            _currentStageIndex = stageIndex;
 
-            //이전 맵과 다음 맵을 제외한 나머지는 Disable
             for (int i = stageIndex - 1; i <= stageIndex + 1; i++)
             {
                 if (i < 0 || i >= _stageList.Count)
@@ -59,7 +67,15 @@ namespace Clicker
                 _stageList[i].SpawnObject();
             }
 
-            _currentStageIndex = stageIndex;
+            for (int i = 0; i < _stageList.Count; i++)
+            {
+                if (i >= _currentStageIndex - 1 && i <= _currentStageIndex + 1)
+                {
+                    continue;
+                }
+                
+                _stageList[i].DisableObject();
+            }
         }
         
     }

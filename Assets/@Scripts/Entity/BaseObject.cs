@@ -1,9 +1,11 @@
 using System;
 using System.Runtime.Serialization;
+using System.Threading;
 using Clicker.ContentData;
 using Clicker.Controllers;
 using Clicker.Manager;
 using Clicker.Utils;
+using Cysharp.Threading.Tasks;
 using Spine;
 using Spine.Unity;
 using UnityEngine;
@@ -13,7 +15,8 @@ using UnityEngine.Serialization;
 namespace Clicker.Entity
 {
     public class BaseObject : MonoBehaviour
-    {
+    {    
+        public Vector3Int CellPosition => _cellPosition;
         public int ExtraSize { get; set; }
         public float Radius => _collider2D.radius;
         public Define.EObjectType ObjectType => objectType;
@@ -28,8 +31,9 @@ namespace Clicker.Entity
 
         protected Define.EObjectType objectType;
         protected int _id;
-        protected Vector3 _spawnPosition;
-        
+        protected Vector3Int _spawnPosition;
+        [SerializeField] protected Vector3Int _cellPosition;
+        private CancellationTokenSource _moveCts;
         private HurtFlashEffect _hurtFlashEffect;
         
         public virtual bool Init(Define.EObjectType eObjectType)
@@ -62,9 +66,9 @@ namespace Clicker.Entity
         public virtual void Spawn(Vector3 spawnPosition)
         {
             Vector3Int spawnPos = Managers.Map.WorldToCell(spawnPosition);
-            Managers.Map.SetCellPosition(spawnPos, this);
-            _spawnPosition = Managers.Map.CellToWorld(spawnPos);
-            transform.position = _spawnPosition;
+            Managers.Map.MoveToCell(spawnPos, Vector3Int.zero, this, true);
+            _spawnPosition = spawnPos;
+            // transform.position = spawnPosition;
         }
 
         public virtual void Dead()
@@ -73,6 +77,21 @@ namespace Clicker.Entity
 
         protected virtual void UpdateAnimation()
         {
+        }
+        
+        public virtual void SetCellPosition(Vector3Int cellPos, Vector3 cellWorldPos, bool forceMove = false)
+        {
+            _cellPosition = cellPos;
+
+            if (ObjectType == Define.EObjectType.Hero)
+            {
+                Debug.LogError($"{cellWorldPos} / {cellPos}");
+            }
+            // Debug.LogError($"{transform.GetInstanceID()} / {cellPos} / {cellWorldPos} / {forceMove}");
+            if (forceMove)
+            {
+                transform.position = cellWorldPos;
+            }
         }
 
         protected void SetSpinAnimation(string id)
@@ -131,17 +150,27 @@ namespace Clicker.Entity
             switch (creatureState)
             {
                 case Define.CreatureState.Idle:
-                    return 0.5f;
+                    return 0.1f;
                 case Define.CreatureState.Move:
-                    return 0.1f;
+                    return 0.0f;
                 case Define.CreatureState.Attack:
-                    return 0.3f;
-                case Define.CreatureState.Dead:
                     return 0.1f;
+                case Define.CreatureState.Dead:
+                    return 0.3f;
             }
 
             //default
             return 0.5f;
+        }
+        
+        protected void StopMoveToCellPosition()
+        {
+            Util.SafeCancelToken(ref _moveCts);
+        }
+        
+        public void SetFlip(bool leftLook)
+        {
+            _animation.skeleton.ScaleX = leftLook ? -1 : 1;
         }
     }
 }

@@ -16,7 +16,17 @@ namespace Clicker.Controllers
         private NpcData _npcData;
         private Define.ENpcType _npcType;
         private UI_NpcInteraction _uiNpcInteraction;
-        
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            if (_uiNpcInteraction)
+            {
+                _uiNpcInteraction.Destroy();
+            }
+        }
+
         public override void SetInfo(int id)
         {
             // base.SetInfo(id);
@@ -24,6 +34,7 @@ namespace Clicker.Controllers
             _npcData = Managers.Data.NPCDataDict[id];
             _npcType = _npcData.NpcType;
             SetSpinAnimation(_npcData.SkeletonDataID);
+            PlayAnimation(0, Define.AnimationName.Idle, true);
 
             GameObject prefab = Managers.Resource.Instantiate(nameof(UI_NpcInteraction));
             if (!prefab.TryGetComponent(out UI_NpcInteraction uiNpcInteraction))

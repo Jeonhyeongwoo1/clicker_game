@@ -64,6 +64,12 @@ namespace Clicker.Entity
             {
                 transform.position = movePosition;
                 _movePosition = movePosition;
+
+                bool isInStage = Managers.Map.StageTranslation.IsInStageInRange(movePosition);
+                if (!isInStage)
+                {
+                    Managers.Map.StageTranslation.ChangeStage(_movePosition);
+                }
             }
             
             float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg - 90;

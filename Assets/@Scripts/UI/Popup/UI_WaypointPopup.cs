@@ -44,8 +44,14 @@ namespace Clicker.UI.Popup
             {
                 var stageItem = Managers.UI.MakeSubItem<UI_StageItem>(_scrollRect.content);
                 _subItemList.Add(stageItem);
-                stageItem.SetInfo(stage.name);
+                stageItem.SetInfo(stage.name, OnSelectStage);
             }
+        }
+
+        private void OnSelectStage(string stageName)
+        {
+            Managers.Game.TeleportHeros(stageName);
+            ClosePopupUI();
         }
     }
 }
