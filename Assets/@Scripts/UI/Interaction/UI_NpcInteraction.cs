@@ -36,7 +36,11 @@ namespace Clicker.UI
         {
             switch (_owner.NpcType)
             {
-                case Define.ENpcType.Camp:
+                case Define.ENpcType.None:
+                    break;
+                case Define.ENpcType.StartPosition:
+                    break;
+                case Define.ENpcType.Guild:
                     break;
                 case Define.ENpcType.Portal:
                     break;
@@ -46,11 +50,23 @@ namespace Clicker.UI
                     break;
                 case Define.ENpcType.BlackSmith:
                     break;
-                case Define.ENpcType.Guild:
+                case Define.ENpcType.Training:
                     break;
                 case Define.ENpcType.TreasureBox:
                     break;
                 case Define.ENpcType.Dungeon:
+                    break;
+                case Define.ENpcType.Quest:
+                    break;
+                case Define.ENpcType.GoldStorage:
+                    break;
+                case Define.ENpcType.WoodStorage:
+                    break;
+                case Define.ENpcType.MineralStorage:
+                    break;
+                case Define.ENpcType.Exchange:
+                    break;
+                case Define.ENpcType.RuneStone:
                     break;
             }
         }

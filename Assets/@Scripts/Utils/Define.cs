@@ -177,13 +177,21 @@ namespace Clicker.Utils
 
 		public enum ENpcType
 		{
-			Camp,
+			None,
+			StartPosition,
+			Guild,
 			Portal,
 			Waypoint,
 			BlackSmith,
-			Guild,
+			Training,
 			TreasureBox,
-			Dungeon
+			Dungeon,
+			Quest,
+			GoldStorage,
+			WoodStorage,
+			MineralStorage,
+			Exchange,
+			RuneStone,
 		}
 		
 		public enum GoodsItemType
@@ -222,13 +230,6 @@ namespace Clicker.Utils
 			Inventory = 100, 
 			WareHouse = 200
 		}
-		
-		public enum QuestType
-		{
-			KillMonster,
-			AddMeat
-		}
-
 		public enum EItemSubType
 		{
 			None,
@@ -249,6 +250,74 @@ namespace Clicker.Utils
 			HealthPotion,
 			ManaPotion,
 		}
+		
+		public enum EQuestPeriodType
+		{
+			Once, // 단발성
+			Daily,
+			Weekly,
+			Infinite, // 무한으로
+		}
+
+		public enum EQuestCondition
+		{
+			None,
+			Level,
+			ItemLevel,
+		}
+
+		public enum EQuestStateType
+		{
+			None,
+			Waiting,
+			OnGoing,
+			Completed,
+			Rewarded
+		}
+
+		public enum EQuestObjectiveType
+		{
+			KillMonster,
+			EarnMeat,
+			SpendMeat,
+			EarnWood,
+			SpendWood,
+			EarnMineral,
+			SpendMineral,
+			EarnGold,
+			SpendGold,
+			UseItem,
+			Survival,
+			ClearDungeon
+		}
+
+		public enum EQuestRewardType
+		{
+			Hero,
+			Gold,
+			Mineral,
+			Meat,
+			Wood,
+			Item,
+		}
+		
+		public enum EBroadcastEventType
+		{
+			None,
+			ChangeMeat,
+			ChangeWood,
+			ChangeMineral,
+			ChangeGold,
+			ChangeDia,
+			ChangeMaterials,
+			KillMonster,
+			LevelUp,
+			DungeonClear,
+			ChangeInventory,
+			ChangeCrew,
+			QuestClear,
+		}
+
 		
 		public class AnimationName
 		{
@@ -281,5 +350,7 @@ namespace Clicker.Utils
 		public const float EFFECT_SMALL_RADIUS = 2.5f;
 		public const float EFFECT_NORMAL_RADIUS = 4.5f;
 		public const float EFFECT_BIG_RADIUS = 5.5f;
+
+		public const float GAME_DATA_SAVE_TIME = 3;
 	}
 }

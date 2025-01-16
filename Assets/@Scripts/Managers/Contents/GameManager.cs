@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using Clicker.Controllers;
 using Clicker.Utils;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Clicker.Manager
@@ -24,9 +28,17 @@ namespace Clicker.Manager
     public class QuestSaveData
     {
         public int dataId;
-        public int questType;
+        public int currentTaskIndex;
+        [FormerlySerializedAs("questTaskDataList")] public List<QuestTaskSaveData> taskDataList = new ();
+        public Define.EQuestStateType stateType = Define.EQuestStateType.OnGoing;
+    }
+
+    [Serializable]
+    public class QuestTaskSaveData
+    {
+        public Define.EQuestStateType stateType = Define.EQuestStateType.Waiting;
+        public int objectiveDataId;
         public int currentValue;
-        public int achievementValue;
     }
 
     [Serializable]
@@ -36,6 +48,7 @@ namespace Clicker.Manager
         public int Mineral = 0;
         public int Meat = 0;
         public int Gold = 0;
+        public int Dia = 0;
 
         public int DbId = 0;
         public List<HeroSaveData> Heroes = new List<HeroSaveData>();
@@ -62,18 +75,91 @@ namespace Clicker.Manager
     public class GameManager
     {
 
-        public long Dia;
-        public long BattlePower;
-        public long Gold;
-        public int Wood;
-        public int Mineral;
-        public int Meat;
+        public int Dia
+        {
+            get => GameSaveData.Dia;
+            set
+            {
+                GameSaveData.Dia = value;
+                OnHandleBroadcastEventAction.Invoke(Define.EBroadcastEventType.ChangeDia, value);
+            } 
+        }
+
+        public int Gold
+        {
+            get=> GameSaveData.Gold;
+            set
+            {
+                GameSaveData.Gold = value;
+                OnHandleBroadcastEventAction.Invoke(Define.EBroadcastEventType.ChangeGold, value);
+            } 
+        }
+
+        public int Wood
+        {
+            get => GameSaveData.Wood;
+            set
+            {
+                GameSaveData.Wood = value;
+                OnHandleBroadcastEventAction.Invoke(Define.EBroadcastEventType.ChangeWood, value);
+            } 
+        }
+
+        public int Mineral
+        {
+            get => GameSaveData.Mineral;
+            set
+            {
+                GameSaveData.Mineral = value; 
+                OnHandleBroadcastEventAction.Invoke(Define.EBroadcastEventType.ChangeMineral, value);
+            }
+        }
+
+        public int Meat
+        {
+            get => GameSaveData.Meat;
+            set
+            {
+                GameSaveData.Meat = value;
+                OnHandleBroadcastEventAction.Invoke(Define.EBroadcastEventType.ChangeMeat, value);
+            }
+        }
         
+        public Action<Define.EBroadcastEventType, int> OnHandleBroadcastEventAction;
+        
+        public int BattlePower;        
         public List<Creature> HeroList;
+        private CancellationTokenSource _autoSaveGameDataCts;
 
         public void InitGame()
         {
-            
+            ReloadAutoSaveGameDataAsync();
+            Managers.Inventory.Initialize();
+            Managers.Quest.Initialize();
+        }
+
+        private void ReloadAutoSaveGameDataAsync()
+        {
+            Util.SafeAllocateToken(ref _autoSaveGameDataCts);
+            AutoSaveGameDataAsync().Forget();
+        }
+
+        private async UniTaskVoid AutoSaveGameDataAsync()
+        {
+            while (_autoSaveGameDataCts != null && !_autoSaveGameDataCts.IsCancellationRequested)
+            {
+                try
+                {
+                    await UniTask.WaitForSeconds(Define.GAME_DATA_SAVE_TIME);
+                }
+                catch (Exception e)
+                {
+                    ReloadAutoSaveGameDataAsync();
+                    break;
+                }
+                
+                SaveGameData();
+            }
         }
         
         #region GameData

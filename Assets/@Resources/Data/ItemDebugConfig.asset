@@ -12,4 +12,2183 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af1566d0ba174e3b99c3a41ba239e1b7, type: 3}
   m_Name: ItemDebugConfig
   m_EditorClassIdentifier: 
-  itemDataList: []
+  _questList:
+  - DataId: 1
+    Name: "\uD074\uB85C\uC774 \uAD6C\uD558\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 0
+    QuestTasks:
+    - ObjectiveType: 2
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 0
+      RewardDataId: 201000
+      RewardCount: 1
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 2
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 4
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 3
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 2
+    Name: "\uBAAC\uC2A4\uD130\uC8FD\uC774\uAE30"
+    DescriptionTextId: KilledMonsterDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 0
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 3
+    Name: "\uBAAC\uC2A4\uD130\uC8FD\uC774\uAE30"
+    DescriptionTextId: KilledMonsterDescription
+    QuestPeriodType: 2
+    QuestTasks:
+    - ObjectiveType: 0
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 2
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 4
+    Name: "\uACE8\uB4DC\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedGoldObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 120
+  - DataId: 5
+    Name: "\uACE8\uB4DC\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedGoldObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 100
+    Rewards:
+    - RewardType: 4
+      RewardDataId: 0
+      RewardCount: 10
+  - DataId: 6
+    Name: "\uC2DD\uB7C9\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 7
+    Name: "\uC2DD\uB7C9\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 20
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 8
+    Name: "\uB358\uC804\uD074\uB9AC\uC5B4"
+    DescriptionTextId: dungeon
+    QuestPeriodType: 0
+    QuestTasks:
+    - ObjectiveType: 11
+      ObjectiveDataId: 0
+      ObjectiveCount: 1
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 1
+    Name: "\uD074\uB85C\uC774 \uAD6C\uD558\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 0
+    QuestTasks:
+    - ObjectiveType: 2
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 0
+      RewardDataId: 201000
+      RewardCount: 1
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 2
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 4
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 3
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 2
+    Name: "\uBAAC\uC2A4\uD130\uC8FD\uC774\uAE30"
+    DescriptionTextId: KilledMonsterDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 0
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 3
+    Name: "\uBAAC\uC2A4\uD130\uC8FD\uC774\uAE30"
+    DescriptionTextId: KilledMonsterDescription
+    QuestPeriodType: 2
+    QuestTasks:
+    - ObjectiveType: 0
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 2
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 4
+    Name: "\uACE8\uB4DC\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedGoldObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 120
+  - DataId: 5
+    Name: "\uACE8\uB4DC\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedGoldObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 100
+    Rewards:
+    - RewardType: 4
+      RewardDataId: 0
+      RewardCount: 10
+  - DataId: 6
+    Name: "\uC2DD\uB7C9\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 7
+    Name: "\uC2DD\uB7C9\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 20
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 8
+    Name: "\uB358\uC804\uD074\uB9AC\uC5B4"
+    DescriptionTextId: dungeon
+    QuestPeriodType: 0
+    QuestTasks:
+    - ObjectiveType: 11
+      ObjectiveDataId: 0
+      ObjectiveCount: 1
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 1
+    Name: "\uD074\uB85C\uC774 \uAD6C\uD558\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 0
+    QuestTasks:
+    - ObjectiveType: 2
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 0
+      RewardDataId: 201000
+      RewardCount: 1
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 2
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 4
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 3
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 2
+    Name: "\uBAAC\uC2A4\uD130\uC8FD\uC774\uAE30"
+    DescriptionTextId: KilledMonsterDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 0
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 3
+    Name: "\uBAAC\uC2A4\uD130\uC8FD\uC774\uAE30"
+    DescriptionTextId: KilledMonsterDescription
+    QuestPeriodType: 2
+    QuestTasks:
+    - ObjectiveType: 0
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 2
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 4
+    Name: "\uACE8\uB4DC\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedGoldObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 120
+  - DataId: 5
+    Name: "\uACE8\uB4DC\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedGoldObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 100
+    Rewards:
+    - RewardType: 4
+      RewardDataId: 0
+      RewardCount: 10
+  - DataId: 6
+    Name: "\uC2DD\uB7C9\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 7
+    Name: "\uC2DD\uB7C9\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 20
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 8
+    Name: "\uB358\uC804\uD074\uB9AC\uC5B4"
+    DescriptionTextId: dungeon
+    QuestPeriodType: 0
+    QuestTasks:
+    - ObjectiveType: 11
+      ObjectiveDataId: 0
+      ObjectiveCount: 1
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 1
+    Name: "\uD074\uB85C\uC774 \uAD6C\uD558\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 0
+    QuestTasks:
+    - ObjectiveType: 2
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 0
+      RewardDataId: 201000
+      RewardCount: 1
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 2
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 4
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 3
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 2
+    Name: "\uBAAC\uC2A4\uD130\uC8FD\uC774\uAE30"
+    DescriptionTextId: KilledMonsterDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 0
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 3
+    Name: "\uBAAC\uC2A4\uD130\uC8FD\uC774\uAE30"
+    DescriptionTextId: KilledMonsterDescription
+    QuestPeriodType: 2
+    QuestTasks:
+    - ObjectiveType: 0
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 2
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 4
+    Name: "\uACE8\uB4DC\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedGoldObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 120
+  - DataId: 5
+    Name: "\uACE8\uB4DC\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedGoldObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 100
+    Rewards:
+    - RewardType: 4
+      RewardDataId: 0
+      RewardCount: 10
+  - DataId: 6
+    Name: "\uC2DD\uB7C9\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 7
+    Name: "\uC2DD\uB7C9\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 20
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 8
+    Name: "\uB358\uC804\uD074\uB9AC\uC5B4"
+    DescriptionTextId: dungeon
+    QuestPeriodType: 0
+    QuestTasks:
+    - ObjectiveType: 11
+      ObjectiveDataId: 0
+      ObjectiveCount: 1
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 1
+    Name: "\uD074\uB85C\uC774 \uAD6C\uD558\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 0
+    QuestTasks:
+    - ObjectiveType: 2
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 0
+      RewardDataId: 201000
+      RewardCount: 1
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 2
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 4
+      RewardDataId: 0
+      RewardCount: 100
+    - RewardType: 3
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 2
+    Name: "\uBAAC\uC2A4\uD130\uC8FD\uC774\uAE30"
+    DescriptionTextId: KilledMonsterDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 0
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 3
+    Name: "\uBAAC\uC2A4\uD130\uC8FD\uC774\uAE30"
+    DescriptionTextId: KilledMonsterDescription
+    QuestPeriodType: 2
+    QuestTasks:
+    - ObjectiveType: 0
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 2
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 4
+    Name: "\uACE8\uB4DC\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedGoldObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 120
+  - DataId: 5
+    Name: "\uACE8\uB4DC\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedGoldObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 100
+    Rewards:
+    - RewardType: 4
+      RewardDataId: 0
+      RewardCount: 10
+  - DataId: 6
+    Name: "\uC2DD\uB7C9\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 10
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 7
+    Name: "\uC2DD\uB7C9\uBAA8\uC73C\uAE30"
+    DescriptionTextId: EarnedMeatObjectiveDescription
+    QuestPeriodType: 1
+    QuestTasks:
+    - ObjectiveType: 1
+      ObjectiveDataId: 0
+      ObjectiveCount: 20
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  - DataId: 8
+    Name: "\uB358\uC804\uD074\uB9AC\uC5B4"
+    DescriptionTextId: dungeon
+    QuestPeriodType: 0
+    QuestTasks:
+    - ObjectiveType: 11
+      ObjectiveDataId: 0
+      ObjectiveCount: 1
+    Rewards:
+    - RewardType: 1
+      RewardDataId: 0
+      RewardCount: 100
+  itemDataList:
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5
+  - Name: TestPotionID
+    ItemGroupType: 2
+    Type: 3
+    SubType: 11
+    Grade: 1
+    MaxStack: 10
+    DataId: 6
+  - Name: TestDaggerID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 2
+    Grade: 1
+    MaxStack: 1
+    DataId: 1
+  - Name: TestSwordID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 1
+    Grade: 2
+    MaxStack: 1
+    DataId: 2
+  - Name: TestBowID
+    ItemGroupType: 1
+    Type: 1
+    SubType: 3
+    Grade: 3
+    MaxStack: 1
+    DataId: 3
+  - Name: TestHelmetID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 4
+    Grade: 1
+    MaxStack: 1
+    DataId: 4
+  - Name: TestArmorID
+    ItemGroupType: 1
+    Type: 2
+    SubType: 5
+    Grade: 1
+    MaxStack: 1
+    DataId: 5

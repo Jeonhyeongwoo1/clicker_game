@@ -11,6 +11,7 @@ namespace Clicker.Manager
     {
         public IReadOnlyDictionary<int, BaseItem> EquippedItemDict => _equipItemDict;
         public IReadOnlyList<BaseItem> AllItemList => _allItemList;
+        public IReadOnlyList<BaseItem> InventoryItemList => _inventoryItemList;
         
         //모든 아이템
         private readonly List<BaseItem> _allItemList = new();
@@ -20,6 +21,41 @@ namespace Clicker.Manager
         private readonly List<BaseItem> _warehouseItemList = new();
         //착용중인 장비 아이템
         private readonly Dictionary<int, BaseItem> _equipItemDict = new();
+        
+        public void Initialize()
+        {
+            List<ItemSaveData> itemSaveDataList = Managers.Game.GameSaveData.Items;
+            foreach (ItemSaveData itemSaveData in itemSaveDataList)
+            {
+                ItemData itemData = Managers.Data.ItemDataDict[itemSaveData.dataId];
+                if ((int)Define.EItemType.Weapon <= itemSaveData.slotId &&
+                    (int)Define.EItemType.Boots >= itemSaveData.slotId)
+                {
+                    //Equip
+                    EquipItem equipItem = new EquipItem(itemData, itemSaveData);
+                    if (equipItem.IsEquipped)
+                    {
+                        _equipItemDict.Add((int)equipItem.ItemType, equipItem);
+                    }
+                    else
+                    {
+                        _inventoryItemList.Add(equipItem);
+                    }
+                }
+                else if ((int)Define.EItemType.Inventory == itemSaveData.slotId)
+                {
+                    BaseItem item = new BaseItem(itemData, itemSaveData);
+                    _inventoryItemList.Add(item);
+                }
+                else if ((int)Define.EItemType.WareHouse == itemSaveData.slotId)
+                {
+                    BaseItem item = new BaseItem(itemData, itemSaveData);
+                    _warehouseItemList.Add(item);
+                }
+            }
+
+            SetEquipStat();
+        }
         
         public void UseConsumableItem(ConsumableItem consumableItem)
         {
@@ -77,35 +113,6 @@ namespace Clicker.Manager
                     cItem.AddConsumable();
                     break;
             }
-        }
-        
-        public void LoadSaveItem()
-        {
-            List<ItemSaveData> itemSaveDataList = Managers.Game.GameSaveData.Items;
-            foreach (ItemSaveData itemSaveData in itemSaveDataList)
-            {
-                ItemData itemData = Managers.Data.ItemDataDict[itemSaveData.dataId];
-                switch(itemData.ItemGroupType)
-                {
-                    case Define.EItemGroupType.Equipment:
-                        EquipItem equipItem = new EquipItem(itemData, itemSaveData);
-                        if (equipItem.IsEquipped)
-                        {
-                            _equipItemDict.Add((int)equipItem.ItemType, equipItem);
-                        }
-                        else
-                        {
-                            _inventoryItemList.Add(equipItem);
-                        }
-                        
-                        break;
-                    case Define.EItemGroupType.Consumable:
-                        
-                        break;
-                }
-            }
-
-            SetEquipStat();
         }
 
         private void SetEquipStat()

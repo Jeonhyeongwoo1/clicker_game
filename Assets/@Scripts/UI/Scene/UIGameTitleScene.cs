@@ -30,11 +30,10 @@ namespace Clicker.Scene
 					bool isLoadedGameData = Managers.Game.LoadGameData();
 					if (!isLoadedGameData)
 					{
-						Managers.Game.InitGame();
 						Managers.Game.SaveGameData();
 					}
 					
-					Managers.Inventory.LoadSaveItem();
+					Managers.Game.InitGame();
 					Managers.Scene.LoadScene(Define.EScene.GameScene);
 				}
 			});

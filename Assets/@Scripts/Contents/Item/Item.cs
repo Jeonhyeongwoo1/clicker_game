@@ -1,7 +1,6 @@
 using Clicker.ContentData;
 using Clicker.Manager;
 using Clicker.Utils;
-using Sirenix.Utilities.Editor;
 
 namespace Scripts.Contents
 {

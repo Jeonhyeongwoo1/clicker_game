@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Clicker.Manager;
 using UnityEngine;
 using Clicker.ContentData;
+using QuestData = Clicker.ContentData.QuestData;
 
 namespace Clicker.Manger
 {
@@ -29,6 +30,7 @@ namespace Clicker.Manger
 		public Dictionary<int, ItemEquipmentData> ItemEquipmentDataDict { get; set; }
 		public Dictionary<int, DropTableData> DropTableDataDict { get; set; }
 		public Dictionary<int, ItemData> ItemDataDict { get; set; }
+		public Dictionary<int, QuestData> QuestDataDict { get; set; }
 		
 		public void Init()
 		{
@@ -45,7 +47,8 @@ namespace Clicker.Manger
 			ItemConsumableDataDict = LoadJson<ItemConsumableDataLoader, int, ItemConsumableData>("Item_ConsumableData").MakeDict();
 			ItemEquipmentDataDict = LoadJson<ItemEquipmentDataLoader, int, ItemEquipmentData>("Item_EquipmentData").MakeDict();
 			DropTableDataDict = LoadJson<DropTableDataLoader, int, DropTableData>("DropTableData").MakeDict();
-
+			QuestDataDict = LoadJson<QuestDataLoader, int, QuestData>("QuestData").MakeDict();
+			
 			ItemDataDict = new Dictionary<int, ItemData>();
 			foreach (var (key, value) in ItemConsumableDataDict)
 			{
