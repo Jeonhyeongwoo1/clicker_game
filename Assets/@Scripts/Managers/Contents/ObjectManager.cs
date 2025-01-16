@@ -28,6 +28,7 @@ namespace Clicker.Manager
         private readonly HashSet<EffectBase> _effectSet = new();
         private readonly HashSet<BaseAoE> _aoeSet = new();
         private readonly HashSet<Npc> _npcSet = new();
+        private readonly HashSet<ItemHolder> _itemHolderSet = new();
         
         private HeroCamp _heroCamp;
         
@@ -73,6 +74,10 @@ namespace Clicker.Manager
                 case Define.EObjectType.Npc:
                     Npc npc = baseObject as Npc;
                     _npcSet.Add(npc);
+                    break;
+                case Define.EObjectType.Item:
+                    ItemHolder itemHolder = baseObject as ItemHolder;
+                    _itemHolderSet.Add(itemHolder);
                     break;
             }
 
@@ -201,7 +206,6 @@ namespace Clicker.Manager
             //Drop
             var item = CreateObject<ItemHolder>(Define.EObjectType.Item, itemData.DataId);
             item.Spawn(spawnPos);
-            Debug.LogError("Spawn");
             return item;
         }
     }
