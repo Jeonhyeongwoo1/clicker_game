@@ -15,10 +15,13 @@ namespace Clicker.Manager
 		private ObjectManager _object = new ObjectManager();
 		private GameManager _game = new GameManager();
 		private MapManager _map = new MapManager();
+		private InventoryManager _inventory = new InventoryManager();
 
 		public static ObjectManager Object => Instance?._object;
 		public static GameManager Game => Instance?._game;
 		public static MapManager Map => Instance?._map;
+		public static InventoryManager Inventory => Instance?._inventory;
+		
 		#endregion
 		
 		#region Core
@@ -28,15 +31,16 @@ namespace Clicker.Manager
 		private SceneManagerEx _scene = new SceneManagerEx();
 		private SoundManager _sound = new SoundManager();
 		private UIManager _ui = new UIManager();
+		private QuestManager _quest = new QuestManager();
 
-		public static DataManager Data { get { return Instance?._data; } }
-		public static PoolManager Pool { get { return Instance?._pool; } }
-		public static ResourceManager Resource { get { return Instance?._resource; } }
-		public static SceneManagerEx Scene { get { return Instance?._scene; } }
-		public static SoundManager Sound { get { return Instance?._sound; } }
-		public static UIManager UI { get { return Instance?._ui; } }
+		public static DataManager Data => Instance?._data;
+		public static PoolManager Pool => Instance?._pool;
+		public static ResourceManager Resource => Instance?._resource;
+		public static SceneManagerEx Scene => Instance?._scene;
+		public static SoundManager Sound => Instance?._sound;
+		public static UIManager UI => Instance?._ui;
+		public static QuestManager Quest => Instance?._quest;
 		#endregion
-
 		
 		#region Language
 		public Define.ELangauge Langauge => _langauge;
@@ -52,7 +56,7 @@ namespace Clicker.Manager
 			return "FAIL!!!!!!!!!!";
 		}
 		#endregion
-
+		
 		public static void Init()
 		{
 			if (s_instance == null)

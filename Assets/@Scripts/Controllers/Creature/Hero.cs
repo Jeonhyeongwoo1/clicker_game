@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using Clicker.ContentData;
 using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
 using Scripts;
+using Scripts.Contents;
 using Spine;
 using UnityEngine;
 
@@ -18,7 +20,7 @@ namespace Clicker.Controllers
                 _heroMoveState = value;
             }
         }
-        
+
         [SerializeField] private Define.HeroMoveState _heroMoveState;
         
         public override void Spawn(Vector3 spawnPosition)

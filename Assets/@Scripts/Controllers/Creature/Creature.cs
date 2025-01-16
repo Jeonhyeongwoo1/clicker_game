@@ -9,6 +9,7 @@ using Clicker.Manager;
 using Clicker.Skill;
 using Clicker.Utils;
 using Cysharp.Threading.Tasks;
+using Scripts.Contents;
 using Sirenix.OdinInspector;
 using Spine;
 using UnityEngine;
@@ -53,7 +54,7 @@ namespace Clicker.Controllers
         [SerializeField][ReadOnly] protected CreatureStat _attackSpeedRate;
         [SerializeField][ReadOnly] protected CreatureStat _lifeStealRate;
 
-        protected float _currentHp;
+        [SerializeField][ReadOnly] protected float _currentHp;
         protected CreatureData _creatureData;
   
         #endregion
@@ -97,7 +98,7 @@ namespace Clicker.Controllers
         protected readonly float _chaseDistance = 8f;
         protected readonly float _searchDistance = 8f;
         protected readonly int _distanceToTargetThreshold = 5;
-        
+
         public override void SetInfo(int id)
         {
             base.SetInfo(id);
@@ -126,6 +127,48 @@ namespace Clicker.Controllers
             _skillBook.AddSkill(_creatureData.SkillAId, Define.SkillType.SkillA);
             _skillBook.AddSkill(_creatureData.SkillBId, Define.SkillType.SkillB);
             ChangeState(Define.CreatureState.Idle);
+        }
+
+        private StatModifer _damageModifer;
+        private StatModifer _defenseModifer;
+        private StatModifer _speedModifer;
+        
+        public virtual void SetEquipStat(List<EquipItem> equippedItemList)
+        {
+            int damage = 0;
+            int defense = 0;
+            int speed = 0;
+            
+            foreach (EquipItem equipItem in equippedItemList)
+            {
+                damage += equipItem.Damage;
+                speed += equipItem.Speed;
+                defense += equipItem.Defence;
+            }
+
+            if (_damageModifer != null)
+            {
+                Atk.RemoveStat(_damageModifer);
+            }
+
+            if (_defenseModifer != null)
+            {
+                ReduceDamageRate.RemoveStat(_defenseModifer);
+            }
+
+            if (_speedModifer != null)
+            {
+                MoveSpeed.RemoveStat(_speedModifer);
+            }
+
+            _defenseModifer = new StatModifer(Define.EStatModType.Add, defense, this, 0);
+            _speedModifer = new StatModifer(Define.EStatModType.Add, speed, this, 0);
+            _damageModifer = new StatModifer(Define.EStatModType.Add, damage, this, 0);
+            Atk.AddStat(_damageModifer);
+            ReduceDamageRate.AddStat(_defenseModifer);
+            MoveSpeed.AddStat(_speedModifer);
+            
+            Debug.LogError($"{damage} / {speed} / {defense}");
         }
 
         public override void Spawn(Vector3 spawnPosition)
@@ -219,7 +262,7 @@ namespace Clicker.Controllers
         {
             base.TakeDamage(attacker, skillData);
             
-            float damage = attacker.Atk.Value * skillData.DamageMultiplier + attacker.AtkBonus.Value;
+            float damage = (attacker.Atk.Value ) * skillData.DamageMultiplier + attacker.AtkBonus.Value;
             bool isCritical = Random.value >= CriRate.Value;
             float finalDamage = isCritical ? damage * CriDamage.Value : damage;
             
@@ -235,6 +278,43 @@ namespace Clicker.Controllers
             if (skillData != null && skillData.AoEId != 0)
             {
                 _skillBook.ExecuteAoESkill(transform.position, skillData);
+            }
+        }
+
+        protected CancellationTokenSource _healCts;
+        
+        public void Heal(ItemConsumableData itemData)
+        {
+            Util.SafeAllocateToken(ref _healCts);
+            HealAsync(itemData).Forget();
+        }
+
+        private async UniTaskVoid HealAsync(ItemConsumableData itemData)
+        {
+            float elapsed = 0;
+            while (elapsed < itemData.CoolTime)
+            {
+                elapsed += Time.deltaTime;
+         
+                switch (itemData.SubType)
+                {
+                    case Define.EItemSubType.HealthPotion:
+                        _currentHp += itemData.Value;
+                        _currentHp = Mathf.Clamp(_currentHp, 0, _maxHp.Value);
+                        break;
+                    case Define.EItemSubType.ManaPotion:
+                        break;
+                }
+                
+                try
+                {
+                    await UniTask.Yield(_healCts.Token);
+                }
+                catch (Exception e)
+                {
+                    LogUtils.LogError($"{nameof(HealAsync)} / {e.Message}");
+                    break;
+                }
             }
         }
 
@@ -601,8 +681,7 @@ namespace Clicker.Controllers
                 }
             }
         }
-
-        public Vector3Int _nextPos;
+        
         public bool useGizmos = false;
         
         private void OnDrawGizmos()

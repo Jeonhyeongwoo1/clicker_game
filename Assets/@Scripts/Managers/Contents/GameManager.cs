@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Clicker.Controllers;
-using Clicker.Entity;
 using Clicker.Utils;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -10,6 +9,25 @@ using Random = UnityEngine.Random;
 
 namespace Clicker.Manager
 {
+    [Serializable]
+    public class ItemSaveData
+    {
+        public int dataId;
+        public int dbId;
+        public int count = 1;
+        public int slotId;
+        public int instanceId;
+        public bool isEquipped;
+    }
+
+    [Serializable]
+    public class QuestSaveData
+    {
+        public int dataId;
+        public int questType;
+        public int currentValue;
+        public int achievementValue;
+    }
 
     [Serializable]
     public class GameSaveData
@@ -19,7 +37,10 @@ namespace Clicker.Manager
         public int Meat = 0;
         public int Gold = 0;
 
+        public int DbId = 0;
         public List<HeroSaveData> Heroes = new List<HeroSaveData>();
+        public List<ItemSaveData> Items = new List<ItemSaveData>();
+        public List<QuestSaveData> Quests = new List<QuestSaveData>();
     }
 
     [Serializable]
@@ -56,8 +77,13 @@ namespace Clicker.Manager
         }
         
         #region GameData
-        public GameSaveData GameData => _gameSaveData;
-        private GameSaveData _gameSaveData;
+        public GameSaveData GameSaveData
+        {
+            get => _gameSaveSaveData;
+            private set => _gameSaveSaveData = value;
+        }
+        
+        private GameSaveData _gameSaveSaveData = new GameSaveData();
         
         #endregion
 
@@ -66,7 +92,7 @@ namespace Clicker.Manager
         public string Path { get { return Application.persistentDataPath + "/SaveData.json"; } }
         public void SaveGameData()
         {
-            string jsonData = JsonConvert.SerializeObject(_gameSaveData, Formatting.Indented);
+            string jsonData = JsonConvert.SerializeObject(GameSaveData, Formatting.Indented);
 
             try
             {
@@ -81,7 +107,7 @@ namespace Clicker.Manager
 
         public bool LoadGameData()
         {
-            if (File.Exists(Path))
+            if (!File.Exists(Path))
             {
                 return false;
             }
@@ -105,13 +131,19 @@ namespace Clicker.Manager
             }
 
             var gameData = JsonConvert.DeserializeObject<GameSaveData>(data);
-            _gameSaveData = gameData;
+            GameSaveData = gameData;
 
             return true;
         }
         
         #endregion
-        
+
+        public int GenerateDBId()
+        {
+            int id = GameSaveData.DbId;
+            GameSaveData.DbId++;
+            return id;
+        }
         
         private Vector3Int GetNearbyPosition(Vector3 position, float range = 5)
         {

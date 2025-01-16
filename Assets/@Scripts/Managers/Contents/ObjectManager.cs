@@ -6,7 +6,7 @@ using Clicker.Effect;
 using Clicker.Entity;
 using Clicker.Skill;
 using Clicker.Utils;
-using Scripts.Contents.Item;
+using Scripts.Contents.ItemHolder;
 using UnityEngine;
 
 namespace Clicker.Manager

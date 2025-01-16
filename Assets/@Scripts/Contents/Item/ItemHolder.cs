@@ -8,7 +8,7 @@ using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Scripts.Contents.Item
+namespace Scripts.Contents.ItemHolder
 {
     public class ItemHolder : BaseObject
     {

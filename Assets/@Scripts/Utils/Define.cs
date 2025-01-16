@@ -214,8 +214,19 @@ namespace Clicker.Utils
 			None,
 			Weapon,
 			Armor,
-			Potion,
-			Scroll
+			Helmet,
+			Gloves,
+			Boots,
+			MaxEquipment,
+			
+			Inventory = 100, 
+			WareHouse = 200
+		}
+		
+		public enum QuestType
+		{
+			KillMonster,
+			AddMeat
 		}
 
 		public enum EItemSubType

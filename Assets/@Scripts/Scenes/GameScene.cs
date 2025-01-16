@@ -1,14 +1,19 @@
+using System;
 using System.Collections.Generic;
+using Clicker.ConfigData;
 using Clicker.Controllers;
 using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Clicker.Scene
 {
 	public class GameScene : BaseScene
 	{
+		[SerializeField] private ItemDebugConfig _itemDebugConfig;
+		
 		public override bool Init()
 		{
 			if (base.Init() == false)
@@ -48,6 +53,8 @@ namespace Clicker.Scene
 			
 			// var env = Managers.Object.CreateObject<Env>(Define.EObjectType.Env, 300001);
 			// env.Spawn(new Vector3(10, 10));
+			
+			_itemDebugConfig.AddItem();
 		}
 
 		public override void Clear()

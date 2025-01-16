@@ -34,6 +34,7 @@ namespace Clicker.Scene
 						Managers.Game.SaveGameData();
 					}
 					
+					Managers.Inventory.LoadSaveItem();
 					Managers.Scene.LoadScene(Define.EScene.GameScene);
 				}
 			});
