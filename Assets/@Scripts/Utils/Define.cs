@@ -10,6 +10,7 @@ namespace Clicker.Utils
 		{
 			Unknown,
 			TitleScene,
+			LoginScene,
 			GameScene,
 		}
 
@@ -317,8 +318,15 @@ namespace Clicker.Utils
 			ChangeCrew,
 			QuestClear,
 		}
-
 		
+		public enum ProviderType
+		{
+			None,
+			Guest,
+			Google,
+			Facebook
+		}
+
 		public class AnimationName
 		{
 			public static string Idle = "idle";

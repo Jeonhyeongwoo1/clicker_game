@@ -10,6 +10,8 @@ namespace Clicker.Manager
 		private static Managers s_instance;
 		private static Managers Instance { get { Init(); return s_instance; } }
 
+		public static string Jwt { get; set; }
+		
 		#region Content
 
 		private ObjectManager _object = new ObjectManager();
@@ -32,7 +34,10 @@ namespace Clicker.Manager
 		private SoundManager _sound = new SoundManager();
 		private UIManager _ui = new UIManager();
 		private QuestManager _quest = new QuestManager();
-
+		private WebManager _web = new WebManager();
+		private AuthManager _auth = new AuthManager();
+		
+		public static AuthManager Auth => Instance?._auth;
 		public static DataManager Data => Instance?._data;
 		public static PoolManager Pool => Instance?._pool;
 		public static ResourceManager Resource => Instance?._resource;
@@ -40,6 +45,7 @@ namespace Clicker.Manager
 		public static SoundManager Sound => Instance?._sound;
 		public static UIManager UI => Instance?._ui;
 		public static QuestManager Quest => Instance?._quest;
+		public static WebManager Web => Instance?._web;
 		#endregion
 		
 		#region Language
@@ -72,6 +78,9 @@ namespace Clicker.Manager
 
 				// 초기화
 				s_instance = go.GetComponent<Managers>();
+				Web.Init();
+				Auth.Initialize();
+				// Auth.InitFacebook();
 			}
 		}
 

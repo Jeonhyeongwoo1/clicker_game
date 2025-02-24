@@ -34,7 +34,7 @@ namespace Clicker.Scene
 					}
 					
 					Managers.Game.InitGame();
-					Managers.Scene.LoadScene(Define.EScene.GameScene);
+					Managers.Scene.LoadScene(Define.EScene.LoginScene);
 				}
 			});
 		}

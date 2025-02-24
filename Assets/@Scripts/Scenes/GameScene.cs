@@ -5,6 +5,8 @@ using Clicker.Controllers;
 using Clicker.Entity;
 using Clicker.Manager;
 using Clicker.Utils;
+using Clicker.WebPacket;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -27,7 +29,7 @@ namespace Clicker.Scene
 			return true;
 		}
 
-		private void Initialize()
+		private async void Initialize()
 		{
 			Managers.Map.CreateMap("BaseMap");
 			var camp = Managers.Object.CreateObject<HeroCamp>(Define.EObjectType.HeroCamp, -1);
@@ -46,13 +48,12 @@ namespace Clicker.Scene
 				hero.ExtraSize = 0;
 				hero.Spawn(spawnPos + Managers.Map.CellToWorld(cellPos));
 			}
-			
-			// var monster = Managers.Object.CreateObject<Monster>(Define.EObjectType.Monster, 202005);
-			// monster.ExtraSize = 1;
-			// monster.Spawn(new Vector3(5,5));
-			
-			// var env = Managers.Object.CreateObject<Env>(Define.EObjectType.Env, 300001);
-			// env.Spawn(new Vector3(10, 10));
+
+			// TestPacketRes result = await Managers.Web.SendRequest<TestPacketRes>("/test/hello", new TestPacketReq()
+			// {
+			// 	token = "123",
+			// 	userId = "1111"
+			// });
 			
 			_itemDebugConfig.AddItem();
 		}

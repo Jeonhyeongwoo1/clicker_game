@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
@@ -119,6 +120,28 @@ namespace Clicker.Utils
 				default:
 					return Define.EFFECT_SMALL_RADIUS;
 			}
+		}
+
+		public static IPAddress GetIpv4Address(string hostAddress)
+		{
+			IPAddress[] ipAddr = Dns.GetHostAddresses(hostAddress);
+
+			if (ipAddr.Length == 0)
+			{
+				LogUtils.LogError("Auth server DNS failed");
+				return null;
+			}
+			
+			foreach (IPAddress ipAddress in ipAddr)
+			{
+				if (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+				{
+					return ipAddress;
+				}
+			}
+			
+			LogUtils.LogError("Auth server DNS failed");
+			return null;
 		}
 	}
 }

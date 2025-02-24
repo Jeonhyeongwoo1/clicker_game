@@ -257,7 +257,12 @@ namespace Clicker.Controllers
             _skillBook.StopAllSKill();
             Map.RemoveObject(this);
         }
-        
+
+        private void OnDestroy()
+        {
+            Util.SafeCancelToken(ref _moveCts);
+        }
+
         public override void TakeDamage(Creature attacker, SkillData skillData)
         {
             base.TakeDamage(attacker, skillData);
